@@ -1,5 +1,66 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Development Tools
+
+This project uses several development tools to ensure code quality:
+
+### Code Quality
+
+- **ESLint**: Code linting with Next.js and TypeScript rules
+- **Prettier**: Code formatting with import sorting
+- **TypeScript**: Static type checking
+
+### Git Hooks (Husky)
+
+- **Pre-commit**: Runs linting, formatting, and build checks
+- **Commit-msg**: Validates commit messages using conventional commits
+
+### Available Scripts
+
+```bash
+# Development
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+
+# Code Quality
+pnpm lint         # Run ESLint
+pnpm lint:fix     # Run ESLint with auto-fix
+pnpm format       # Format code with Prettier
+pnpm format:check # Check code formatting
+pnpm type-check   # Run TypeScript type checking
+```
+
+### Commit Message Format
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+
+- `feat`: 새로운 기능 추가
+- `fix`: 오류 수정 - 기능 상 변경(개선or수정), 롤백의 단위
+- `bug`: 기능상의 오류
+- `docs`: 문서 관련 수정
+- `style`: CSS 관련
+- `refactor`: 코드의 리팩터링(기능 상 변경 x)
+- `chore`: 잡다한 수정사항
+- `build`: 빌드 혹은 패키지 매니저 수정사항
+- `test`: test 코드 삽입 및 수정
+- `comment`: 필요한 주석 추가 및 변경
+
+**Breaking Changes:**
+
+- `fix!`: breaking change가 포함된 수정
+- `BREAKING CHANGE:` 메시지 본문에 포함하여 상세 설명
+
 ## Getting Started
 
 First, run the development server:
