@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running linting..."
+pnpm lint
+
+echo "💅 Running prettier..."
+pnpm prettier --write .
+
+# echo "🏗️ Building project..."
+# pnpm build
