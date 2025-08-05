@@ -1,6 +1,6 @@
 export class SentryNetworkError extends Error {
-  status: number;
-  url: string;
+  public status: number;
+  public url: string;
 
   constructor(response: Response) {
     const name = SentryNetworkError.generateName(response);
@@ -12,9 +12,8 @@ export class SentryNetworkError extends Error {
 
   private static generateName(response: Response): string {
     const status = response.status;
-    const fullUrl = response.url;
-    const urlObj = new URL(fullUrl);
-    const baseURL = `${urlObj.origin}`;
+    const urlObj = new URL(response.url);
+    const baseURL = urlObj.origin;
     const path = urlObj.pathname;
     const replacePathParams = path.replace(/\/\d+(?=\/|$)/g, "/{id}");
 
