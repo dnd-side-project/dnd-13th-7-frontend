@@ -1,5 +1,6 @@
 import { FlatCompat } from '@eslint/eslintrc'
 import pluginNext from '@next/eslint-plugin-next'
+import storybook from 'eslint-plugin-storybook'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -36,6 +37,7 @@ const eslintConfig = [
       'storybook-static/**',
     ],
   }),
+  ...storybook.configs['flat/recommended'],
 ]
 
 export default eslintConfig
