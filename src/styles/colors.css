@@ -1,0 +1,81 @@
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Pretendard, var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  /* Removed unused sidebar/chart tokens */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Typography tokens */
+  --text-main-title: 2rem; /* 32px */
+  --text-title-1: 1.5rem; /* 24px */
+  --text-title-2: 1.375rem; /* 22px */
+  --text-title-3: 1.25rem; /* 20px */
+  --text-body-1: 1.125rem; /* 18px */
+  --text-body-2: 1rem; /* 16px */
+  --text-body-3: 0.9375rem; /* 15px */
+  --text-button: 0.875rem; /* 14px */
+  --text-caption-m: 0.8125rem; /* 13px */
+  --text-caption-sb: 0.6875rem; /* 11px */
+
+  /* Design color tokens (consuming --moyeoit-*) */
+  --color-grey-color-1: var(--moyeoit-grey-1);
+  --color-grey-color-2: var(--moyeoit-grey-2);
+  --color-grey-color-3: var(--moyeoit-grey-3);
+  --color-grey-color-4: var(--moyeoit-grey-4);
+  --color-grey-color-5: var(--moyeoit-grey-5);
+  --color-light-color-1: var(--moyeoit-light-1);
+  --color-light-color-2: var(--moyeoit-light-2);
+  --color-light-color-3: var(--moyeoit-light-3);
+  --color-light-color-4: var(--moyeoit-light-4);
+  --color-white-color: var(--moyeoit-white);
+  --color-black-color: var(--moyeoit-black);
+  --color-main-color-1: var(--moyeoit-main-1);
+  --color-main-color-2: var(--moyeoit-main-2);
+  --color-main-color-3: var(--moyeoit-main-3);
+  --color-failure-color: var(--moyeoit-failure);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Design tokens (CSS-first; Tailwind v4 recommended) */
+  --moyeoit-grey-1: #bcbdbf;
+  --moyeoit-grey-2: #b0b1b3;
+  --moyeoit-grey-3: #8d8e8f;
+  --moyeoit-grey-4: #6a6a6c;
+  --moyeoit-grey-5: #3c3d3e;
+
+  --moyeoit-light-1: #fafafc;
+  --moyeoit-light-2: #f7f7f9;
+  --moyeoit-light-3: #ebecef;
+  --moyeoit-light-4: #d4d4d7;
+
+  --moyeoit-white: #ffffff;
+  --moyeoit-black: #0b0b0b;
+
+  --moyeoit-main-1: #6e58fe;
+  --moyeoit-main-2: #5846cb;
+  --moyeoit-main-3: #f1eeff;
+
+  --moyeoit-failure: #f44336;
+}
