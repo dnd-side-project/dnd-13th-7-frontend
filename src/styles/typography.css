@@ -1,0 +1,80 @@
+@utility typo-main-title {
+  font-size: var(--text-main-title);
+  line-height: 1.5;
+  font-weight: 700;
+}
+@utility typo-title-1 {
+  font-size: var(--text-title-1);
+  line-height: 1.5;
+  font-weight: 700;
+}
+@utility typo-title-2 {
+  font-size: var(--text-title-2);
+  line-height: 1.5;
+  font-weight: 700;
+}
+@utility typo-title-3 {
+  font-size: var(--text-title-3);
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+@utility typo-body-1-b {
+  font-size: var(--text-body-1);
+  line-height: 1.5;
+  font-weight: 700;
+}
+@utility typo-body-1-sb {
+  font-size: var(--text-body-1);
+  line-height: 1.5;
+  font-weight: 600;
+}
+@utility typo-body-1-m {
+  font-size: var(--text-body-1);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@utility typo-body-2-sb {
+  font-size: var(--text-body-2);
+  line-height: 1.5;
+  font-weight: 600;
+}
+@utility typo-body-2-m {
+  font-size: var(--text-body-2);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@utility typo-body-3-sb {
+  font-size: var(--text-body-3);
+  line-height: 1.5;
+  font-weight: 600;
+}
+@utility typo-body-3-r {
+  font-size: var(--text-body-3);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@utility typo-button-sb {
+  font-size: var(--text-button);
+  line-height: 1.5;
+  font-weight: 600;
+}
+@utility typo-button-m {
+  font-size: var(--text-button);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@utility typo-caption-m {
+  font-size: var(--text-caption-m);
+  line-height: 1.5;
+  font-weight: 500;
+}
+@utility typo-caption-sb {
+  font-size: var(--text-caption-sb);
+  line-height: 1.5;
+  font-weight: 600;
+}
