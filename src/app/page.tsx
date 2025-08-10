@@ -1,3 +1,5 @@
+import { CheckItem } from '@/components/atoms/CheckItem'
+
 export default function Home() {
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -10,6 +12,10 @@ export default function Home() {
         <p className="typo-body-1-sb">Hello World</p>
         <p className="typo-body-1-m">Hello World</p>
         <p className="typo-body-2-sb">Hello World</p>
+        <CheckItem className="typo-button-m" label="전체" />
+        <CheckItem className="typo-button-m" label="PM/PO" />
+        <CheckItem className="typo-button-m" label="프론트 개발자" />
+        <CheckItem className="typo-button-m" label="백엔드 개발자" />
       </main>
     </div>
   )
