@@ -12,10 +12,10 @@ export default function Home() {
         <p className="typo-body-1-sb">Hello World</p>
         <p className="typo-body-1-m">Hello World</p>
         <p className="typo-body-2-sb">Hello World</p>
-        <CheckItem className="typo-button-m" label="전체" />
-        <CheckItem className="typo-button-m" label="PM/PO" />
-        <CheckItem className="typo-button-m" label="프론트 개발자" />
-        <CheckItem className="typo-button-m" label="백엔드 개발자" />
+        <CheckItem label="PM/PO" />
+        <CheckItem label="프론트 개발자" />
+        <CheckItem label="백엔드 개발자" />
+        <CheckItem className="typo-body-3-sb" label="전체 동의" />
       </main>
     </div>
   )

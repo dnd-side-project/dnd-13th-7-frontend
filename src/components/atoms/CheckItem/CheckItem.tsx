@@ -37,7 +37,7 @@ const CheckItem: React.FC<CheckItemProps> = ({
     <label
       htmlFor={inputId}
       className={cn(
-        'flex w-full h-[21px] select-none items-center gap-2 cursor-pointer',
+        'flex w-full h-[21px] select-none items-center gap-2 cursor-pointer typo-button-m',
       )}
     >
       <Checkbox
@@ -48,12 +48,10 @@ const CheckItem: React.FC<CheckItemProps> = ({
         onCheckedChange={(v) => onChange?.(v === true)}
       />
       <div className="flex-1">
-        <div className={cn('text-[var(--text-body-2)] leading-5', className)}>
-          {label}
-        </div>
+        <div className={cn('typo-button-m leading-5', className)}>{label}</div>
       </div>
     </label>
   )
 }
 
-export default CheckItem
+export { CheckItem, type CheckState }
