@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api' //TODO: 환경변수 추가
 
-export const apiClient = axios.create({
+const apiClient = axios.create({
   baseURL,
   withCredentials: true,
   headers: {
