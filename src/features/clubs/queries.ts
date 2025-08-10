@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { clubQueries } from './queries.factory'
-import { ClubDetailsData, ClubsPage } from './types'
+import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
 
 export function useClubsList(params?: {
   page?: number
@@ -18,6 +18,6 @@ export function useClubDetails(
 
 export function useClubRecruits(
   clubId: number | string,
-): UseQueryResult<unknown, Error> {
+): UseQueryResult<ClubRecruitsData, Error> {
   return useQuery(clubQueries.recruit(clubId))
 }

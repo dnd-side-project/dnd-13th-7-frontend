@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import { getClubDetails, getClubRecruits, getClubs } from './api'
 import { clubKeys } from './keys'
-import { ClubDetailsData } from './types'
+import { ClubDetailsData, ClubRecruitsData } from './types'
 
 export const clubQueries = {
   list: (params?: { page?: number; size?: number; search?: string }) =>
@@ -17,7 +17,7 @@ export const clubQueries = {
       enabled: Boolean(clubId),
     }),
   recruit: (clubId: number | string) =>
-    queryOptions({
+    queryOptions<ClubRecruitsData>({
       queryKey: clubKeys.recruit(clubId),
       queryFn: () => getClubRecruits(clubId),
       enabled: Boolean(clubId),

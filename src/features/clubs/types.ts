@@ -69,3 +69,16 @@ export interface ClubsPage {
   first: boolean
   empty: boolean
 }
+
+export interface ClubRecruitsData {
+  clubName: string
+  clubLogoUrl: string
+  recruitmentParts: string[]
+  qualification: string
+  recruitmentSchedule: string
+  activityPeriod: string
+  activityMethod: string
+  activityFee: string
+  homepageUrl: string
+  noticeUrl: string
+}

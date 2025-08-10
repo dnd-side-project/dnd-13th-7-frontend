@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/shared/types/api'
 import apiClient from '@/shared/utils/axios'
-import { ClubDetailsData, ClubsPage } from './types'
+import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
 
 export async function getClubs(params?: {
   page?: number
@@ -21,8 +21,6 @@ export async function getClubDetails(
   )
   return res.data.data
 }
-
-export type ClubRecruitsData = unknown
 
 export async function getClubRecruits(
   clubId: number | string,
