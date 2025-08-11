@@ -37,6 +37,7 @@
   --text-body-1: 1.125rem; /* 18px */
   --text-body-2: 1rem; /* 16px */
   --text-body-3: 0.9375rem; /* 15px */
+  --text-body-4: 0.75rem; /* 12px */
   --text-button: 0.875rem; /* 14px */
   --text-caption-m: 0.8125rem; /* 13px */
   --text-caption-sb: 0.6875rem; /* 11px */
@@ -56,6 +57,7 @@
   --color-main-color-1: var(--moyeoit-main-1);
   --color-main-color-2: var(--moyeoit-main-2);
   --color-main-color-3: var(--moyeoit-main-3);
+  --color-main-color-4: var(--moyeoit-main-4);
   --color-failure-color: var(--moyeoit-failure);
 }
 
@@ -80,6 +82,7 @@
   --moyeoit-main-1: #6e58fe;
   --moyeoit-main-2: #5846cb;
   --moyeoit-main-3: #f1eeff;
+  --moyeoit-main-4: #634fe5;
 
   --moyeoit-failure: #f44336;
 }
