@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { CheckItem, type CheckState } from './CheckItem'
+import { CheckItem, type CheckState } from './checkItem'
 
 const meta = {
   title: 'Atoms/CheckItem',

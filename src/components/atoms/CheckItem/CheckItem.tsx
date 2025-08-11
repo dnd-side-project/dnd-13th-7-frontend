@@ -45,7 +45,13 @@ const CheckItem: React.FC<CheckItemProps> = ({
         checked={checked}
         defaultChecked={defaultChecked}
         className={checkboxClass}
-        onCheckedChange={(v) => onChange?.(v === true)}
+        onCheckedChange={(v) => {
+          if (v === 'indeterminate') {
+            onChange?.(true)
+          } else {
+            onChange?.(v === true)
+          }
+        }}
       />
       <div className="flex-1">
         <div className={cn('typo-button-m leading-5', className)}>{label}</div>
@@ -54,4 +60,5 @@ const CheckItem: React.FC<CheckItemProps> = ({
   )
 }
 
+CheckItem.displayName = 'CheckItem'
 export { CheckItem, type CheckState }
