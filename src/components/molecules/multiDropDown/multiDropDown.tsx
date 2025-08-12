@@ -3,10 +3,7 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import {
-  CheckItem,
-  type CheckState,
-} from '@/components/atoms/checkItem/checkItem'
+import { CheckItem } from '@/components/atoms/CheckItem/CheckItem'
 import { Button } from '@/components/ui/button'
 import {
   Popover,
@@ -25,7 +22,6 @@ function summarize(labels: string[], maxShown = 2, empty = '선택') {
 }
 
 const triggerVariants = cva(
-  // 공통
   'justify-between border py-2 px-3 rounded-full gap-1',
   {
     variants: {
@@ -91,22 +87,6 @@ const MultiDropDown: React.FC<Props> = ({
   const count = selected.length
   const showAllLabel = count === total
 
-  const byGroup = groups.map((g) => {
-    const vals = g.options.map((o) => o.value)
-    const selInGroup = vals.filter((v) => selected.includes(v))
-    const st: CheckState =
-      selInGroup.length === 0
-        ? false
-        : selInGroup.length === vals.length
-          ? true
-          : 'indeterminate'
-    const toggleGroup = (next: boolean) => {
-      const rest = selected.filter((v) => !vals.includes(v))
-      setSelected(next ? [...rest, ...vals] : rest)
-    }
-    return { group: g, state: st, toggleGroup }
-  })
-
   const valueToLabel = new Map(
     groups.flatMap((g) => g.options.map((o) => [o.value, o.label] as const)),
   )
@@ -146,7 +126,7 @@ const MultiDropDown: React.FC<Props> = ({
           </div>
 
           <div className="px-2 space-y-4">
-            {byGroup.map(({ group }) => (
+            {groups.map((group) => (
               <div key={group.title} className="space-y-2">
                 <div className="text-[var(--moyeoit-grey-4)] typo-caption-m">
                   {group.title}

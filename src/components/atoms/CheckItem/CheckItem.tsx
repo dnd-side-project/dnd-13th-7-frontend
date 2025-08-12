@@ -10,7 +10,7 @@ export type CheckItemProps = {
   label: React.ReactNode
   checked?: CheckState
   defaultChecked?: boolean
-  onChange?: (checked: CheckState) => void
+  onChange?: (checked: boolean) => void
   id?: string
   className?: string
 }
@@ -45,13 +45,7 @@ const CheckItem: React.FC<CheckItemProps> = ({
         checked={checked}
         defaultChecked={defaultChecked}
         className={checkboxClass}
-        onCheckedChange={(v) => {
-          if (v === 'indeterminate') {
-            onChange?.(true)
-          } else {
-            onChange?.(v === true)
-          }
-        }}
+        onCheckedChange={onChange}
       />
       <div className="flex-1">
         <div className={cn('typo-button-m leading-5', className)}>{label}</div>
