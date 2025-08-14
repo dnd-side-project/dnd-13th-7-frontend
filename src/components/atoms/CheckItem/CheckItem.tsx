@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@/components/atoms/CheckItem/checkbox'
 import { cn } from '@/lib/utils'
 
 type CheckState = boolean | 'indeterminate'

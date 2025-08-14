@@ -4,12 +4,12 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { CheckItem } from '@/components/atoms/CheckItem/CheckItem'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/atoms/CheckItem/button'
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from '@/components/ui/popover'
+} from '@/components/atoms/CheckItem/popover'
 import { cn } from '@/lib/utils'
 
 export type Option = { label: string; value: string }
