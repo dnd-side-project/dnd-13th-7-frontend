@@ -3,13 +3,13 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { CheckItem } from '@/components/atoms/CheckItem/CheckItem'
-import { Button } from '@/components/atoms/CheckItem/button'
+import { Button } from '@/components/atoms/button'
+import { CheckItem } from '@/components/atoms/checkItem/CheckItem'
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from '@/components/atoms/CheckItem/popover'
+} from '@/components/atoms/popover'
 import { cn } from '@/lib/utils'
 
 export type Option = { label: string; value: string }
