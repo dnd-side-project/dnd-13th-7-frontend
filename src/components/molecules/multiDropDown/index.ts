@@ -1,1 +1,4 @@
-export { MultiDropDown, type Group } from './MultiDropDown'
+export {
+  MultiDropDown,
+  type Group,
+} from '@/components/molecules/multiDropDown/MultiDropDown'
