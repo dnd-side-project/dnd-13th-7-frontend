@@ -1,5 +1,8 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Group, MultiDropDown} from './MultiDropDown'
+import {
+  Group,
+  MultiDropDown,
+} from '@/components/molecules/multiDropDown/MultiDropDown'
 
 const Groups: Group[] = [
   {
