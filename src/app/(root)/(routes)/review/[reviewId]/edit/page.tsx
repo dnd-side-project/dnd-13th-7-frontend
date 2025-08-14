@@ -1,9 +1,9 @@
-type PageProps = {
-  params: { reviewId: string }
-}
-
-export default function Page({ params }: PageProps) {
-  const { reviewId } = params
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ reviewId: string }>
+}) {
+  const { reviewId } = await params
   return (
     <main className="p-6">
       <h1 className="text-xl font-semibold">Edit Review</h1>

@@ -3,12 +3,12 @@ import { notFound } from 'next/navigation'
 const validKinds = ['paper', 'interview', 'activity'] as const
 const validTypes = ['normal', 'premium'] as const
 
-type PageProps = {
-  params: { kind: string; type: string }
-}
-
-export default function Page({ params }: PageProps) {
-  const { kind, type } = params
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ kind: string; type: string }>
+}) {
+  const { kind, type } = await params
   const isValidKind = (validKinds as readonly string[]).includes(kind)
   const isValidType = (validTypes as readonly string[]).includes(type)
 
