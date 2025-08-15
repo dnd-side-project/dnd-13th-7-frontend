@@ -4,7 +4,7 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/atoms/button'
-import { CheckItem } from '@/components/atoms/checkItem/CheckItem'
+import { CheckItem } from '@/components/atoms/checkItem'
 import {
   Popover,
   PopoverTrigger,
