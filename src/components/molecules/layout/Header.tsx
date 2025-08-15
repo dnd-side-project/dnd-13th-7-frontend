@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/atoms/Button'
 
 export default function Header() {
   const router = useRouter()
