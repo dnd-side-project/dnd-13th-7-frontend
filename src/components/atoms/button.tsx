@@ -1,53 +1,71 @@
 import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/utils/cn'
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  [
+    'inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-[100px] transition-colors',
+    'disabled:cursor-not-allowed',
+    'disabled:bg-light-color-3 disabled:text-grey-color-3 disabled:border-light-color-3',
+  ].join(' '),
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary:
-          'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+        solid:
+          // bg: main-1, hover: main-2, text: white
+          [
+            'bg-main-color-1 text-white-color',
+            'hover:bg-main-color-4',
+            'active:bg-main-color-2',
+          ].join(' '),
+        'outlined-primary':
+          // primary: border/text main color
+          [
+            'border border-solid',
+            'border-light-color-3 text-grey-color-4',
+            'hover:border-light-color-3 hover:text-grey-color-5 hover:bg-light-color-1',
+            'active:border-main-color-1 active:text-main-color-1 active:bg-main-color-3',
+          ].join(' '),
+        'outlined-secondary':
+          // secondary: neutral border/text, hover to main color
+          [
+            'border border-solid',
+            'border-light-color-4 text-main-color-1',
+            'hover:border-main-color-1 hover:text-main-color-1 hover:bg-main-color-3',
+            'active:border-light-color-4 active:text-grey-color-5 active:bg-light-color-2',
+          ].join(' '),
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
+        small: 'px-4 py-2 typo-caption-m',
+        medium: 'px-4 py-3 typo-body-3-b',
+        large: 'p-4 typo-body-3-b',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'solid',
+        class: 'border border-main-color-1',
+      },
+    ],
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'solid',
+      size: 'small',
     },
   },
 )
+
 export interface ButtonProps
-  extends React.ComponentProps<'button'>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button'
+  ({ className, variant, size, disabled, type = 'button', ...props }, ref) => {
     return (
-      <Comp
+      <button
         ref={ref}
-        data-slot="button"
-        className={cn(buttonVariants({ variant, size, className }))}
-        {...(asChild ? {} : { type: props.type ?? 'button' })}
+        type={type}
+        className={cn(buttonVariants({ variant, size }), className)}
+        disabled={disabled}
         {...props}
       />
     )
