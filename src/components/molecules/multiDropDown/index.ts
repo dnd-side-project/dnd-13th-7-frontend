@@ -1,4 +1,1 @@
-export {
-  MultiDropDown,
-  type Group,
-} from './MultiDropDown'
+export { MultiDropDown, type Group } from './MultiDropDown'
