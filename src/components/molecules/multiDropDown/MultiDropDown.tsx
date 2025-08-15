@@ -3,14 +3,14 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { Button } from '@/components/atoms/button'
-import { CheckItem } from '@/components/atoms/checkItem'
+import { CheckItem, CheckState } from '@/components/atoms/checkItem'
+import { Button } from '@/components/atoms/checkItem/button'
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from '@/components/atoms/popover'
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/utils/cn'
 
 export type Option = { label: string; value: string }
 export type Group = { title: string; options: Option[] }
@@ -22,12 +22,13 @@ function summarize(labels: string[], maxShown = 2, empty = '선택') {
 }
 
 const triggerVariants = cva(
+  // 공통
   'justify-between border py-2 px-3 rounded-full gap-1',
   {
     variants: {
       variant: {
         outline:
-          'border-[var(--moyeoit-light-3)] bg-[var(--moyeoit-white)] text-[var(--moyeoit-black)]',
+          'border-[var(--moyeoit-light-3)] bg-[var(--moyeoit-light-2)] text-[var(--moyeoit-black)]',
         solid:
           'bg-[var(--moyeoit-main-3)] border-[var(--moyeoit-main-1)] text-[var(--moyeoit-main-1)]',
       },
@@ -87,6 +88,22 @@ const MultiDropDown: React.FC<Props> = ({
   const count = selected.length
   const showAllLabel = count === total
 
+  const byGroup = groups.map((g) => {
+    const vals = g.options.map((o) => o.value)
+    const selInGroup = vals.filter((v) => selected.includes(v))
+    const st: CheckState =
+      selInGroup.length === 0
+        ? false
+        : selInGroup.length === vals.length
+          ? true
+          : 'indeterminate'
+    const toggleGroup = (next: boolean) => {
+      const rest = selected.filter((v) => !vals.includes(v))
+      setSelected(next ? [...rest, ...vals] : rest)
+    }
+    return { group: g, state: st, toggleGroup }
+  })
+
   const valueToLabel = new Map(
     groups.flatMap((g) => g.options.map((o) => [o.value, o.label] as const)),
   )
@@ -98,6 +115,7 @@ const MultiDropDown: React.FC<Props> = ({
 
   const triggerClass = cn(
     triggerVariants({ variant: hasSelected ? 'solid' : variant }),
+    open ? 'bg-[var(--moyeoit-white)]' : 'bg-[var(--moyeoit-light-2)]',
   )
 
   return (
@@ -106,7 +124,15 @@ const MultiDropDown: React.FC<Props> = ({
         <PopoverTrigger asChild>
           <Button className={triggerClass}>
             {summary}
-            <span className="text-[var(--moyeoit-grey-2)] typo-button-m">
+            <span
+              className={cn(
+                'typo-button-m',
+
+                selected.length > 0
+                  ? 'text-[var(--moyeoit-main-1)]'
+                  : 'text-[var(--moyeoit-grey-2)]',
+              )}
+            >
               {open ? <ChevronUp /> : <ChevronDown />}
             </span>
           </Button>
@@ -126,7 +152,7 @@ const MultiDropDown: React.FC<Props> = ({
           </div>
 
           <div className="px-2 space-y-4">
-            {groups.map((group) => (
+            {byGroup.map(({ group }) => (
               <div key={group.title} className="space-y-2">
                 <div className="text-[var(--moyeoit-grey-4)] typo-caption-m">
                   {group.title}

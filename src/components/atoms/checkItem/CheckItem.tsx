@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { Checkbox } from '@/components/atoms/checkbox'
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/utils/cn'
 
 type CheckState = boolean | 'indeterminate'
 
