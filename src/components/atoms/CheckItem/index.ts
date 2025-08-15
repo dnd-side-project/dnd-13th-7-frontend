@@ -1,1 +1,0 @@
-export { CheckItem } from './CheckItem'
