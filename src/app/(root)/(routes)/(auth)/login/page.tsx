@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { KakaoIcon, GoogleIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
 
-export default function Login() {
+export default function LoginPage() {
   const handleKakaoLogin = () => {
     console.log('kakao login')
   }

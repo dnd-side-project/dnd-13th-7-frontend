@@ -13,6 +13,8 @@ export type CheckItemProps = {
   onChange?: (checked: boolean) => void
   id?: string
   className?: string
+  showArrow?: boolean
+  onArrowClick?: () => void
 }
 
 const CheckItem: React.FC<CheckItemProps> = ({
@@ -22,6 +24,8 @@ const CheckItem: React.FC<CheckItemProps> = ({
   onChange,
   id,
   className,
+  showArrow = false,
+  onArrowClick,
 }) => {
   const autoId = React.useId()
   const inputId = id ?? `${autoId}`
@@ -50,6 +54,29 @@ const CheckItem: React.FC<CheckItemProps> = ({
       <div className="flex-1">
         <div className={cn('typo-button-m leading-5', className)}>{label}</div>
       </div>
+      {showArrow && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            onArrowClick?.()
+          }}
+          className="text-[var(--moyeoit-grey-3)] hover:text-[var(--moyeoit-grey-4)] transition-colors"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      )}
     </label>
   )
 }

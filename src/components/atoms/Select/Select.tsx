@@ -36,7 +36,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        'flex w-full items-center justify-between gap-2 rounded-lg border p-3 typo-body-3-3-r transition-[color,box-shadow] outline-none ring-0 resize-none ',
+        'flex w-full h-full items-center justify-between gap-2 rounded-lg border p-3 typo-body-3-3-r transition-[color,box-shadow] outline-none ring-0 resize-none ',
         // Base colors from design tokens
         'bg-white-color text-black-color border-light-color-4 focus:border-grey-color-1 data-[placeholder]:text-grey-color-1 focus:data-[placeholder]:text-grey-color-3',
         // disabled states
@@ -44,7 +44,7 @@ function SelectTrigger({
         // Invalid
         'aria-invalid:border-failure-color',
         // Size variants
-        'data-[size=default]:h-9 data-[size=sm]:h-8',
+        'data-[size=default]:h-full data-[size=sm]:h-8',
         // Value styling
         '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2',
         // Icon styling
