@@ -12,6 +12,8 @@ import {
 } from 'react-hook-form'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
+import Image from 'next/image'
+import { InvalidIcon } from '@/assets/icons'
 import { Label } from '@/components/atoms/Label'
 import { cn } from '@/shared/utils/cn'
 
@@ -146,9 +148,13 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-destructive text-sm', className)}
+      className={cn(
+        'typo-caption-m text-failure-color flex flex-row items-center gap-1',
+        className,
+      )}
       {...props}
     >
+      <Image src={InvalidIcon} alt="invalid" width={20} height={20} />
       {body}
     </p>
   )

@@ -23,26 +23,12 @@ import { UserCategory } from '@/features/user/types'
 import { useSignupForm, AGREEMENT_ITEMS } from './hooks/useSignupForm'
 
 export default function SignupPage() {
-  const {
-    form,
-    onSubmit,
-    isSubmitting,
-    allAgreed,
-    requiredAgreed,
-    handleAllAgreementChange,
-  } = useSignupForm()
+  const { form, onSubmit, isSubmitting, allAgreed, handleAllAgreementChange } =
+    useSignupForm()
 
   const handleArrowClick = (itemId: string) => {
     // 약관 상세 페이지로 이동하는 로직
     console.log(`약관 상세 보기: ${itemId}`)
-  }
-
-  // 버튼 활성화 조건 개선
-  const isFormValid = () => {
-    const values = form.getValues()
-    const hasRequiredFields =
-      values.email && values.name && values.nickname && values.category
-    return hasRequiredFields && requiredAgreed
   }
 
   return (
@@ -61,7 +47,11 @@ export default function SignupPage() {
                   이메일
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} className="p-3" />
+                  <Input
+                    {...field}
+                    className="p-3"
+                    aria-invalid={!!form.formState.errors.email}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -75,7 +65,11 @@ export default function SignupPage() {
                   이름
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} className="p-3" />
+                  <Input
+                    {...field}
+                    className="p-3"
+                    aria-invalid={!!form.formState.errors.name}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -93,6 +87,7 @@ export default function SignupPage() {
                     {...field}
                     className="p-3"
                     placeholder="모여잇에서 사용하실 닉네임을 입력해주세요."
+                    aria-invalid={!!form.formState.errors.nickname}
                   />
                 </FormControl>
                 <FormMessage />
@@ -111,7 +106,10 @@ export default function SignupPage() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger className="p-3">
+                    <SelectTrigger
+                      className="p-3"
+                      aria-invalid={!!form.formState.errors.category}
+                    >
                       <SelectValue placeholder="분야 선택하기" />
                     </SelectTrigger>
                     <SelectContent>
@@ -134,14 +132,14 @@ export default function SignupPage() {
 
           {/* 동의 섹션 */}
           <div className="mt-6">
-            <div className="mb-4">
+            <div className="mb-3">
               <CheckItem
                 label="전체 동의"
                 checked={allAgreed}
                 onChange={handleAllAgreementChange}
-                className="typo-title-3 font-semibold"
+                className="typo-body-m font-semibold"
               />
-              <div className="h-px bg-[var(--moyeoit-light-4)] mt-4" />
+              <div className="h-px bg-light-color-4 mt-3" />
             </div>
 
             <div className="space-y-3">
@@ -162,23 +160,23 @@ export default function SignupPage() {
                         <CheckItem
                           label={
                             <span>
-                              <span className="text-[var(--moyeoit-grey-4)]">
+                              <span className="typo-caption-m text-grey-color-3">
                                 ({item.required ? '필수' : '선택'})
                               </span>{' '}
-                              {item.label}
+                              <span className="typo-caption-m text-grey-color-3">
+                                {item.label}
+                              </span>
                             </span>
                           }
                           checked={field.value}
                           onChange={(checked) => {
                             field.onChange(checked)
-                            // 동의 항목 변경 후 폼 검증 트리거
                             form.trigger()
                           }}
                           showArrow={item.hasDetail}
                           onArrowClick={() => handleArrowClick(item.id)}
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -188,7 +186,7 @@ export default function SignupPage() {
 
           <Button
             type="submit"
-            disabled={isSubmitting || !isFormValid()}
+            disabled={isSubmitting || !form.formState.isValid}
             size="medium"
             variant="solid"
             className="w-full"

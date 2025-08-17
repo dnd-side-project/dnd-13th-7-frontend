@@ -54,6 +54,7 @@ export const SignupFormSchema = z.object({
   privacy: z.boolean().refine((val) => val === true, {
     message: '개인정보 수집 및 이용에 동의해주세요.',
   }),
+  // 선택적 동의 항목들 (동의하지 않아도 가입 가능)
   marketing: z.boolean().transform((val) => val || false),
   newsletter: z.boolean().transform((val) => val || false),
 })
@@ -75,26 +76,20 @@ export const useSignupForm = () => {
       marketing: false,
       newsletter: false,
     },
-    mode: 'onSubmit',
+    mode: 'onBlur',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // 전체 동의 상태 계산
-  const allAgreed = AGREEMENT_ITEMS.every(
-    (item) => form.watch(item.id as keyof SignupFormType) === true,
-  )
-
-  const requiredAgreed = AGREEMENT_ITEMS.filter((item) => item.required).every(
-    (item) => form.watch(item.id as keyof SignupFormType) === true,
+  const allAgreed = AGREEMENT_ITEMS.every((item) =>
+    form.watch(item.id as keyof SignupFormType),
   )
 
   // 전체 동의 변경 핸들러
   const handleAllAgreementChange = (checked: boolean) => {
-    console.log(form.getValues())
     AGREEMENT_ITEMS.forEach((item) => {
       form.setValue(item.id as keyof SignupFormType, checked)
     })
-    // 동의 항목 변경 후 폼 검증 트리거
     form.trigger()
   }
 
@@ -115,7 +110,6 @@ export const useSignupForm = () => {
     onSubmit,
     isSubmitting,
     allAgreed,
-    requiredAgreed,
     handleAllAgreementChange,
   }
 }
