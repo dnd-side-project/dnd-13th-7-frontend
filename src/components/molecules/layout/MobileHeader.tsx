@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { MenuIcon, SearchIcon } from '@/assets/icons'
 import { MoyeoitMiniLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
+import AppPath from '@/shared/configs/appPath'
 
 const IS_LOGIN = false
 
@@ -18,7 +19,7 @@ export default function MobileHeader() {
         <div className="h-14 w-full bg-white rounded-full flex items-center justify-between px-6 shadow-sm ">
           {/* Left: Logo placeholder */}
           <div className="flex items-center gap-14">
-            <Link href="/" className="block">
+            <Link href={AppPath.home()} className="block">
               <Image
                 src={MoyeoitMiniLogo}
                 alt="moyeoit logo"
@@ -31,7 +32,7 @@ export default function MobileHeader() {
           <div className="flex items-center gap-4">
             {!IS_LOGIN && (
               <Link
-                href="/login"
+                href={AppPath.login()}
                 className="typo-caption-m text-main-color-1 whitespace-nowrap hover:underline focus:underline"
               >
                 회원가입/로그인

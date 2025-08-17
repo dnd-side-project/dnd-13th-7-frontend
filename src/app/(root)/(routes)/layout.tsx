@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Footer, Header, MobileHeader } from '@/components/molecules/layout'
+import { Header, MobileHeader } from '@/components/molecules/layout'
 
 export default function RoutesLayout({ children }: { children: ReactNode }) {
   return (
@@ -7,7 +7,6 @@ export default function RoutesLayout({ children }: { children: ReactNode }) {
       <MobileHeader />
       <Header />
       <div className="flex-1 w-full">{children}</div>
-      <Footer />
     </div>
   )
 }

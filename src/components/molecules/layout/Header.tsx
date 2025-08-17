@@ -19,7 +19,7 @@ export default function Header() {
         <div className="h-14 w-full bg-white rounded-full flex items-center justify-between px-6 shadow-sm ">
           {/* Left: Logo placeholder */}
           <div className="flex items-center gap-14">
-            <Link href="/" className="block">
+            <Link href={AppPath.home()} className="block">
               <Image
                 src={MoyeoitFullLogo}
                 alt="moyeoit logo"
@@ -30,7 +30,7 @@ export default function Header() {
 
             <nav className="flex items-center gap-10 typo-body-3-b text-black-color">
               <Link
-                href="/club/explore"
+                href={AppPath.clubExplore()}
                 className="hover:text-main-color-1 focus:text-main-color-1 transition-colors"
               >
                 탐색하기
@@ -38,7 +38,7 @@ export default function Header() {
               <span className="text-light-color-4">비교 노트</span>
               <span className="text-light-color-4">지원 준비</span>
               <Link
-                href="/review/explore"
+                href={AppPath.reviewExplore()}
                 className="hover:text-main-color-1 focus:text-main-color-1 transition-colors"
               >
                 후기
@@ -67,7 +67,7 @@ export default function Header() {
               </Button>
             ) : (
               <Link
-                href="/login"
+                href={AppPath.login()}
                 className="typo-caption-m text-main-color-1 whitespace-nowrap hover:underline focus:underline"
               >
                 회원가입/로그인
@@ -76,7 +76,7 @@ export default function Header() {
             <Button
               size="small"
               variant="solid"
-              onClick={() => router.push('/review/new')}
+              onClick={() => router.push(AppPath.reviewNewRoot())}
               className="typo-button"
             >
               후기 작성
