@@ -58,7 +58,7 @@ const MultiDropDown: React.FC<Props> = ({
   defaultValue = [],
   onChange,
   placeholder = '선택',
-  maxSummary = 2,
+  maxSummary = 1,
   className,
   variant = 'outline',
 }) => {
