@@ -131,7 +131,7 @@ export default function SignupPage() {
           />
 
           {/* 동의 섹션 */}
-          <div className="mt-6">
+          <div>
             <div className="mb-3">
               <CheckItem
                 label="전체 동의"
@@ -184,15 +184,17 @@ export default function SignupPage() {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting || !form.formState.isValid}
-            size="medium"
-            variant="solid"
-            className="w-full"
-          >
-            가입하기
-          </Button>
+          <div className="w-full my-3 max-desktop:sticky max-desktop:bottom-5 max-desktop:left-0 max-desktop:right-0 max-desktop:bg-light-color-2 max-desktop:border-none">
+            <Button
+              type="submit"
+              disabled={isSubmitting || !form.formState.isValid}
+              size="medium"
+              variant="solid"
+              className="w-full"
+            >
+              가입하기
+            </Button>
+          </div>
         </form>
       </Form>
     </main>
