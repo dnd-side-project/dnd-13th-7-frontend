@@ -5,6 +5,13 @@ import { cn } from '@/shared/utils/cn'
 import { PRESET } from './presets'
 import { CardSizePreset, Orientation } from './types'
 
+type CardCSSVars = {
+  '--card-w'?: string
+  '--thumb-w'?: string
+  '--card-gap'?: string
+  '--card-pad'?: string
+}
+
 export const CardCtx = React.createContext<{
   orientation: Orientation
   preset: CardSizePreset
@@ -37,13 +44,13 @@ export function Card({
 }: CardProps) {
   const preset = PRESET[size]
 
-  const styles: React.CSSProperties = {
-    ...(style || {}),
-    ['--card-w' as any]: preset.cardWidth,
-    ['--thumb-w' as any]: thumbNailWidth ?? preset.ImageWidth,
-    ['--card-gap' as any]: gap,
-    ['--card-pad' as any]: pad,
-  }
+  const styles = {
+    ...style,
+    '--card-w': preset.cardWidth,
+    '--thumb-w': thumbNailWidth ?? preset.ImageWidth,
+    ...(gap && { '--card-gap': gap }),
+    ...(pad && { '--card-pad': pad }),
+  } satisfies React.CSSProperties & CardCSSVars
 
   const base =
     orientation === 'vertical'

@@ -8,7 +8,7 @@ import { CardMeta } from './CardMeta'
 import { CardStats } from './CardStats'
 import { CardTitle } from './CardTitle'
 
-type CardCompound = typeof CardRoot & {
+export type CardCompound = typeof CardRoot & {
   Image: typeof CardImage
   Content: typeof CardContent
   Header: typeof CardHeader

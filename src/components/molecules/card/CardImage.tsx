@@ -6,6 +6,10 @@ import { cn } from '@/shared/utils/cn'
 import { CardCtx } from './Card'
 import { PRESET } from './presets'
 
+type CardImageCSSVars = {
+  '--thumb-w'?: string
+}
+
 export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
   coverSrc?: string | null
   logoSrc?: string | null
@@ -57,9 +61,9 @@ export function CardImage({
         className,
       )}
       style={{
-        ...(orientation === 'horizontal' && ImageWidth
-          ? ({ ['--thumb-w' as any]: ImageWidth } as React.CSSProperties)
-          : undefined),
+        ...((orientation === 'horizontal' && ImageWidth
+          ? { '--thumb-w': ImageWidth }
+          : {}) as CardImageCSSVars),
         aspectRatio: ratio.replace('/', ' / '),
       }}
       {...props}
