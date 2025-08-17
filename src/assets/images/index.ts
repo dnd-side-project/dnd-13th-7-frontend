@@ -1,1 +1,2 @@
-export { default as MoyeoitLogo } from './moyeoit-logo.svg'
+export { default as MoyeoitFullLogo } from './moyeoit-logo-full.svg'
+export { default as MoyeoitMiniLogo } from './moyeoit-logo-mini.svg'
