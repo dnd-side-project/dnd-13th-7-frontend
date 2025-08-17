@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation'
 import { ProfileIcon, SearchIcon } from '@/assets/icons'
 import { MoyeoitFullLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
+import AppPath from '@/shared/configs/appPath'
 
-const IS_LOGIN = true
+const IS_LOGIN = false
 
 export default function Header() {
   const router = useRouter()
@@ -45,7 +46,7 @@ export default function Header() {
             </nav>
           </div>
           {/* Right: search, profile, cta */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Button
               variant="none"
               size="none"
@@ -60,13 +61,14 @@ export default function Header() {
                 size="none"
                 aria-label="profile"
                 className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
+                onClick={() => router.push(AppPath.myPage())}
               >
                 <Image src={ProfileIcon} alt="profile" width={48} height={48} />
               </Button>
             ) : (
               <Link
                 href="/login"
-                className="typo-caption-m text-main-color-1 hover:underline focus:underline"
+                className="typo-caption-m text-main-color-1 whitespace-nowrap hover:underline focus:underline"
               >
                 회원가입/로그인
               </Link>
