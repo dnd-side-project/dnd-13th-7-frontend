@@ -1,7 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { MoyeoitLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
 
 export default function Header() {
@@ -9,12 +11,15 @@ export default function Header() {
   return (
     <div className="w-full text-grey-color-5">
       <header className="mx-auto max-w-screen-xl px-4 py-3">
+        <h1 className="sr-only">moyeoit 모여잇</h1>
         <div className="h-14 w-full bg-white rounded-full flex items-center justify-between px-6">
           {/* Left: Logo placeholder */}
           <Link href="/" className="block">
-            <div
-              className="w-[144px] h-8 bg-gray-200 rounded"
-              aria-label="logo"
+            <Image
+              src={MoyeoitLogo}
+              alt="moyeoit logo"
+              width={132}
+              height={20}
             />
           </Link>
 

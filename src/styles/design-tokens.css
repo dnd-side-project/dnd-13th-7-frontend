@@ -59,6 +59,7 @@
   --color-main-color-3: var(--moyeoit-main-3);
   --color-main-color-4: var(--moyeoit-main-4);
   --color-failure-color: var(--moyeoit-failure);
+  --color-kakao-color: var(--moyeoit-kakao);
 }
 
 :root {
@@ -85,4 +86,6 @@
   --moyeoit-main-4: #634fe5;
 
   --moyeoit-failure: #f44336;
+
+  --moyeoit-kakao: #fee500;
 }

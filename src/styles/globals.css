@@ -25,3 +25,8 @@
     scrollbar-width: none;
   }
 }
+
+@theme {
+  --breakpoint-phone: 360px;
+  --breakpoint-desktop: 1440px;
+}
