@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -7,11 +8,13 @@ import { ProfileIcon, SearchIcon } from '@/assets/icons'
 import { MoyeoitFullLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
 import AppPath from '@/shared/configs/appPath'
+import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
 
 const IS_LOGIN = false
 
 export default function Header() {
   const router = useRouter()
+  const { setOpen } = useSearchUrlState()
   return (
     <div className="w-full text-grey-color-5 max-desktop:hidden">
       <header className="mx-auto px-4 py-3 ">
@@ -52,6 +55,7 @@ export default function Header() {
               size="none"
               aria-label="search"
               className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
+              onClick={() => setOpen(true)}
             >
               <Image src={SearchIcon} alt="search" width={24} height={24} />
             </Button>

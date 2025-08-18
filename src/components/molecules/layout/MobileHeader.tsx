@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -7,11 +8,13 @@ import { MenuIcon, SearchIcon } from '@/assets/icons'
 import { MoyeoitMiniLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
 import AppPath from '@/shared/configs/appPath'
+import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
 
 const IS_LOGIN = false
 
 export default function MobileHeader() {
-  const router = useRouter()
+  useRouter() // keep potential future navigation; avoid unused var warning
+  const { setOpen } = useSearchUrlState()
   return (
     <div className="w-full text-grey-color-5 min-w-[320px] desktop:hidden">
       <header className="mx-auto px-4 py-3 ">
@@ -42,7 +45,7 @@ export default function MobileHeader() {
               variant="none"
               size="none"
               className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
-              onClick={() => router.push('/review/new')}
+              onClick={() => setOpen(true)}
             >
               <Image src={SearchIcon} alt="search" width={24} height={24} />
             </Button>
