@@ -1,3 +1,4 @@
+import { SideBar } from '@/components/atoms/sideBar/Sidebar'
 import { Tab } from '@/components/molecules/tab'
 
 export default function Home() {
@@ -11,13 +12,6 @@ export default function Home() {
         <p className="typo-body-1-r">Hello World</p>
         <p className="typo-body-1-sb">Hello World</p>
         <p className="typo-body-1-m">Hello World</p>
-        <Tab
-          options={[
-            { label: '모집중', value: 'recruit' },
-            { label: '이름순', value: 'name' },
-            { label: '인기순', value: 'popular' },
-          ]}
-        />
         <p className="typo-body-2-sb">Hello World</p>
       </main>
     </div>
