@@ -34,11 +34,15 @@ const buttonVariants = cva(
             'hover:border-main-color-1 hover:text-main-color-1 hover:bg-main-color-3',
             'active:border-light-color-4 active:text-grey-color-5 active:bg-light-color-2',
           ].join(' '),
+        none: [
+          'border-none bg-transparent text-black-color hover:bg-transparent active:bg-transparent',
+        ],
       },
       size: {
         small: 'px-4 py-2 typo-caption-m',
         medium: 'px-4 py-3 typo-body-3-b',
         large: 'p-4 typo-body-3-b',
+        none: 'p-0 m-0',
       },
     },
     compoundVariants: [
