@@ -17,7 +17,7 @@ export default function Header() {
   const { setOpen } = useSearchUrlState()
   return (
     <div className="w-full text-grey-color-5 max-desktop:hidden">
-      <header className="mx-auto px-4 py-3 z-20 ">
+      <header className="mx-auto px-4 py-3 z-20 relative">
         <h1 className="sr-only">moyeoit 모여잇</h1>
         <div className="h-14 w-full bg-white rounded-full flex items-center justify-between px-6 shadow-sm ">
           {/* Left: Logo placeholder */}
