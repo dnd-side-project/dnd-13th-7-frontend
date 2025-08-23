@@ -267,7 +267,7 @@ export function Explore() {
                             <Card.Meta part={club.categories.join(' · ')} />
                           </Card.Content>
                           {club.isRecruiting && (
-                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb px-3 py-1.5 rounded-[73px] border border-light-color-3 z-10 flex items-center justify-center">
+                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center">
                               모집중
                             </div>
                           )}
