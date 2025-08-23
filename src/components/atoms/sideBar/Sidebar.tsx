@@ -21,15 +21,13 @@ export function SideBar({
   onChange,
   className,
 }: SideBarProps) {
-  const controlled = value !== undefined
-
   return (
-    <div className=" typo-body-1-2-sb py-14 px-5 ">
+    <div className="typo-body-1-2-sb">
       <RadioGroup.Root
         value={value}
         defaultValue={defaultValue}
         onValueChange={(v) => onChange?.(v)}
-        className={cn('flex flex-col w-44 h-full', className)}
+        className={cn('flex flex-col', className)}
       >
         {options.map((o) => {
           const id = `${o.value}`
@@ -44,7 +42,7 @@ export function SideBar({
               <label
                 htmlFor={id}
                 className={cn(
-                  'block px-5 py-3 w-full h-13',
+                  'block w-full py-3 px-5',
                   'cursor-pointer select-none',
                   // 선택 상태
                   'peer-data-[state=checked]:bg-white rounded-[4px]',

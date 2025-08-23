@@ -2,221 +2,14 @@ import { http, HttpResponse } from 'msw'
 import {
   ClubDetailsData,
   ClubRecruitsData,
-  ClubsListItem,
   ClubsPage,
   Pageable,
   PageableSort,
 } from '@/features/clubs/types'
+import { clubs, detailsById, recruitsById } from '@/mocks/mockData/mockClubs'
 import { ApiResponse } from '@/shared/types/api'
 
 // Mock data
-const clubs: ClubsListItem[] = [
-  {
-    clubId: 1,
-    clubName: '알고리즘 동아리 ALGO',
-    description: '알고리즘 스터디 및 대회 준비',
-    categories: ['학술', '개발'],
-    logoUrl: '/logos/algo.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 2,
-    clubName: '디자인 스튜디오 D:ST',
-    description: 'UI/UX 디자인 스터디와 프로젝트',
-    categories: ['디자인', '학술'],
-    logoUrl: '/logos/dst.png',
-    isRecruiting: false,
-  },
-  {
-    clubId: 3,
-    clubName: '사진동아리 SNAP',
-    description: '출사와 사진 보정 워크샵',
-    categories: ['예술', '취미'],
-    logoUrl: '/logos/snap.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 4,
-    clubName: '밴드부 RE:PLAY',
-    description: '정기공연과 합주',
-    categories: ['음악', '공연'],
-    logoUrl: '/logos/replay.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 5,
-    clubName: '봉사동아리 HANDS',
-    description: '지역사회 봉사활동',
-    categories: ['봉사'],
-    logoUrl: '/logos/hands.png',
-    isRecruiting: false,
-  },
-  {
-    clubId: 6,
-    clubName: '게임개발 G-DEV',
-    description: '인디게임 제작 스터디',
-    categories: ['개발', '게임'],
-    logoUrl: '/logos/gdev.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 7,
-    clubName: '영화감상 CINEMA',
-    description: '영화 상영 및 리뷰',
-    categories: ['문화', '취미'],
-    logoUrl: '/logos/cinema.png',
-    isRecruiting: false,
-  },
-  {
-    clubId: 8,
-    clubName: '테니스 ACE',
-    description: '주 2회 코트 연습',
-    categories: ['체육'],
-    logoUrl: '/logos/ace.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 9,
-    clubName: '요리 COOKers',
-    description: '요리 레시피 공유와 실습',
-    categories: ['취미', '요리'],
-    logoUrl: '/logos/cook.png',
-    isRecruiting: false,
-  },
-  {
-    clubId: 10,
-    clubName: '문예창작 PEN',
-    description: '시/소설 창작 모임',
-    categories: ['문학'],
-    logoUrl: '/logos/pen.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 11,
-    clubName: '로보틱스 ROBO',
-    description: '로봇 하드웨어/소프트웨어 연구',
-    categories: ['공학', '개발'],
-    logoUrl: '/logos/robo.png',
-    isRecruiting: true,
-  },
-  {
-    clubId: 12,
-    clubName: '마케팅 MKT',
-    description: '디지털 마케팅 및 브랜딩',
-    categories: ['경영', '학술'],
-    logoUrl: '/logos/mkt.png',
-    isRecruiting: false,
-  },
-]
-
-const detailsById: Record<number, ClubDetailsData> = {
-  1: {
-    name: '알고리즘 동아리 ALGO',
-    position: null,
-    slogan: 'Think. Solve. Optimize.',
-    bio: '알고리즘 문제풀이와 대회 준비를 함께 합니다.',
-    establishment: 2012,
-    total_participant: 45,
-    operation: 1,
-    offline: '주 1회 세미나',
-    online: '디스코드 상시 스터디',
-    location: '공학관 312호',
-    address: '서울시 광진구 능동로 209',
-    recruiting: true,
-    imageUrl: '/images/clubs/algo/cover.jpg',
-    recruitmentPart: '알고리즘/자료구조',
-    activities: [
-      {
-        hashtag: '#PS',
-        activityName: '주간 스터디',
-        activityDescribe: '백준/프로그래머스 문제풀이',
-        imageUrl: null,
-        order: 1,
-      },
-    ],
-    schedules: [
-      { periodValue: 1, period: '3월', activity: '신입 OT' },
-      { periodValue: 2, period: '4~6월', activity: '봄학기 스터디' },
-    ],
-  },
-  2: {
-    name: '디자인 스튜디오 D:ST',
-    position: null,
-    slogan: 'Design for Everyone',
-    bio: 'UI/UX 중심의 디자인 스터디와 실무 스킬 향상.',
-    establishment: 2018,
-    total_participant: 28,
-    operation: 1,
-    offline: '격주 스튜디오 세션',
-    online: '피그마 협업/슬랙',
-    location: '디자인관 201호',
-    address: '서울시 광진구 능동로 209',
-    recruiting: false,
-    imageUrl: '/images/clubs/dst/cover.jpg',
-    recruitmentPart: 'UI/UX, 브랜딩',
-    activities: [
-      {
-        hashtag: '#Figma',
-        activityName: '프로토타이핑 워크샵',
-        activityDescribe: '피그마 활용법 공유',
-        imageUrl: null,
-        order: 1,
-      },
-    ],
-    schedules: [
-      { periodValue: 1, period: '상시', activity: '포트폴리오 리뷰' },
-    ],
-  },
-}
-
-// 기본 템플릿으로 세부/모집정보가 없는 ID는 1번 데이터를 복제하여 변형
-for (const club of clubs) {
-  if (!detailsById[club.clubId]) {
-    detailsById[club.clubId] = {
-      ...detailsById[1],
-      name: club.clubName,
-      recruiting: club.isRecruiting,
-      imageUrl: `/images/clubs/${club.clubId}/cover.jpg`,
-    }
-  }
-}
-
-const recruitsById: Record<number, ClubRecruitsData> = {
-  1: {
-    clubName: '알고리즘 동아리 ALGO',
-    clubLogoUrl: '/logos/algo.png',
-    recruitmentParts: ['알고리즘', '자료구조'],
-    qualification: '프로그래밍 기초 지식',
-    recruitmentSchedule: '상반기(3~4월), 하반기(9~10월)',
-    activityPeriod: '1년(연장 가능)',
-    activityMethod: '온/오프라인 병행',
-    activityFee: '월 5,000원',
-    homepageUrl: 'https://example.com/algo',
-    noticeUrl: 'https://example.com/algo/notice',
-  },
-  2: {
-    clubName: '디자인 스튜디오 D:ST',
-    clubLogoUrl: '/logos/dst.png',
-    recruitmentParts: ['UI/UX', '브랜딩'],
-    qualification: '기초 디자인 툴 사용 가능',
-    recruitmentSchedule: '비정기',
-    activityPeriod: '학기 단위',
-    activityMethod: '오프라인 중심',
-    activityFee: '월 10,000원',
-    homepageUrl: 'https://example.com/dst',
-    noticeUrl: 'https://example.com/dst/notice',
-  },
-}
-
-for (const club of clubs) {
-  if (!recruitsById[club.clubId]) {
-    recruitsById[club.clubId] = {
-      ...recruitsById[1],
-      clubName: club.clubName,
-      clubLogoUrl: club.logoUrl,
-    }
-  }
-}
 
 function buildPageableSort(): PageableSort {
   return { sorted: false, unsorted: true, empty: true }
@@ -234,6 +27,105 @@ function buildPageable(pageNumber: number, pageSize: number): Pageable {
 }
 
 const clubHandlers = [
+  // GET /api/v1/clubs (목록, 검색/페이지네이션)
+  http.get('/api/v1/clubs', ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '0')
+    const size = parseInt(url.searchParams.get('size') || '10')
+    const sort = url.searchParams.get('sort') || 'popular'
+    const field = url.searchParams.get('field')
+    const part = url.searchParams.get('part')
+    const way = url.searchParams.get('way')
+    const target = url.searchParams.get('target')
+
+    // Filter by field (category)
+    let filteredClubs = clubs
+    if (field && field !== 'all') {
+      filteredClubs = filteredClubs.filter((club) =>
+        club.categories.some((cat) =>
+          cat.toLowerCase().includes(field.toLowerCase()),
+        ),
+      )
+    }
+
+    // Filter by part (직군)
+    if (part && part !== 'all') {
+      const partArray = part.split(',')
+      filteredClubs = filteredClubs.filter((club) =>
+        partArray.some((p) =>
+          club.categories.some((cat) =>
+            cat.toLowerCase().includes(p.toLowerCase()),
+          ),
+        ),
+      )
+    }
+
+    // Filter by way (활동 방식)
+    if (way && way !== 'all') {
+      const wayArray = way.split(',')
+      filteredClubs = filteredClubs.filter((club) =>
+        wayArray.some((w) =>
+          club.description.toLowerCase().includes(w.toLowerCase()),
+        ),
+      )
+    }
+
+    // Filter by target (모집 대상)
+    if (target && target !== 'all') {
+      const targetArray = target.split(',')
+      filteredClubs = filteredClubs.filter((club) =>
+        targetArray.some((t) =>
+          club.description.toLowerCase().includes(t.toLowerCase()),
+        ),
+      )
+    }
+
+    // Sort clubs (최적화: 불필요한 복사 제거)
+    if (sort === 'recruit') {
+      filteredClubs.sort((a, b) => {
+        if (a.isRecruiting !== b.isRecruiting) {
+          return a.isRecruiting ? -1 : 1
+        }
+        return a.clubName.localeCompare(b.clubName)
+      })
+    } else if (sort === 'name') {
+      filteredClubs.sort((a, b) => a.clubName.localeCompare(b.clubName))
+    } else if (sort === 'popular') {
+      filteredClubs.sort((a, b) => a.clubId - b.clubId)
+    }
+
+    // Pagination
+    const start = page * size
+    const end = start + size
+    const content = filteredClubs.slice(start, end)
+
+    const totalElements = filteredClubs.length
+    const totalPages = Math.max(1, Math.ceil(totalElements / size))
+    const last = page >= totalPages - 1
+
+    const pagePayload: ClubsPage = {
+      content,
+      pageable: buildPageable(page, size),
+      totalPages,
+      totalElements,
+      last,
+      size,
+      number: page,
+      sort: buildPageableSort(),
+      numberOfElements: content.length,
+      first: page === 0,
+      empty: content.length === 0,
+    }
+
+    const body: ApiResponse<ClubsPage> = {
+      status: 'SUCCESS',
+      message: '동아리 목록 조회에 성공하였습니다.',
+      data: pagePayload,
+    }
+
+    return HttpResponse.json(body)
+  }),
+
   // GET /api/v1/clubs (목록, 검색/페이지네이션)
   http.get('*/api/v1/clubs', ({ request }) => {
     const url = new URL(request.url)
@@ -276,8 +168,8 @@ const clubHandlers = [
     }
 
     const body: ApiResponse<ClubsPage> = {
-      status: 'OK',
-      message: 'success',
+      status: 'SUCCESS',
+      message: '동아리 목록 조회에 성공하였습니다.',
       data: pagePayload,
     }
 
@@ -297,8 +189,8 @@ const clubHandlers = [
       return HttpResponse.json(notFound, { status: 404 })
     }
     const body: ApiResponse<ClubDetailsData> = {
-      status: 'OK',
-      message: 'success',
+      status: 'SUCCESS',
+      message: '동아리 상세 정보 조회에 성공하였습니다.',
       data: details,
     }
     return HttpResponse.json(body)
@@ -317,8 +209,8 @@ const clubHandlers = [
       return HttpResponse.json(notFound, { status: 404 })
     }
     const body: ApiResponse<ClubRecruitsData> = {
-      status: 'OK',
-      message: 'success',
+      status: 'SUCCESS',
+      message: '조회에 성공하였습니다.',
       data: recruits,
     }
     return HttpResponse.json(body)
