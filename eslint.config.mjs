@@ -35,6 +35,7 @@ const eslintConfig = [
       '.next/**',
       'out/**',
       'storybook-static/**',
+      '.pnpm-lock.yaml',
     ],
   }),
   ...storybook.configs['flat/recommended'],
