@@ -1,8 +1,16 @@
 export const clubKeys = {
   all: () => ['clubs'] as const,
   lists: () => [...clubKeys.all(), 'list'] as const,
-  list: (params?: { page?: number; size?: number; search?: string }) =>
-    [...clubKeys.lists(), params ?? {}] as const,
+  list: (params?: {
+    page?: number
+    size?: number
+    search?: string
+    field?: string
+    part?: string
+    way?: string
+    target?: string
+    sort?: string
+  }) => [...clubKeys.lists(), params ?? {}] as const,
   details: () => [...clubKeys.all(), 'details'] as const,
   detail: (clubId: number | string) => [...clubKeys.details(), clubId] as const,
   recruits: () => [...clubKeys.all(), 'recruits'] as const,

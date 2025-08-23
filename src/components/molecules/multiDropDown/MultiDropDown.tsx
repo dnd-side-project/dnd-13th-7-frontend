@@ -13,7 +13,7 @@ import {
 import { cn } from '@/shared/utils/cn'
 
 export type Option = { label: string; value: string }
-export type Group = { title: string; options: Option[] }
+export type Group = { title?: string; options: Option[] }
 
 function summarize(labels: string[], maxShown = 2, empty = '선택') {
   if (labels.length === 0) return empty
@@ -67,67 +67,111 @@ const MultiDropDown: React.FC<Props> = ({
   const [inner, setInner] = React.useState<string[]>(defaultValue)
   const selected = isControlled ? value! : inner
 
-  const setSelected = (next: string[]) => {
-    if (!isControlled) setInner(next)
-    onChange?.(next)
-  }
-
-  const toggleOne = (val: string, next: boolean) => {
-    setSelected(
-      next
-        ? [...new Set([...selected, val])]
-        : selected.filter((v) => v !== val),
-    )
-  }
-
   const allOptions = React.useMemo(
     () => groups.flatMap((g) => g.options.map((o) => o.value)),
     [groups],
   )
+
+  const valueToLabel = React.useMemo(
+    () =>
+      new Map(
+        groups.flatMap((g) =>
+          g.options.map((o) => [o.value, o.label] as const),
+        ),
+      ),
+    [groups],
+  )
+
+  const setSelected = React.useCallback(
+    (next: string[]) => {
+      if (!isControlled) setInner(next)
+      onChange?.(next)
+    },
+    [isControlled, onChange],
+  )
+
+  const toggleOne = React.useCallback(
+    (val: string, next: boolean) => {
+      if (val === 'all' && next) {
+        setSelected(allOptions)
+      } else if (val === 'all' && !next) {
+        setSelected([])
+      } else {
+        setSelected(
+          next
+            ? [...new Set([...selected, val])]
+            : selected.filter((v) => v !== val),
+        )
+      }
+    },
+    [selected, setSelected, allOptions],
+  )
+
+  const byGroup = React.useMemo(() => {
+    return groups.map((g) => {
+      const vals = g.options.map((o) => o.value)
+      const selInGroup = vals.filter((v) => selected.includes(v))
+      const st: CheckState =
+        selInGroup.length === 0
+          ? false
+          : selInGroup.length === vals.length
+            ? true
+            : 'indeterminate'
+
+      return { group: g, state: st, vals }
+    })
+  }, [groups, selected])
+
   const total = allOptions.length
   const count = selected.length
   const showAllLabel = count === total
-
-  const byGroup = groups.map((g) => {
-    const vals = g.options.map((o) => o.value)
-    const selInGroup = vals.filter((v) => selected.includes(v))
-    const st: CheckState =
-      selInGroup.length === 0
-        ? false
-        : selInGroup.length === vals.length
-          ? true
-          : 'indeterminate'
-    const toggleGroup = (next: boolean) => {
-      const rest = selected.filter((v) => !vals.includes(v))
-      setSelected(next ? [...rest, ...vals] : rest)
-    }
-    return { group: g, state: st, toggleGroup }
-  })
-
-  const valueToLabel = new Map(
-    groups.flatMap((g) => g.options.map((o) => [o.value, o.label] as const)),
-  )
   const hasSelected = selected.length > 0
-  const selectedLabels = selected.map((v) => valueToLabel.get(v) || v)
-  const summary = showAllLabel
-    ? '전체'
-    : summarize(selectedLabels, maxSummary, placeholder)
 
-  const triggerClass = cn(
-    triggerVariants({ variant: hasSelected ? 'solid' : variant }),
-    open ? 'bg-[var(--moyeoit-white)]' : 'bg-[var(--moyeoit-light-2)]',
+  const selectedLabels = React.useMemo(
+    () => selected.map((v) => valueToLabel.get(v) || v),
+    [selected, valueToLabel],
   )
+
+  const summary = React.useMemo(
+    () =>
+      showAllLabel
+        ? '전체'
+        : summarize(selectedLabels, maxSummary, placeholder),
+    [showAllLabel, selectedLabels, maxSummary, placeholder],
+  )
+
+  const triggerClass = React.useMemo(
+    () =>
+      cn(
+        triggerVariants({ variant: hasSelected ? 'solid' : variant }),
+        open ? 'bg-[var(--moyeoit-white)]' : 'bg-[var(--moyeoit-light-2)]',
+      ),
+    [hasSelected, variant, open],
+  )
+
+  const handleOpenChange = React.useCallback((newOpen: boolean) => {
+    setOpen(newOpen)
+
+    if (!newOpen) {
+      setTimeout(() => {}, 100)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    return () => {
+      setOpen(false)
+    }
+  }, [])
 
   return (
     <div className={cn('w-72', className)}>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button className={triggerClass}>
             {summary}
             <span
               className={cn(
                 'typo-button-m',
-
                 selected.length > 0
                   ? 'text-[var(--moyeoit-main-1)]'
                   : 'text-[var(--moyeoit-grey-2)]',
@@ -141,28 +185,31 @@ const MultiDropDown: React.FC<Props> = ({
         <PopoverContent
           side="bottom"
           align="start"
-          className="w-[174px] mt-2 border border-[var(--moyeoit-light-3)] shadow-none bg-[var(--moyeoit-white)] typo-button-m whitespace-nowrap py-4 space-y-4 rounded-2xl"
+          sideOffset={4}
+          avoidCollisions={false}
+          className="w-fit mt-2 border border-[var(--moyeoit-light-3)] shadow-none bg-[var(--moyeoit-white)] typo-button-m whitespace-nowrap p-4 space-y-4 rounded-2xl"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-2 ">
-            <CheckItem
-              label="전체"
-              checked={showAllLabel}
-              onChange={(next) => setSelected(next ? allOptions : [])}
-            />
-          </div>
-
-          <div className="px-2 space-y-4">
+          <div className="space-y-4">
             {byGroup.map(({ group }) => (
-              <div key={group.title} className="space-y-2">
-                <div className="text-[var(--moyeoit-grey-4)] typo-caption-m">
-                  {group.title}
-                </div>
+              <div key={group.title || 'default'} className="space-y-2">
+                {group.title && (
+                  <div className="text-[var(--moyeoit-grey-4)] typo-caption-m">
+                    {group.title}
+                  </div>
+                )}
                 <div className="space-y-2 ">
                   {group.options.map((o) => (
                     <CheckItem
                       key={o.value}
                       label={o.label}
-                      checked={selected.includes(o.value)}
+                      checked={
+                        o.value === 'all'
+                          ? selected.length === allOptions.length &&
+                            allOptions.length > 0
+                          : selected.includes(o.value)
+                      }
                       onChange={(next) => toggleOne(o.value, next as boolean)}
                     />
                   ))}

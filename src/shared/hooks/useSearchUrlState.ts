@@ -13,8 +13,8 @@ export default function useSearchUrlState() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const isOpen = searchParams.get('search') === '1'
-  const keyword = searchParams.get('q') ?? ''
+  const isOpen = searchParams?.get('search') === '1'
+  const keyword = searchParams?.get('q') ?? ''
 
   const updateParams = React.useCallback(
     (updater: (params: URLSearchParams) => void) => {
@@ -22,7 +22,7 @@ export default function useSearchUrlState() {
       updater(next)
       const query = next.toString()
       const href = query ? `${pathname}?${query}` : pathname
-      router.replace(href, { scroll: false })
+      router.replace(href || '', { scroll: false })
     },
     [router, pathname, searchParams],
   )

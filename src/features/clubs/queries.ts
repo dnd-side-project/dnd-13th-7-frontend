@@ -6,6 +6,11 @@ export function useClubsList(params?: {
   page?: number
   size?: number
   search?: string
+  field?: string
+  part?: string
+  way?: string
+  target?: string
+  sort?: string
 }): UseQueryResult<ClubsPage, Error> {
   return useQuery(clubQueries.list(params))
 }

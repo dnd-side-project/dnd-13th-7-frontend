@@ -6,6 +6,11 @@ export async function getClubs(params?: {
   page?: number
   size?: number
   search?: string
+  field?: string
+  part?: string
+  way?: string
+  target?: string
+  sort?: string
 }): Promise<ClubsPage> {
   const res = await apiClient.get<ApiResponse<ClubsPage>>('/api/v1/clubs', {
     params,
