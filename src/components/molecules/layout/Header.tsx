@@ -9,6 +9,7 @@ import { MoyeoitFullLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
 import AppPath from '@/shared/configs/appPath'
 import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
+import { ReviewWriteDropdown } from './sections'
 
 const IS_LOGIN = false
 
@@ -77,14 +78,7 @@ export default function Header() {
                 회원가입/로그인
               </Link>
             )}
-            <Button
-              size="small"
-              variant="solid"
-              onClick={() => router.push(AppPath.reviewNewRoot())}
-              className="typo-button"
-            >
-              후기 작성
-            </Button>
+            <ReviewWriteDropdown />
           </div>
         </div>
       </header>

@@ -88,4 +88,6 @@
   --moyeoit-failure: #f44336;
 
   --moyeoit-kakao: #fee500;
+
+  --exception-header-height: calc(100vh - 80px);
 }

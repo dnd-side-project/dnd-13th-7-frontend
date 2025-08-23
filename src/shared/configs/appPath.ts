@@ -14,11 +14,10 @@ const AppPath = {
   clubDetail: (clubId: string) => `/club/${clubId}` as const,
   reviewExplore: () => '/review/explore' as const,
   reviewDetail: (reviewId: string) => `/review/${reviewId}` as const,
-  reviewNewRoot: () => '/review/new' as const,
   reviewNew: (
     kind: 'paper' | 'interview' | 'activity',
-    type: 'normal' | 'premium',
-  ) => `/review/new/${kind}/${type}` as const,
+    type?: 'normal' | 'premium',
+  ) => `/review/new/${kind}${type ? `/${type}` : ''}` as const,
   reviewEdit: (reviewId: string) => `/review/${reviewId}/edit` as const,
 } as const
 
