@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import ReviewCardTemplate from '@/components/pages/review/new/kind/type/ReviewCardTemplate'
 
 const validKinds = ['paper', 'interview', 'activity'] as const
 const validTypes = ['normal', 'premium'] as const
@@ -41,23 +42,17 @@ export default async function Page({
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="">
       <div className="max-w-4xl mx-auto pt-20 px-6">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-black mb-2">
-            {getKindDisplayName(kind)} {getTypeDisplayName(type)} 작성
-          </h1>
-          <p className="text-gray-600 text-sm">
-            {type === 'normal'
-              ? '간단하고 빠르게 후기를 작성해보세요'
-              : '상세한 가이드를 따라 체계적으로 후기를 작성해보세요'}
-          </p>
-        </div>
-
-        <div className="bg-gray-50 rounded-xl p-8">
-          <p className="text-center text-gray-500">
-            {getTypeDisplayName(type)} 작성 폼이 여기에 표시됩니다.
-          </p>
+          <ReviewCardTemplate
+            typeText={getTypeDisplayName(type)}
+            kindText={getKindDisplayName(kind)}
+          >
+            <div>
+              <h1 className="text-2xl font-bold text-black mb-2">작성</h1>
+            </div>
+          </ReviewCardTemplate>
         </div>
       </div>
     </main>

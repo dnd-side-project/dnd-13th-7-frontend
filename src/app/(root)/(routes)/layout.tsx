@@ -12,7 +12,7 @@ export default function RoutesLayout({ children }: { children: ReactNode }) {
       <Suspense fallback={null}>
         <Header />
       </Suspense>
-      <div className="flex-1 w-full">{children}</div>
+      <div className="w-full h-(--exception-header-height)">{children}</div>
       <Suspense fallback={null}>
         <SearchOverlay />
       </Suspense>
