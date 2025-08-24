@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { appValidation } from '@/shared/configs/appValidation'
+import { useAuth } from '@/shared/providers/auth-provider'
 
 // 동의 항목 타입 정의
 export interface AgreementItem {
@@ -62,6 +64,9 @@ export const SignupFormSchema = z.object({
 export type SignupFormType = z.infer<typeof SignupFormSchema>
 
 export const useSignupForm = () => {
+  const router = useRouter()
+  const { login } = useAuth()
+
   const form = useForm<SignupFormType>({
     resolver: zodResolver(SignupFormSchema),
     defaultValues: {
@@ -96,10 +101,47 @@ export const useSignupForm = () => {
   const onSubmit = async (data: SignupFormType) => {
     setIsSubmitting(true)
     try {
-      //   await signup(data)
-      console.log(data)
+      // OAuth 데이터가 있는지 확인
+      const oauthDataStr = sessionStorage.getItem('oauth_data')
+      let oauthData = null
+
+      if (oauthDataStr) {
+        try {
+          oauthData = JSON.parse(oauthDataStr)
+        } catch (error) {
+          console.error('OAuth 데이터 파싱 에러:', error)
+        }
+      }
+
+      console.log('회원가입 데이터:', data)
+      console.log('OAuth 데이터:', oauthData)
+
+      // TODO: 실제 회원가입 API 호출
+      // const signupResult = await signupApi({
+      //   ...data,
+      //   oauthToken: oauthData?.access_token
+      // })
+
+      // 임시로 성공 처리 (실제로는 API 응답을 사용)
+      if (oauthData) {
+        // OAuth 토큰으로 최종 로그인 처리
+        login(oauthData.access_token, {
+          id: oauthData.user_id,
+          active: true, // 회원가입 완료 후 활성화
+        })
+
+        // OAuth 데이터 정리
+        sessionStorage.removeItem('oauth_data')
+
+        // 홈으로 이동
+        router.push('/')
+      } else {
+        // 일반 회원가입인 경우
+        console.log('일반 회원가입 완료')
+        router.push('/login')
+      }
     } catch (error) {
-      console.error(error)
+      console.error('회원가입 에러:', error)
     } finally {
       setIsSubmitting(false)
     }

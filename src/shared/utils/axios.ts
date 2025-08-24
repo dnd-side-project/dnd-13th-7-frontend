@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-const baseURL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://13.124.170.206:8080'
+const baseURL = 'http://api.moyeoit.com/api'
 
 const apiClient = axios.create({
   baseURL,
-  withCredentials: false, // OAuth 리다이렉트를 위해 false로 설정
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
   timeout: 10_000,
 })

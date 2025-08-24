@@ -1,6 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import {
@@ -20,11 +21,41 @@ import {
   FormMessage,
 } from '@/components/molecules/Form'
 import { UserCategory } from '@/features/user/types'
+import { useAuth } from '@/shared/providers/auth-provider'
 import { useSignupForm, AGREEMENT_ITEMS } from './hooks/useSignupForm'
 
 export default function SignupPage() {
+  const { setUserFromOAuth } = useAuth()
+  const router = useRouter()
+
   const { form, onSubmit, isSubmitting, allAgreed, handleAllAgreementChange } =
     useSignupForm()
+
+  // OAuth 데이터가 있는지 확인하고 처리
+  useEffect(() => {
+    const oauthDataStr = sessionStorage.getItem('oauth_data')
+    if (oauthDataStr) {
+      try {
+        const oauthData = JSON.parse(oauthDataStr)
+        console.log('OAuth 데이터 확인:', oauthData)
+
+        if (oauthData.active === true) {
+          // 이미 활성화된 계정이면 바로 로그인 처리
+          setUserFromOAuth(oauthData)
+          router.push('/')
+          return
+        }
+
+        // OAuth 데이터에서 이메일 정보가 있다면 폼에 미리 채우기
+        if (oauthData.email) {
+          form.setValue('email', oauthData.email)
+        }
+      } catch (error) {
+        console.error('OAuth 데이터 파싱 에러:', error)
+        sessionStorage.removeItem('oauth_data')
+      }
+    }
+  }, [setUserFromOAuth, router, form])
 
   const handleArrowClick = (itemId: string) => {
     // 약관 상세 페이지로 이동하는 로직
@@ -33,7 +64,7 @@ export default function SignupPage() {
 
   return (
     <main className="flex flex-col gap-2 px-5 h-full w-full max-w-[360px] mx-auto pt-20 pb-12">
-      <h2 className="typo-title-1 text-center mb-24">회원가입</h2>
+      <h2 className="mb-24 text-center typo-title-1">회원가입</h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -137,9 +168,9 @@ export default function SignupPage() {
                 label="전체 동의"
                 checked={allAgreed}
                 onChange={handleAllAgreementChange}
-                className="typo-body-m font-semibold"
+                className="font-semibold typo-body-m"
               />
-              <div className="h-px bg-light-color-4 mt-3" />
+              <div className="h-px mt-3 bg-light-color-4" />
             </div>
 
             <div className="space-y-3">
