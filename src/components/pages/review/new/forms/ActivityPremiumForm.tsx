@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Input } from '@/components/atoms'
 import { Button } from '@/components/atoms/Button'
 import { ImageUpload } from '@/components/atoms/ImageUpload'
@@ -28,6 +29,7 @@ import {
 } from './hooks/useActivityPremiumForm'
 
 export default function ActivityPremiumForm() {
+  const router = useRouter()
   const { form, onSubmit, isSubmitting } = useActivityPremiumForm()
   const { data: clubsData } = useClubsList()
 
@@ -319,6 +321,7 @@ export default function ActivityPremiumForm() {
               variant="outlined-secondary"
               size="large"
               className="flex-1"
+              onClick={() => router.back()}
             >
               취소
             </Button>

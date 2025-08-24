@@ -19,6 +19,7 @@ const AppPath = {
     type?: 'normal' | 'premium',
   ) => `/review/new/${kind}${type ? `/${type}` : ''}` as const,
   reviewEdit: (reviewId: string) => `/review/${reviewId}/edit` as const,
+  reviewSubmitted: () => '/review/submitted' as const,
 } as const
 
 type AppPathReturnType = {

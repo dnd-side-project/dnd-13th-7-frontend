@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Input } from '@/components/atoms'
 import { Button } from '@/components/atoms/Button'
 import { ImageUpload } from '@/components/atoms/ImageUpload'
@@ -26,6 +27,7 @@ import { ResultType } from '@/features/review/types'
 import { usePaperPremiumForm } from './hooks/usePaperPremiumForm'
 
 export default function PaperPremiumForm() {
+  const router = useRouter()
   const { form, onSubmit, isSubmitting } = usePaperPremiumForm()
   const { data: clubsData } = useClubsList()
 
@@ -314,6 +316,7 @@ export default function PaperPremiumForm() {
               variant="outlined-secondary"
               size="large"
               className="flex-1"
+              onClick={() => router.back()}
             >
               취소
             </Button>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import z from 'zod'
 import {
   ReviewCategory,
@@ -10,6 +11,7 @@ import {
   type AnswerRequest,
   ResultType,
 } from '@/features/review/types'
+import AppPath from '@/shared/configs/appPath'
 import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
@@ -58,6 +60,7 @@ export type PaperNormalFormType = z.infer<typeof PaperNormalFormSchema>
 
 export const usePaperNormalForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
 
   const form = useForm<PaperNormalFormType>({
     resolver: zodResolver(PaperNormalFormSchema),
@@ -125,6 +128,7 @@ export const usePaperNormalForm = () => {
       console.log('Form submitted:', apiData)
       // TODO: API 호출
       // await postBasicReview(apiData)
+      router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
     } finally {

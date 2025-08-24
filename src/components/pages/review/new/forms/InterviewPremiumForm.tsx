@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Input } from '@/components/atoms'
 import { Button } from '@/components/atoms/Button'
 import { ImageUpload } from '@/components/atoms/ImageUpload'
@@ -26,6 +27,7 @@ import { ResultType } from '@/features/review/types'
 import { useInterviewPremiumForm } from './hooks/useInterviewPremiumForm'
 
 export default function InterviewPremiumForm() {
+  const router = useRouter()
   const { form, onSubmit, isSubmitting } = useInterviewPremiumForm()
   const { data: clubsData } = useClubsList()
 
@@ -314,6 +316,7 @@ export default function InterviewPremiumForm() {
               variant="outlined-secondary"
               size="large"
               className="flex-1"
+              onClick={() => router.back()}
             >
               취소
             </Button>

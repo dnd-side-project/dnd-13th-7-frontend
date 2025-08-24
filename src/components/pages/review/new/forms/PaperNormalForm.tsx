@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/atoms/Button'
 import { OptionButton } from '@/components/atoms/OptionButton'
 import {
@@ -30,6 +31,7 @@ import {
 } from './hooks/usePaperNormalForm'
 
 export default function PaperNormalForm() {
+  const router = useRouter()
   const { form, onSubmit, isSubmitting } = usePaperNormalForm()
   const { data: clubsData } = useClubsList()
   console.log('clubsData', clubsData)
@@ -395,6 +397,7 @@ export default function PaperNormalForm() {
               variant="outlined-secondary"
               size="large"
               className="flex-1"
+              onClick={() => router.back()}
             >
               취소
             </Button>
