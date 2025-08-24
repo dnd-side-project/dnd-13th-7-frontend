@@ -10,7 +10,7 @@ import {
   type Group,
 } from '@/components/molecules/multiDropDown/MultiDropDown'
 import { Tab, type TabOption } from '@/components/molecules/tab/Tab'
-import { useClubsList } from '@/features/clubs/queries'
+import { useExploreClubs } from '@/features/explore/queries'
 import useQueryState from '@/shared/hooks/useQueryState'
 
 const CATEGORY_OPTIONS: SideOption[] = [
@@ -29,23 +29,23 @@ const SORT_OPTIONS: TabOption[] = [
 const PART_OPTIONS: Group[] = [
   {
     title: '전체',
-    options: [{ label: '전체', value: 'all' }],
+    options: [{ label: '전체', value: '전체' }],
   },
   {
     title: '기획',
-    options: [{ label: 'PM/PO', value: 'pmpo' }],
+    options: [{ label: 'PM/PO', value: 'PM/PO' }],
   },
   {
     title: '디자인',
-    options: [{ label: '프로덕트 디자이너', value: 'designer' }],
+    options: [{ label: '프로덕트 디자이너', value: '프로덕트 디자이너' }],
   },
   {
-    title: '개발',
+    title: '개발자',
     options: [
-      { label: '백엔드 개발자', value: 'backend' },
-      { label: '프론트엔드 개발자', value: 'frontend' },
-      { label: '안드로이드 개발자', value: 'android' },
-      { label: 'iOS 개발자', value: 'ios' },
+      { label: '백엔드 개발자', value: '백엔드 개발자' },
+      { label: '프론트엔드 개발자', value: '프론트엔드 개발자' },
+      { label: '안드로이드 개발자', value: '안드로이드 개발자' },
+      { label: 'iOS 개발자', value: 'iOS 개발자' },
     ],
   },
 ]
@@ -54,9 +54,9 @@ const WAY_OPTIONS: Group[] = [
   {
     title: '활동 방식',
     options: [
-      { label: '전체', value: 'all' },
-      { label: '온라인', value: 'online' },
-      { label: '오프라인', value: 'offline' },
+      { label: '전체', value: '전체' },
+      { label: '온라인', value: '온라인' },
+      { label: '오프라인', value: '오프라인' },
     ],
   },
 ]
@@ -65,9 +65,9 @@ const TARGET_OPTIONS: Group[] = [
   {
     title: '모집 대상',
     options: [
-      { label: '전체', value: 'all' },
-      { label: '대학생', value: 'student' },
-      { label: '직장인', value: 'worker' },
+      { label: '전체', value: '전체' },
+      { label: '대학생', value: '대학생' },
+      { label: '직장인', value: '직장인' },
     ],
   },
 ]
@@ -118,27 +118,40 @@ export function Explore() {
   )
 
   const resetFilters = React.useCallback(() => {
-    router.push('/club/explore')
+    router.replace('/club/explore')
   }, [router])
+
+  const queryParams = {
+    page: 0,
+    size: 10,
+    field: currentField !== 'all' ? currentField : undefined,
+    part:
+      partArray.filter((p) => p !== 'all').length > 0
+        ? partArray.filter((p) => p !== 'all').join(',')
+        : undefined,
+    way:
+      wayArray.filter((w) => w !== 'all').length > 0
+        ? wayArray.filter((w) => w !== 'all').join(',')
+        : undefined,
+    target:
+      targetArray.filter((t) => t !== 'all').length > 0
+        ? targetArray.filter((t) => t !== 'all').join(',')
+        : undefined,
+    sort: currentSort,
+  }
 
   const {
     data: clubsData,
     isLoading: loading,
     error: queryError,
-  } = useClubsList({
-    page: 0,
-    size: 10,
-    field: currentField !== 'all' ? currentField : undefined,
-    part: partArray.length > 0 ? partArray.join(',') : undefined,
-    way: wayArray.length > 0 ? wayArray.join(',') : undefined,
-    target: targetArray.length > 0 ? targetArray.join(',') : undefined,
-    sort: currentSort,
-  })
+  } = useExploreClubs(queryParams)
 
   const clubs = clubsData?.content || []
   const error = queryError ? '동아리를 불러오는데 실패했습니다.' : null
 
-  const fieldLabel = currentField === 'all' ? '전체' : currentField
+  const fieldLabel = React.useMemo(() => {
+    return currentField === 'all' ? '전체' : currentField
+  }, [currentField])
 
   return (
     <div className="min-h-screen bg-[var(--moyeoit-light-1)]">
@@ -195,7 +208,7 @@ export function Explore() {
                 />
                 <button
                   onClick={() => resetFilters()}
-                  className="flex items-center gap-1 px-3 py-2  text-grey-color-2 typo-button-m h-[32px]"
+                  className="flex items-center gap-1 px-3 py-2  text-grey-color-2 typo-button-m h-[32px] cursor-pointer"
                 >
                   <Image
                     src="/icons/reset.svg"
@@ -267,7 +280,7 @@ export function Explore() {
                             <Card.Meta part={club.categories.join(' · ')} />
                           </Card.Content>
                           {club.isRecruiting && (
-                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center">
+                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
                               모집중
                             </div>
                           )}
@@ -300,7 +313,7 @@ export function Explore() {
                             <Card.Meta part={club.categories.join(' · ')} />
                           </Card.Content>
                           {club.isRecruiting && (
-                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb px-3 py-1.5 rounded-[73px] border border-light-color-3 z-10 flex items-center justify-center">
+                            <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-[6px] text-center flex items-center justify-center leading-none">
                               모집중
                             </div>
                           )}

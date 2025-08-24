@@ -69,6 +69,11 @@ export default function HomePage() {
                     <Card.Description>{club.description}</Card.Description>
                     <Card.Meta part={club.categories.join(' · ')} />
                   </Card.Content>
+                  {club.isRecruiting && (
+                    <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
+                      모집중
+                    </div>
+                  )}
                 </Card>
               </Link>
             ))}
