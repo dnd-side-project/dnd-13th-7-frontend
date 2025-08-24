@@ -12,7 +12,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <div className="bg-grey-color-5 text-white h-64 lg:h-80 flex items-end justify-center px-5 py-14 lg:py-18 -mt-20">
+      <div className="bg-grey-color-5 text-white h-64 lg:h-100 flex items-end justify-center px-5 py-14 lg:py-18 -mt-20">
         <div className="max-w-7xl w-full relative z-10"></div>
       </div>
 
