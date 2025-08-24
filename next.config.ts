@@ -4,6 +4,16 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   /* config options here */
   transpilePackages: ['msw'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'example.com',
+        port: '',
+        pathname: '/images/**',
+      },
+    ],
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,

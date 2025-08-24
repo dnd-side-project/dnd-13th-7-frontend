@@ -1,5 +1,5 @@
-import { GreyMessage } from '@/public/icons/GreyMessage'
-import { GreyThumbsUp } from '@/public/icons/GreyThumbsUp'
+import { GreyMessage } from '@/assets/icons/GreyMessage'
+import { GreyThumbsUp } from '@/assets/icons/GreyThumbsUp'
 import { cn } from '@/shared/utils/cn'
 
 export function CardStats({

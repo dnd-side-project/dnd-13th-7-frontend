@@ -198,7 +198,7 @@ export function Explore() {
                   className="flex items-center gap-1 px-3 py-2  text-grey-color-2 typo-button-m h-[32px]"
                 >
                   <Image
-                    src="/images/reset.svg"
+                    src="/icons/reset.svg"
                     alt="reset"
                     width={20}
                     height={20}
