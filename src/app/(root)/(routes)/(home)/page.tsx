@@ -1,19 +1,58 @@
+import { QuickButton } from '@/components/atoms/quickButton'
 import { Footer } from '@/components/molecules/layout'
 
 export default function Home() {
   return (
     <div>
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-        <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-          <h1 className="typo-main-title text-main-color-1">Hello World</h1>
-          <h2 className="typo-title-1 text-grey-color-1">Hello World</h2>
-          <h3 className="typo-title-2">Hello World</h3>
-          <h4 className="typo-title-3">Hello World</h4>
-          <p className="typo-body-1-r">Hello World</p>
-          <p className="typo-body-1-sb">Hello World</p>
-          <p className="typo-body-1-m">Hello World</p>
-          <p className="typo-body-2-sb">Hello World</p>
-        </main>
+      <div>{/* 히어로 영역 */}</div>
+      <div>
+        {/* 하단 푸터 제외한 컨테이너 내용물 전체 */}
+        {/* 상단 버튼 2개  */}
+        <div className="flex flex-row gap-4 justify-center items-center">
+          <div>
+            <QuickButton
+              icon="/images/subscribe.svg"
+              title="구독"
+              description="구독한 IT 활동 모아보기"
+              href="/subscribe"
+              className=""
+            />
+          </div>
+          <div>
+            <QuickButton
+              icon="/images/clubMatching.svg"
+              title="동아리 매칭"
+              description="아직 준비중이에요"
+              href="/"
+              className=""
+            />
+          </div>
+        </div>
+
+        {/* 인기 IT 동아리  */}
+        <div>
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
+        </div>
+
+        {/* IT 동아리 프리미엄 후기 */}
+        <div>
+          <div>
+            세로1
+            <div>각각1</div>
+            <div>각각2</div>
+          </div>
+
+          <div>
+            세로2
+            <div>각각1</div>
+            <div>각각2</div>
+          </div>
+        </div>
+
+        <div> {/* 하단 광고 배너 */} </div>
       </div>
       <Footer />
     </div>
