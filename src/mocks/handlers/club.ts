@@ -237,12 +237,7 @@ const clubHandlers = [
   // GET /api/v1/clubs (목록, 검색/페이지네이션)
   http.get('*/api/v1/clubs', ({ request }) => {
     const url = new URL(request.url)
-    const pageParam = url.searchParams.get('page')
-    const sizeParam = url.searchParams.get('size')
     const search = (url.searchParams.get('search') || '').trim().toLowerCase()
-
-    const page = Number.isNaN(Number(pageParam)) ? 0 : Number(pageParam)
-    const size = Number.isNaN(Number(sizeParam)) ? 10 : Number(sizeParam)
 
     const filtered = search
       ? clubs.filter(
@@ -253,32 +248,15 @@ const clubHandlers = [
         )
       : clubs
 
-    const start = page * size
-    const end = start + size
-    const content = filtered.slice(start, end)
+    // 단순히 5개 데이터만 반환
+    const content = filtered.slice(0, 5)
 
-    const totalElements = filtered.length
-    const totalPages = Math.max(1, Math.ceil(totalElements / size || 1))
-    const last = page >= totalPages - 1
-
-    const pagePayload: ClubsPage = {
-      content,
-      pageable: buildPageable(page, size),
-      totalPages,
-      totalElements,
-      last,
-      size,
-      number: page,
-      sort: buildPageableSort(),
-      numberOfElements: content.length,
-      first: page === 0,
-      empty: content.length === 0,
-    }
-
-    const body: ApiResponse<ClubsPage> = {
+    const body: ApiResponse<{ content: ClubsListItem[] }> = {
       status: 'OK',
       message: 'success',
-      data: pagePayload,
+      data: {
+        content,
+      },
     }
 
     return HttpResponse.json(body)

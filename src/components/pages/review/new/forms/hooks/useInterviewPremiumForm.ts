@@ -1,0 +1,118 @@
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import z from 'zod'
+import {
+  ReviewCategory,
+  ReviewType,
+  QuestionType,
+  type PremiumReviewCreateRequest,
+  type AnswerRequest,
+  ResultType,
+} from '@/features/review/types'
+import { appValidation } from '@/shared/configs/appValidation'
+
+// Q&A 질문 ID 정의
+const QUESTION_IDS = {
+  Q1_ATMOSPHERE_AND_INTERVIEWERS: 20,
+  Q2_MEMORABLE_QUESTIONS: 21,
+  Q3_FEELINGS_AND_REGRETS: 22,
+  TITLE: 23,
+} as const
+
+const InterviewPremiumFormSchema = z.object({
+  clubId: appValidation.requiredNumber('IT 동아리명을 선택해주세요'),
+  generation: appValidation.requiredNumber('지원 기수를 선택해주세요'),
+  jobId: appValidation.requiredNumber('지원 파트를 선택해주세요'),
+  resultType: z.enum(ResultType),
+  thumbnailImage: z.instanceof(File).optional(),
+  title: appValidation.oneLineText(60, '제목을 입력해주세요'),
+  atmosphereAndInterviewers: appValidation.longText(10, 1200),
+  memorableQuestions: appValidation.longText(10, 1200),
+  feelingsAndRegrets: appValidation.longText(10, 1200),
+})
+
+export type InterviewPremiumFormType = z.infer<
+  typeof InterviewPremiumFormSchema
+>
+
+export const useInterviewPremiumForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const form = useForm<InterviewPremiumFormType>({
+    resolver: zodResolver(InterviewPremiumFormSchema),
+    defaultValues: {
+      clubId: undefined,
+      generation: undefined,
+      jobId: undefined,
+      resultType: ResultType.Ready,
+      thumbnailImage: undefined,
+      title: '',
+      atmosphereAndInterviewers: '',
+      memorableQuestions: '',
+      feelingsAndRegrets: '',
+    },
+    mode: 'onBlur',
+  })
+
+  // 폼 데이터를 API 요청 형식으로 변환
+  const transformToApiRequest = (
+    data: InterviewPremiumFormType,
+  ): PremiumReviewCreateRequest => {
+    const questions: AnswerRequest[] = [
+      {
+        questionId: QUESTION_IDS.TITLE,
+        questionType: QuestionType.Subjective,
+        value: data.title,
+      },
+      {
+        questionId: QUESTION_IDS.Q1_ATMOSPHERE_AND_INTERVIEWERS,
+        questionType: QuestionType.Subjective,
+        value: data.atmosphereAndInterviewers,
+      },
+      {
+        questionId: QUESTION_IDS.Q2_MEMORABLE_QUESTIONS,
+        questionType: QuestionType.Subjective,
+        value: data.memorableQuestions,
+      },
+      {
+        questionId: QUESTION_IDS.Q3_FEELINGS_AND_REGRETS,
+        questionType: QuestionType.Subjective,
+        value: data.feelingsAndRegrets,
+      },
+    ]
+
+    return {
+      clubId: data.clubId,
+      generation: data.generation,
+      jobId: data.jobId,
+      questions,
+      resultType: data.resultType,
+      reviewCategory: ReviewCategory.Interview, // 인터뷰 전형
+      reviewType: ReviewType.Premium, // 프리미엄 후기
+      imageUrl: '', // TODO: 이미지 업로드 후 URL로 변경
+      title: data.title,
+    }
+  }
+
+  const onSubmit = async (data: InterviewPremiumFormType) => {
+    setIsSubmitting(true)
+    try {
+      const apiData = transformToApiRequest(data)
+      console.log('Form submitted:', data)
+      console.log('Form submitted:', apiData)
+      // TODO: API 호출
+      // await postPremiumReview(apiData)
+    } catch (error) {
+      console.error('Form submission error:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return {
+    form,
+    onSubmit,
+    isSubmitting,
+  }
+}

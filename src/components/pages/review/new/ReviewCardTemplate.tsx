@@ -10,7 +10,7 @@ const ReviewCardTemplate = ({
   kindText: string
 }) => {
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       <div className="relative">
         {/* 상단 탭 부분 */}
         <div className="flex items-center gap-1 bg-white-color px-8 pt-4 pb-2 rounded-tr-4xl rounded-tl-4xl w-fit relative z-20">
