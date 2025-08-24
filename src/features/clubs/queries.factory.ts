@@ -4,7 +4,16 @@ import { clubKeys } from './keys'
 import { ClubDetailsData, ClubRecruitsData } from './types'
 
 export const clubQueries = {
-  list: (params?: { page?: number; size?: number; search?: string }) =>
+  list: (params?: {
+    page?: number
+    size?: number
+    search?: string
+    field?: string
+    part?: string
+    way?: string
+    target?: string
+    sort?: string
+  }) =>
     queryOptions({
       queryKey: clubKeys.list(params),
       queryFn: () => getClubs(params),

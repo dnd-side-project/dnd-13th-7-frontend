@@ -28,6 +28,10 @@ const PopoverContent = React.forwardRef<
       data-slot="popover-content"
       align={align}
       sideOffset={sideOffset}
+      onOpenAutoFocus={(e) => e.preventDefault()}
+      onCloseAutoFocus={(e) => e.preventDefault()}
+      onEscapeKeyDown={(e) => e.preventDefault()}
+      onPointerDownOutside={(e) => e.preventDefault()}
       className={cn(
         'bg-popover text-popover-foreground ' +
           'data-[state=open]:animate-in data-[state=closed]:animate-out ' +

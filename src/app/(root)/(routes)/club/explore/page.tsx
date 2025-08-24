@@ -1,7 +1,10 @@
+import { Suspense } from 'react'
+import { Explore } from '@/components/(pages)/club/explore/Explore'
+
 export default function Page() {
   return (
-    <main className="p-6">
-      <h1 className="text-xl font-semibold">Club Explore</h1>
-    </main>
+    <Suspense fallback={null}>
+      <Explore />
+    </Suspense>
   )
 }

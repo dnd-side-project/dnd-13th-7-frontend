@@ -29,12 +29,33 @@ const CheckItem: React.FC<CheckItemProps> = ({
 }) => {
   const autoId = React.useId()
   const inputId = id ?? `${autoId}`
-  const checkboxClass = cn(
-    'h-5 w-5 shrink-0 rounded-[3px] border-[1.5px]',
-    'bg-[var(--moyeoit-white)] border-[var(--moyeoit-light-4)]',
-    'focus-visible:ring-[var(--moyeoit-main-1)] ',
-    'data-[state=checked]:bg-[var(--moyeoit-main-1)] data-[state=checked]:border-[var(--moyeoit-main-1)] data-[state=checked]:text-[var(--moyeoit-white)]',
-    'data-[state=indeterminate]:bg-[var(--moyeoit-main-1)] data-[state=indeterminate]:border-[var(--moyeoit-main-1)] data-[state=indeterminate]:text-[var(--moyeoit-white)]',
+
+  const checkboxClass = React.useMemo(
+    () =>
+      cn(
+        'h-5 w-5 shrink-0 rounded-[3px] border-[1.5px]',
+        'bg-[var(--moyeoit-white)] border-[var(--moyeoit-light-4)]',
+        'focus-visible:ring-[var(--moyeoit-main-1)] ',
+        'data-[state=checked]:bg-[var(--moyeoit-main-1)] data-[state=checked]:border-[var(--moyeoit-main-1)] data-[state=checked]:text-[var(--moyeoit-white)]',
+        'data-[state=indeterminate]:bg-[var(--moyeoit-main-1)] data-[state=indeterminate]:border-[var(--moyeoit-main-1)] data-[state=indeterminate]:text-[var(--moyeoit-white)]',
+      ),
+    [],
+  )
+
+  const handleArrowClick = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      onArrowClick?.()
+    },
+    [onArrowClick],
+  )
+
+  const handleChange = React.useCallback(
+    (checked: boolean) => {
+      onChange?.(checked)
+    },
+    [onChange],
   )
 
   return (
@@ -49,7 +70,7 @@ const CheckItem: React.FC<CheckItemProps> = ({
         checked={checked}
         defaultChecked={defaultChecked}
         className={checkboxClass}
-        onCheckedChange={onChange}
+        onCheckedChange={handleChange}
       />
       <div className="flex-1">
         <div className={cn('typo-button-m leading-5', className)}>{label}</div>
@@ -57,10 +78,7 @@ const CheckItem: React.FC<CheckItemProps> = ({
       {showArrow && (
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            onArrowClick?.()
-          }}
+          onClick={handleArrowClick}
           className="text-[var(--moyeoit-grey-3)] hover:text-[var(--moyeoit-grey-4)] transition-colors"
         >
           <svg
