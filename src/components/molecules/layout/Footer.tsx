@@ -9,7 +9,7 @@ import AppPath from '@/shared/configs/appPath'
 export default function Footer() {
   return (
     <div className="w-full text-grey-color-5 border-t border-light-color-4">
-      <footer className="mx-auto max-w-screen-xl px-5 pt-10 pb-12">
+      <footer className="mx-auto px-5 pt-10 pb-12 max-w-[1100px]">
         {/* Top brand + desc + email */}
         <div className="flex flex-col gap-5 desktop:gap-8">
           <div className="flex flex-col gap-5 desktop:flex-row desktop:justify-between">

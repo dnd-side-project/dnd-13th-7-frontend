@@ -143,7 +143,7 @@ export function Explore() {
   return (
     <div className="min-h-screen bg-[var(--moyeoit-light-1)]">
       {/* 히어로 섹션 */}
-      <div className="bg-[#5846CB] text-white h-[200px] lg:h-80 flex items-end justify-center px-5 py-18 -mt-20">
+      <div className="bg-[#5846CB] text-white h-[200px] lg:h-100 flex items-end justify-center px-5 py-18 -mt-20">
         <div className="max-w-7xl w-full relative z-10">
           <h1 className="text-[22px] lg:text-4xl font-bold text-left uppercase">
             {fieldLabel}
@@ -198,7 +198,7 @@ export function Explore() {
                   className="flex items-center gap-1 px-3 py-2  text-grey-color-2 typo-button-m h-[32px]"
                 >
                   <Image
-                    src="/images/reset.svg"
+                    src="/icons/reset.svg"
                     alt="reset"
                     width={20}
                     height={20}
