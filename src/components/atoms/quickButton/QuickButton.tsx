@@ -16,6 +16,7 @@ interface QuickButtonProps {
   description?: string
   href: string
   className?: string
+  onClick?: () => void
 }
 
 export const QuickButton: React.FC<QuickButtonProps> = ({
@@ -24,12 +25,14 @@ export const QuickButton: React.FC<QuickButtonProps> = ({
   description,
   href,
   className,
+  onClick,
 }) => {
   const { isDesktop } = useMediaQuery()
 
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         isDesktop
           ? 'w-130 h-22 flex items-center gap-2 bg-white border border-light-color-3 rounded-[16px] p-4'

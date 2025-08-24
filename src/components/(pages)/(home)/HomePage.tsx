@@ -25,14 +25,13 @@ export default function HomePage() {
             title="구독"
             description="구독한 IT 활동 모아보기"
             href="/subscribe"
-            className=""
           />
           <QuickButton
             icon="/icons/clubMatching.svg"
             title="동아리 매칭"
             description="아직 준비중이에요"
             href="/"
-            className=""
+            onClick={() => alert('준비중인 기능입니다')}
           />
         </div>
 
