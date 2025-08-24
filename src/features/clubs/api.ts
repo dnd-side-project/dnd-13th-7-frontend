@@ -1,6 +1,11 @@
 import { ApiResponse } from '@/shared/types/api'
 import apiClient from '@/shared/utils/axios'
-import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
+import {
+  ClubDetailsData,
+  ClubsPage,
+  ClubRecruitsData,
+  ClubRecruitsResponse,
+} from './types'
 
 export async function getClubs(params?: {
   page?: number
@@ -30,7 +35,7 @@ export async function getClubDetails(
 export async function getClubRecruits(
   clubId: number | string,
 ): Promise<ClubRecruitsData> {
-  const res = await apiClient.get<ApiResponse<ClubRecruitsData>>(
+  const res = await apiClient.get<ClubRecruitsResponse>(
     `/api/v1/clubs/${clubId}/recruits`,
   )
   return res.data.data

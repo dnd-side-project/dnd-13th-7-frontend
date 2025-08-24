@@ -162,9 +162,7 @@ export const detailsById: Record<number, ClubDetailsData> = {
 
 export const recruitsById: Record<number, ClubRecruitsData> = {
   1: {
-    clubName: '코딩의 신',
-    clubLogoUrl: 'http://example.com/images/club1.jpg',
-    recruitmentParts: ['Java', 'Spring'],
+    recruitmentPart: ['Java', 'Spring'],
     qualification: 'Java 기초 지식',
     recruitmentSchedule: '상반기(3~4월), 하반기(9~10월)',
     activityPeriod: '1년(연장 가능)',
@@ -174,9 +172,7 @@ export const recruitsById: Record<number, ClubRecruitsData> = {
     noticeUrl: 'https://example.com/coding/notice',
   },
   2: {
-    clubName: '픽셀 크래프터',
-    clubLogoUrl: 'http://example.com/images/club2.jpg',
-    recruitmentParts: ['Figma', 'React'],
+    recruitmentPart: ['Figma', 'React'],
     qualification: '기초 디자인/개발 지식',
     recruitmentSchedule: '비정기',
     activityPeriod: '학기 단위',
@@ -186,9 +182,7 @@ export const recruitsById: Record<number, ClubRecruitsData> = {
     noticeUrl: 'https://example.com/pixel/notice',
   },
   3: {
-    clubName: '데이터 다이버',
-    clubLogoUrl: 'http://example.com/images/club3.jpg',
-    recruitmentParts: ['Python', 'SQL'],
+    recruitmentPart: ['Python', 'SQL'],
     qualification: 'Python 기초 지식',
     recruitmentSchedule: '상반기(3~4월)',
     activityPeriod: '1년(연장 가능)',
@@ -198,15 +192,13 @@ export const recruitsById: Record<number, ClubRecruitsData> = {
     noticeUrl: 'https://example.com/data/notice',
   },
   4: {
-    clubName: '알고리즘 정복자',
-    clubLogoUrl: 'http://example.com/images/club4.jpg',
-    recruitmentParts: ['알고리즘', '자료구조'],
+    recruitmentPart: ['알고리즘', '자료구조'],
     qualification: '프로그래밍 기초 지식',
     recruitmentSchedule: '상반기(3~4월), 하반기(9~10월)',
     activityPeriod: '1년(연장 가능)',
     activityMethod: '온/오프라인 병행',
     activityFee: '월 5,000원',
     homepageUrl: 'https://example.com/algo',
-    noticeUrl: 'https://example.com/algo/notice',
+    noticeUrl: null,
   },
 }

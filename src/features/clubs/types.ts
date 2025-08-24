@@ -71,14 +71,20 @@ export interface ClubsPage {
 }
 
 export interface ClubRecruitsData {
-  clubName: string
-  clubLogoUrl: string
-  recruitmentParts: string[]
+  recruitmentPart: string[]
   qualification: string
   recruitmentSchedule: string
   activityPeriod: string
   activityMethod: string
   activityFee: string
   homepageUrl: string
-  noticeUrl: string
+  noticeUrl: string | null
 }
+
+export interface ApiResponse<T> {
+  status: 'SUCCESS' | 'ERROR'
+  message: string
+  data: T
+}
+
+export type ClubRecruitsResponse = ApiResponse<ClubRecruitsData>
