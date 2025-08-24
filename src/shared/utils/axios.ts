@@ -1,10 +1,11 @@
 import axios from 'axios'
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api' //TODO: 환경변수 추가
+const baseURL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://13.124.170.206:8080'
 
 const apiClient = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: false, // OAuth 리다이렉트를 위해 false로 설정
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,3 +29,4 @@ apiClient.interceptors.response.use(
 )
 
 export default apiClient
+export const axiosInstance = apiClient
