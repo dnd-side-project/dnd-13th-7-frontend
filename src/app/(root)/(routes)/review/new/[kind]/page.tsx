@@ -31,7 +31,7 @@ export default async function Page({
 
   return (
     <main className="w-full h-full">
-      <div className="max-w-[530px] h-(--exception-header-height) mx-auto flex flex-col items-center justify-center">
+      <div className="max-w-[530px] h-full mx-auto flex flex-col items-center justify-center">
         {/* 제목 */}
         <div className="text-center mb-8">
           <h2 className="typo-title-1 text-black-color mb-8">

@@ -1,4 +1,9 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import {
+  useQuery,
+  UseQueryResult,
+  useSuspenseQuery,
+  UseSuspenseQueryResult,
+} from '@tanstack/react-query'
 import { clubQueries } from './queries.factory'
 import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
 
@@ -11,8 +16,8 @@ export function useClubsList(params?: {
   way?: string
   target?: string
   sort?: string
-}): UseQueryResult<ClubsPage, Error> {
-  return useQuery(clubQueries.list(params))
+}): UseSuspenseQueryResult<ClubsPage, Error> {
+  return useSuspenseQuery(clubQueries.list(params))
 }
 
 export function useClubDetails(

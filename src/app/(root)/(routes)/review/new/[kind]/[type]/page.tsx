@@ -1,20 +1,38 @@
+'use client'
+
+import { Suspense, useEffect, useState } from 'react'
 import { notFound } from 'next/navigation'
+import ReviewCardTemplate from '@/components/pages/review/new/ReviewCardTemplate'
+import {
+  FormFactory,
+  isValidFormCombination,
+  type FormKind,
+  type FormType,
+} from '@/components/pages/review/new/forms'
 
-const validKinds = ['paper', 'interview', 'activity'] as const
-const validTypes = ['normal', 'premium'] as const
-
-export default async function Page({
-  params,
-}: {
+interface PageProps {
   params: Promise<{ kind: string; type: string }>
-}) {
-  const { kind, type } = await params
-  const isValidKind = (validKinds as readonly string[]).includes(kind)
-  const isValidType = (validTypes as readonly string[]).includes(type)
+}
 
-  if (!isValidKind || !isValidType) {
-    notFound()
-  }
+export default function Page({ params }: PageProps) {
+  const [formParams, setFormParams] = useState<{
+    kind: string
+    type: string
+  } | null>(null)
+
+  useEffect(() => {
+    async function loadParams() {
+      const { kind, type } = await params
+
+      if (!isValidFormCombination(kind, type)) {
+        notFound()
+      }
+
+      setFormParams({ kind, type })
+    }
+
+    loadParams()
+  }, [params])
 
   const getKindDisplayName = (kind: string) => {
     switch (kind) {
@@ -40,26 +58,34 @@ export default async function Page({
     }
   }
 
-  return (
-    <main className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto pt-20 px-6">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-black mb-2">
-            {getKindDisplayName(kind)} {getTypeDisplayName(type)} 작성
-          </h1>
-          <p className="text-gray-600 text-sm">
-            {type === 'normal'
-              ? '간단하고 빠르게 후기를 작성해보세요'
-              : '상세한 가이드를 따라 체계적으로 후기를 작성해보세요'}
-          </p>
+  if (!formParams) {
+    return (
+      <main className="">
+        <div className="max-w-[800px] mx-auto pt-20">
+          <div className="text-center">
+            <p className="typo-body-2-r text-grey-color-4">로딩 중...</p>
+          </div>
         </div>
+      </main>
+    )
+  }
 
-        <div className="bg-gray-50 rounded-xl p-8">
-          <p className="text-center text-gray-500">
-            {getTypeDisplayName(type)} 작성 폼이 여기에 표시됩니다.
-          </p>
+  const { kind, type } = formParams
+
+  return (
+    <main className="">
+      <Suspense>
+        <div className="max-w-[800px] mx-auto pt-20">
+          <div className="mb-8">
+            <ReviewCardTemplate
+              typeText={getTypeDisplayName(type)}
+              kindText={getKindDisplayName(kind)}
+            >
+              <FormFactory kind={kind as FormKind} type={type as FormType} />
+            </ReviewCardTemplate>
+          </div>
         </div>
-      </div>
+      </Suspense>
     </main>
   )
 }
