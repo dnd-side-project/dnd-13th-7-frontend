@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { OAuthCallbackParams } from '@/features/oauth/types'
+import { tokenCookies } from '@/shared/utils/cookies'
 
 interface User {
   id: number
@@ -15,9 +14,9 @@ interface AuthContextType {
   user: User | null
   accessToken: string | null
   isLoading: boolean
-  login: (token: string, userData: User) => void
+  login: (token: string, userData: User, expiresIn?: number) => void
   logout: () => void
-  setUserFromOAuth: (oauthData: any) => void
+  setUserFromOAuth: (oauthData: OAuthCallbackParams) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -31,50 +30,71 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [accessToken, setAccessToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // 초기 로드 시 로컬스토리지에서 토큰 확인
+  // 초기 로드 시 쿠키에서 토큰 확인
   useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    const userIdStr = localStorage.getItem('user_id')
+    const token = tokenCookies.getAccessToken()
+    const userIdStr = tokenCookies.getUserId()
+    const isTokenValid = tokenCookies.isTokenValid()
 
-    if (token && userIdStr) {
+    if (token && userIdStr && isTokenValid) {
       setAccessToken(token)
       setUser({
         id: parseInt(userIdStr),
-        active: true, // 로컬스토리지에 있다는 것은 active 상태
+        active: true, // 쿠키에 있다는 것은 active 상태
       })
+    } else if (!isTokenValid && token) {
+      // 토큰이 만료된 경우 쿠키 정리
+      tokenCookies.clearAll()
     }
 
     setIsLoading(false)
   }, [])
 
-  const login = (token: string, userData: User) => {
+  const login = (token: string, userData: User, expiresIn?: number) => {
     setAccessToken(token)
     setUser(userData)
-    localStorage.setItem('access_token', token)
-    localStorage.setItem('user_id', userData.id.toString())
+
+    // 쿠키에 토큰 정보 저장
+    const tokenExpiresIn = expiresIn || 900 // 기본값 15분
+    tokenCookies.setAccessToken(token, tokenExpiresIn)
+    tokenCookies.setUserId(userData.id.toString())
+    tokenCookies.setExpiresAt(Date.now() + tokenExpiresIn * 1000)
   }
 
   const logout = () => {
     setAccessToken(null)
     setUser(null)
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('user_id')
+
+    // 쿠키에서 토큰 정보 삭제
+    tokenCookies.clearAll()
     sessionStorage.removeItem('oauth_data')
   }
 
-  const setUserFromOAuth = (oauthData: any) => {
-    if (oauthData.active) {
-      login(oauthData.access_token, {
-        id: oauthData.user_id,
-        active: true,
-      })
+  const setUserFromOAuth = (oauthData: OAuthCallbackParams) => {
+    const isActive = oauthData.active === 'true'
+
+    if (isActive) {
+      login(
+        oauthData.accessToken,
+        {
+          id: parseInt(oauthData.userId),
+          active: true,
+        },
+        parseInt(oauthData.expiresIn),
+      )
     } else {
       // 비활성 사용자는 토큰만 임시 저장 (signup 완료 전까지)
-      setAccessToken(oauthData.access_token)
+      setAccessToken(oauthData.accessToken)
       setUser({
-        id: oauthData.user_id,
+        id: parseInt(oauthData.userId),
         active: false,
       })
+
+      // 임시 토큰 저장 (회원가입 완료 후 정식 토큰으로 교체)
+      const expiresIn = parseInt(oauthData.expiresIn)
+      tokenCookies.setAccessToken(oauthData.accessToken, expiresIn)
+      tokenCookies.setUserId(oauthData.userId)
+      tokenCookies.setExpiresAt(Date.now() + expiresIn * 1000)
     }
   }
 

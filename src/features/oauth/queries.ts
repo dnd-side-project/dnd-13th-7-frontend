@@ -1,19 +1,24 @@
-import { useQuery } from '@tanstack/react-query'
-import { oauthApi } from './api'
-import { oauthKeys } from './keys'
-import { OAuthProvider, OAuthLoginParams } from './types'
+import { OAuthCallbackParams } from './types'
 
-export const useOAuthLogin = (
-  provider: OAuthProvider,
-  params: OAuthLoginParams,
-  enabled: boolean = true,
-) => {
-  return useQuery({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: oauthKeys.login(provider, params as Record<string, string>),
-    queryFn: () => oauthApi.login(provider, params),
-    enabled:
-      enabled && Object.values(params).some((value) => value !== undefined),
-    retry: false, // OAuth 로그인은 실패 시 재시도하지 않음
-  })
+/**
+ * 쿼리 파라미터에서 OAuth 콜백 데이터를 파싱하는 유틸리티 함수
+ */
+export const parseOAuthCallbackParams = (
+  searchParams: URLSearchParams,
+): OAuthCallbackParams | null => {
+  const userId = searchParams.get('userId')
+  const active = searchParams.get('active')
+  const accessToken = searchParams.get('accessToken')
+  const expiresIn = searchParams.get('expiresIn')
+
+  if (userId && active !== null && accessToken && expiresIn) {
+    return {
+      userId,
+      active,
+      accessToken,
+      expiresIn,
+    }
+  }
+
+  return null
 }

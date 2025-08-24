@@ -20,7 +20,9 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/molecules/Form'
-import { UserCategory } from '@/features/user/types'
+import { OAuthCallbackParams } from '@/features/oauth/types'
+import { USER_CATEGORY_TO_ID, UserCategory } from '@/features/user/types'
+import AppPath from '@/shared/configs/appPath'
 import { useAuth } from '@/shared/providers/auth-provider'
 import { useSignupForm, AGREEMENT_ITEMS } from './hooks/useSignupForm'
 
@@ -36,20 +38,23 @@ export default function SignupPage() {
     const oauthDataStr = sessionStorage.getItem('oauth_data')
     if (oauthDataStr) {
       try {
-        const oauthData = JSON.parse(oauthDataStr)
+        const oauthData: OAuthCallbackParams = JSON.parse(oauthDataStr)
         console.log('OAuth 데이터 확인:', oauthData)
 
-        if (oauthData.active === true) {
+        const isActive = oauthData.active === 'true'
+
+        if (isActive) {
           // 이미 활성화된 계정이면 바로 로그인 처리
           setUserFromOAuth(oauthData)
-          router.push('/')
+          router.push(AppPath.home())
           return
         }
 
         // OAuth 데이터에서 이메일 정보가 있다면 폼에 미리 채우기
-        if (oauthData.email) {
-          form.setValue('email', oauthData.email)
-        }
+        // 새로운 프로세스에서는 이메일 정보가 쿼리 파라미터에 포함되지 않으므로 주석 처리
+        // if (oauthData.email) {
+        //   form.setValue('email', oauthData.email)
+        // }
       } catch (error) {
         console.error('OAuth 데이터 파싱 에러:', error)
         sessionStorage.removeItem('oauth_data')
@@ -144,14 +149,16 @@ export default function SignupPage() {
                       <SelectValue placeholder="분야 선택하기" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={UserCategory.DESIGN}>
-                        디자인
+                      <SelectItem value={String(USER_CATEGORY_TO_ID.DESIGN)}>
+                        {UserCategory.DESIGN}
                       </SelectItem>
-                      <SelectItem value={UserCategory.DEVELOPMENT}>
-                        개발
+                      <SelectItem
+                        value={String(USER_CATEGORY_TO_ID.DEVELOPMENT)}
+                      >
+                        {UserCategory.DEVELOPMENT}
                       </SelectItem>
-                      <SelectItem value={UserCategory.PLANNING}>
-                        기획
+                      <SelectItem value={String(USER_CATEGORY_TO_ID.PLANNING)}>
+                        {UserCategory.PLANNING}
                       </SelectItem>
                     </SelectContent>
                   </Select>
