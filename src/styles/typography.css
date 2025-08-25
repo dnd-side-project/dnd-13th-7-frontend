@@ -57,6 +57,12 @@
   font-weight: 600;
 }
 
+@utility typo-body-3-2-m {
+  font-size: var(--text-body-3);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
 @utility typo-body-3-3-r {
   font-size: var(--text-body-3);
   line-height: 1.5;
