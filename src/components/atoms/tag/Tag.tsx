@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn'
 import { Badge } from './badge'
 
 export type TagKind = 'premiumReview' | 'generalReview' | 'clubDetail'
-export type TagSize = 'small' | 'large'
+export type TagSize = 'small' | 'large' | 'none'
 export type TagColor = 'white' | 'lightPurple' | 'purple'
 
 export interface TagProps
@@ -21,6 +21,7 @@ const tagVariants = cva(['inline-flex items-center justify-center'].join(' '), {
     size: {
       small: 'px-[8px] py-[2px] gap-[10px] rounded-[40px] typo-body-4-m',
       large: 'px-[12px] py-[4px] gap-[10px] rounded-[40px] typo-body-3-b',
+      none: 'p-0 m-0',
     },
   },
   defaultVariants: {

@@ -21,13 +21,13 @@ export function useClubsList(params?: {
 }
 
 export function useClubDetails(
-  clubId: number | string,
+  clubId: number,
 ): UseQueryResult<ClubDetailsData, Error> {
   return useQuery(clubQueries.detail(clubId))
 }
 
 export function useClubRecruits(
-  clubId: number | string,
+  clubId: number,
 ): UseQueryResult<ClubRecruitsData, Error> {
   return useQuery(clubQueries.recruit(clubId))
 }

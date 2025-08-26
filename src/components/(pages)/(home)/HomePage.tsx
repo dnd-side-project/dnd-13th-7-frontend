@@ -59,7 +59,7 @@ export default function HomePage() {
                   className="group cursor-pointer relative"
                 >
                   <Card.Image
-                    coverSrc={club.logoUrl || '/images/default.svg'}
+                    logoUrl={club.logoUrl}
                     alt={club.clubName}
                     interactive
                     className="transition-transform duration-300 ease-out"
@@ -69,6 +69,11 @@ export default function HomePage() {
                     <Card.Description>{club.description}</Card.Description>
                     <Card.Meta part={club.categories.join(' · ')} />
                   </Card.Content>
+                  {club.isRecruiting && (
+                    <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
+                      모집중
+                    </div>
+                  )}
                 </Card>
               </Link>
             ))}
@@ -93,7 +98,6 @@ export default function HomePage() {
                 className="group cursor-pointer relative"
               >
                 <Card.Image
-                  coverSrc="/images/default.svg"
                   alt={review.meta[0]}
                   interactive
                   className="transition-transform duration-300 ease-out"
