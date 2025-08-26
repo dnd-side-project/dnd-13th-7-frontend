@@ -1,5 +1,9 @@
 import apiClient from '@/shared/utils/axios'
-import { UserActivateRequest, UserActivateResponse } from './types'
+import {
+  UserActivateRequest,
+  UserActivateResponse,
+  UserMeResponse,
+} from './types'
 
 export const userApi = {
   /**
@@ -18,6 +22,13 @@ export const userApi = {
         },
       },
     )
+    return response.data
+  },
+  /**
+   * 현재 사용자 정보 조회
+   */
+  me: async (): Promise<UserMeResponse> => {
+    const response = await apiClient.get<UserMeResponse>('/api/v1/user/me')
     return response.data
   },
 }

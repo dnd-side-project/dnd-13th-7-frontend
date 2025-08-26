@@ -80,3 +80,14 @@ export interface UserActivateResponse {
     active: boolean
   }
 }
+
+/**
+ * 현재 사용자 정보 응답 인터페이스
+ */
+export interface UserMeResponse {
+  id: number
+  nickname: string
+  job_id: number
+  active: boolean
+  email?: string
+}

@@ -12,5 +12,8 @@ export { userApi } from './api'
 // Keys
 export { userKeys } from './keys'
 
+// Queries
+export { useUserMe } from './queries'
+
 // Mutations
 export { useUserActivate } from './mutations'

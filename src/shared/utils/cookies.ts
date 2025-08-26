@@ -2,6 +2,8 @@
  * 토큰 관리를 위한 쿠키 유틸리티 함수들
  */
 
+const isBrowser = typeof document !== 'undefined'
+
 interface CookieOptions {
   expires?: Date
   maxAge?: number
@@ -25,6 +27,7 @@ export const setCookie = (
   value: string,
   options: CookieOptions = {},
 ): void => {
+  if (!isBrowser) return
   const opts = { ...DEFAULT_COOKIE_OPTIONS, ...options }
 
   let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
@@ -60,6 +63,7 @@ export const setCookie = (
  * 쿠키 읽기
  */
 export const getCookie = (name: string): string | null => {
+  if (!isBrowser) return null
   const nameEQ = `${encodeURIComponent(name)}=`
   const cookies = document.cookie.split(';')
 
@@ -80,6 +84,7 @@ export const deleteCookie = (
   name: string,
   options: CookieOptions = {},
 ): void => {
+  if (!isBrowser) return
   const opts = { ...DEFAULT_COOKIE_OPTIONS, ...options }
   setCookie(name, '', { ...opts, maxAge: -1 })
 }
