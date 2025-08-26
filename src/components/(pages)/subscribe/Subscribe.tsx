@@ -47,7 +47,10 @@ export default function Subscribe() {
                     {club.description}
                   </Card.Description>
                 </div>
-                <Card.Meta kind={club.categories.join(',')} className="mb-12" />
+                <Card.Meta
+                  kind={club.categories.join(' · ')}
+                  className="mb-12"
+                />
               </Card.Content>
             </Card>
           ))}
