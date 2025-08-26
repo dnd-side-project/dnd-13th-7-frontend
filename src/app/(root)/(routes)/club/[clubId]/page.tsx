@@ -10,7 +10,7 @@ import { ClubRecruitsData } from '@/features/clubs/types'
 export default async function Page({
   params,
 }: {
-  params: Promise<{ clubId: string }>
+  params: Promise<{ clubId: number }>
 }) {
   const { clubId } = await params
 
@@ -32,7 +32,7 @@ export default async function Page({
             {
               value: '상세 내용',
               label: '상세 내용',
-              content: <DetailContent />,
+              content: <DetailContent clubId={clubId} />,
             },
             {
               value: '일반 후기',
@@ -47,7 +47,9 @@ export default async function Page({
           ]}
         />
       </div>
-      <Recruit clubId={clubId} className="max-w-[360px]" />
+      <div className="w-80">
+        <Recruit clubId={clubId} />
+      </div>
     </div>
   )
 }

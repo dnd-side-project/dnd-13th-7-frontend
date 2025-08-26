@@ -95,14 +95,11 @@ const clubHandlers = [
       filteredClubs.sort((a, b) => a.clubId - b.clubId)
     }
 
-    // Pagination
-    const start = page * size
-    const end = start + size
-    const content = filteredClubs.slice(start, end)
-
-    const totalElements = filteredClubs.length
-    const totalPages = Math.max(1, Math.ceil(totalElements / size))
-    const last = page >= totalPages - 1
+    // 임시 데이터 (mockClubs 주석처리로 인한 임시 해결책)
+    const content: ClubsListItem[] = []
+    const totalElements = 0
+    const totalPages = 1
+    const last = true
 
     const pagePayload: ClubsPage = {
       content,
@@ -132,17 +129,8 @@ const clubHandlers = [
     const url = new URL(request.url)
     const search = (url.searchParams.get('search') || '').trim().toLowerCase()
 
-    const filtered = search
-      ? clubs.filter(
-          (c) =>
-            c.clubName.toLowerCase().includes(search) ||
-            c.description.toLowerCase().includes(search) ||
-            c.categories.some((cat) => cat.toLowerCase().includes(search)),
-        )
-      : clubs
-
-    // 단순히 5개 데이터만 반환
-    const content = filtered.slice(0, 5)
+    // 임시 데이터 (mockClubs 주석처리로 인한 임시 해결책)
+    const content: ClubsListItem[] = []
 
     const body: ApiResponse<{ content: ClubsListItem[] }> = {
       status: 'SUCCESS',

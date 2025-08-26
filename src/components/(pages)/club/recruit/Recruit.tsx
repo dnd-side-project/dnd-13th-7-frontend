@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button/button'
 import { useClubRecruits } from '@/features/clubs/queries'
 
 interface RecruitProps {
-  clubId: string
+  clubId: number
   className?: string
 }
 
@@ -12,7 +12,7 @@ export default function Recruit({ clubId, className }: RecruitProps) {
   const { data: recruitsData } = useClubRecruits(clubId)
 
   return (
-    <div className="w-80 h-69 px-5 sticky">
+    <div className="w-80 px-5 sticky top-15">
       {/* 위 */}
       <div className="bg-white px-8 py-6 rounded-[16px]">
         {/* 모집 파트 */}

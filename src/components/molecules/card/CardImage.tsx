@@ -21,6 +21,17 @@ export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean
 }
 
+// URL 유효성 검사 함수
+function isValidUrl(url: string | null | undefined): boolean {
+  if (!url) return false
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export function CardImage({
   logoUrl,
   fallbackSrc = '/images/default.svg',
@@ -36,7 +47,8 @@ export function CardImage({
   const p = PRESET[preset]
 
   const [failed, setFailed] = React.useState(false)
-  const src = failed ? fallbackSrc! : logoUrl || fallbackSrc!
+  const src =
+    failed || !logoUrl || !isValidUrl(logoUrl) ? fallbackSrc! : logoUrl!
 
   const ratio = ratioOverride || p.ratio
 

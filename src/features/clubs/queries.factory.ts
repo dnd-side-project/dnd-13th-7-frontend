@@ -19,13 +19,13 @@ export const clubQueries = {
       queryFn: () => getClubs(params),
       staleTime: 60_000,
     }),
-  detail: (clubId: number | string) =>
+  detail: (clubId: number) =>
     queryOptions<ClubDetailsData>({
       queryKey: clubKeys.detail(clubId),
       queryFn: () => getClubDetails(clubId),
       enabled: Boolean(clubId),
     }),
-  recruit: (clubId: number | string) =>
+  recruit: (clubId: number) =>
     queryOptions<ClubRecruitsData>({
       queryKey: clubKeys.recruit(clubId),
       queryFn: () => getClubRecruits(clubId),

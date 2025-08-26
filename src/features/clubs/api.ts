@@ -23,9 +23,7 @@ export async function getClubs(params?: {
   return res.data.data
 }
 
-export async function getClubDetails(
-  clubId: number | string,
-): Promise<ClubDetailsData> {
+export async function getClubDetails(clubId: number): Promise<ClubDetailsData> {
   const res = await apiClient.get<ApiResponse<ClubDetailsData>>(
     `/api/v1/clubs/${clubId}/details`,
   )
