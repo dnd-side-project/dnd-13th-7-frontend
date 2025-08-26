@@ -59,7 +59,7 @@ export default function HomePage() {
                   className="group cursor-pointer relative"
                 >
                   <Card.Image
-                    coverSrc={club.logoUrl || '/images/default.svg'}
+                    logoUrl={club.logoUrl}
                     alt={club.clubName}
                     interactive
                     className="transition-transform duration-300 ease-out"
@@ -98,7 +98,6 @@ export default function HomePage() {
                 className="group cursor-pointer relative"
               >
                 <Card.Image
-                  coverSrc="/images/default.svg"
                   alt={review.meta[0]}
                   interactive
                   className="transition-transform duration-300 ease-out"

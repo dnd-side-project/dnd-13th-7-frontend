@@ -48,7 +48,7 @@ const description =
 const VerticalRender = (args: React.ComponentProps<typeof Card>) => (
   <Card {...args} className="group cursor-pointer">
     <Card.Image
-      coverSrc="/images/thumbnail.png"
+      logoUrl="/images/thumbnail.png"
       alt="동아리 썸네일"
       interactive
       className="transition-transform duration-300 ease-out"
@@ -64,7 +64,7 @@ const VerticalRender = (args: React.ComponentProps<typeof Card>) => (
 const HorizontalRender = (args: React.ComponentProps<typeof Card>) => (
   <Card {...args} className="group cursor-pointer">
     <Card.Image
-      coverSrc="/images/thumbnail.png"
+      logoUrl="/images/thumbnail.png"
       alt="동아리 썸네일"
       interactive
       className="transition-transform duration-300 ease-out"

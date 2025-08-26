@@ -1,3 +1,4 @@
+import BasicReview from '@/components/(pages)/club/basicReview/BasicReview'
 import Detail from '@/components/(pages)/club/detail/Detail'
 import DetailContent from '@/components/(pages)/club/detail/DetailContent'
 import Recruit from '@/components/(pages)/club/recruit/Recruit'
@@ -26,7 +27,7 @@ export default async function Page({
             {
               value: '일반 후기',
               label: '일반 후기',
-              content: <div>일반 후기임</div>,
+              content: <BasicReview />,
             },
             {
               value: '프리미엄 리뷰',

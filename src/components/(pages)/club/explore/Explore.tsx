@@ -265,7 +265,7 @@ export function Explore() {
                           onClick={() => router.push(`/club/${club.clubId}`)}
                         >
                           <Card.Image
-                            coverSrc={club.logoUrl || '/images/default.svg'}
+                            logoUrl={club.logoUrl || '/images/default.svg'}
                             alt={club.clubName}
                             interactive
                             className="transition-transform duration-300 ease-out"
@@ -298,7 +298,7 @@ export function Explore() {
                           onClick={() => router.push(`/club/${club.clubId}`)}
                         >
                           <Card.Image
-                            coverSrc={club.logoUrl || '/images/default.svg'}
+                            logoUrl={club.logoUrl}
                             alt={club.clubName}
                             interactive
                             className="transition-transform duration-300 ease-out"

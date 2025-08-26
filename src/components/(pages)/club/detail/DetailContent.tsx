@@ -70,7 +70,7 @@ export default function DetailContent() {
               className="h-37"
             >
               <Card.Image
-                coverSrc={activity.image}
+                logoUrl={activity.image}
                 alt={`${activity.title} 이미지`}
                 className="w-56 h-37 mr-4"
               />
