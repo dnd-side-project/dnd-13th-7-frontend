@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { MultiDropDown } from '@/components/molecules/multiDropDown/MultiDropDown'
 import { ClubRecruitsData } from '@/features/clubs/types'
 
-interface BasicReviewProps {
+interface PremiumReviewProps {
   recruitsData: ClubRecruitsData | null
 }
 
-export default function BasicReview({ recruitsData }: BasicReviewProps) {
+export default function PremiumReview({ recruitsData }: PremiumReviewProps) {
   const [selectedParts, setSelectedParts] = useState<string[]>([])
 
   // recruitsData에서 모집 파트를 멀티드롭다운 옵션으로 변환
@@ -27,9 +27,8 @@ export default function BasicReview({ recruitsData }: BasicReviewProps) {
 
   return (
     <div className="p-4 space-y-4">
-      <div>일반 후기 페이지</div>
+      <div>프리미엄 리뷰 페이지</div>
 
-      {/* 모집 파트 데이터 사용 예시 */}
       {recruitsData && (
         <div className="space-y-4">
           <div>모집 파트: {recruitsData.recruitmentPart?.join(', ')}</div>
