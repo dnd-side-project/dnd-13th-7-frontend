@@ -1,10 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ProfileIcon, SearchIcon, BellIcon, ThumbsUpIcon } from '@/assets/icons'
-import { MoyeoitFullLogo } from '@/assets/images'
+import { useRouter } from 'next/navigation'
+import { ProfileIcon, BellIcon, ThumbsUpIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import {
@@ -14,8 +13,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/atoms/Select'
+import { useUserMe } from '@/features/user'
+import AppPath from '@/shared/configs/appPath'
+import { useAuth } from '@/shared/providers/auth-provider'
 
 export default function MyPage() {
+  const { logout, user, isLoading } = useAuth()
+  const { data: userMe } = useUserMe()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push(AppPath.login())
+    }
+  }, [isLoading, user, router])
+
+  console.log(userMe)
+
   return (
     <div className="min-h-screen bg-light-color-2">
       {/* Hero Section */}
@@ -30,19 +44,25 @@ export default function MyPage() {
         <div className="flex gap-5 max-w-[1100px] w-full px-5 pt-14">
           <div className="w-52 flex-shrink-0">
             <div className="flex flex-col gap-2.5">
-              <div className="bg-white rounded-lg px-5 py-3">
+              {/* <div className="bg-white rounded-lg px-5 py-3">
                 <span className="typo-body-1-2-sb text-black-color">
                   프로필
                 </span>
-              </div>
+              </div> */}
+              <Button
+                variant="outlined-secondary"
+                className="w-full justify-start"
+                size="small"
+                onClick={logout}
+              >
+                <span className="typo-body-1-2-sb text-black-color">
+                  로그아웃
+                </span>
+              </Button>
               {/* <div className="rounded-lg px-5 py-3">
                 <span className="typo-body-1-2-sb text-black-color">후기</span>
               </div>
-              <div className="rounded-lg px-5 py-3">
-                <span className="typo-body-1-2-sb text-grey-color-1">
-                  로그아웃
-                </span>
-              </div> */}
+              */}
             </div>
           </div>
 

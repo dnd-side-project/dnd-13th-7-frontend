@@ -6,10 +6,14 @@ const AppPath = {
   login: () => '/login' as const,
   logout: () => '/logout' as const,
   signup: () => '/signup' as const,
+  oauthCallback: (provider: 'google' | 'kakao') =>
+    `/api/oauth-callback/${provider}` as const,
   kakaoLogin: () =>
-    `${Environment.apiAddress()}/users/oauth2/authorize/kakao/login` as const,
+    `${Environment.apiAddress()}/api/users/oauth2/authorize/kakao/login` as const,
   googleLogin: () =>
-    `${Environment.apiAddress()}/users/oauth2/authorize/google/login` as const,
+    `${Environment.apiAddress()}/api/users/oauth2/authorize/google/login` as const,
+  oauthAuthorize: (provider: 'google' | 'kakao') =>
+    `${Environment.apiAddress()}/api/oauth2/authorize/${provider}` as const,
   clubExplore: () => '/club/explore' as const,
   clubDetail: (clubId: string) => `/club/${clubId}` as const,
   reviewExplore: () => '/review/explore' as const,
