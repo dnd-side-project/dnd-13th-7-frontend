@@ -5,7 +5,12 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query'
 import { clubQueries } from './queries.factory'
-import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
+import {
+  ClubDetailsData,
+  ClubsPage,
+  ClubRecruitsData,
+  SubscriptionResponse,
+} from './types'
 
 export function useClubsList(params?: {
   page?: number
