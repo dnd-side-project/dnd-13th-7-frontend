@@ -16,6 +16,7 @@ export const clubKeys = {
   recruits: () => [...clubKeys.all(), 'recruits'] as const,
   recruit: (clubId: number | string) =>
     [...clubKeys.recruits(), clubId] as const,
+  popular: () => [...clubKeys.all(), 'popular'] as const,
 } as const
 
 export type ClubKeys = typeof clubKeys

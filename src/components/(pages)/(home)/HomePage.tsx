@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { QuickButton } from '@/components/atoms/quickButton'
 import { Card } from '@/components/molecules/card'
-import { clubs } from '@/mocks/mockData/mockClubs'
+import { usePopularClubs } from '@/features/clubs/queries'
 import { premiumReviews } from '@/mocks/mockData/mockPremiumReview'
 import useMediaQuery from '@/shared/hooks/useMediaQuery'
 
 export default function HomePage() {
   const { isDesktop } = useMediaQuery()
+  const { data: popularClubs, isLoading: isPopularClubsLoading } =
+    usePopularClubs()
 
   return (
     <div>
@@ -49,34 +51,46 @@ export default function HomePage() {
           <div
             className={`grid ${isDesktop ? 'grid-cols-4 gap-4 gap-y-4' : 'grid-cols-2 gap-3 gap-y-6'} mt-6 ${!isDesktop ? 'justify-items-center' : ''}`}
           >
-            {clubs.slice(0, 4).map((club) => (
-              <Link key={club.clubId} href={`/club/${club.clubId}`}>
-                <Card
-                  size={isDesktop ? 'col4Desktop' : 'col4Phone'}
-                  orientation="vertical"
-                  border={true}
-                  gap="12px"
-                  className="group cursor-pointer relative"
-                >
-                  <Card.Image
-                    logoUrl={club.logoUrl}
-                    alt={club.clubName}
-                    interactive
-                    className="transition-transform duration-300 ease-out"
+            {isPopularClubsLoading
+              ? // 로딩 상태
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className={`${isDesktop ? 'w-full' : 'w-40'} h-48 bg-gray-200 rounded-lg animate-pulse`}
                   />
-                  <Card.Content className="px-[6px]">
-                    <Card.Title>{club.clubName}</Card.Title>
-                    <Card.Description>{club.description}</Card.Description>
-                    <Card.Meta part={club.categories.join(' · ')} />
-                  </Card.Content>
-                  {club.isRecruiting && (
-                    <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
-                      모집중
-                    </div>
-                  )}
-                </Card>
-              </Link>
-            ))}
+                ))
+              : popularClubs?.content
+                ? popularClubs.content.map((club) => (
+                    <Link key={club.clubId} href={`/club/${club.clubId}`}>
+                      <Card
+                        size={isDesktop ? 'col4Desktop' : 'col4Phone'}
+                        orientation="vertical"
+                        border={true}
+                        gap="12px"
+                        className="group cursor-pointer relative"
+                      >
+                        <Card.Image
+                          logoUrl={club.logoUrl}
+                          alt={club.clubName}
+                          interactive
+                          className="transition-transform duration-300 ease-out"
+                        />
+                        <Card.Content className="px-[6px]">
+                          <Card.Title>{club.clubName}</Card.Title>
+                          <Card.Description>
+                            {club.description}
+                          </Card.Description>
+                          <Card.Meta part={club.categories.join(' · ')} />
+                        </Card.Content>
+                        {club.isRecruiting && (
+                          <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
+                            모집중
+                          </div>
+                        )}
+                      </Card>
+                    </Link>
+                  ))
+                : null}
           </div>
         </div>
         {/* IT 동아리 프리미엄 후기 */}

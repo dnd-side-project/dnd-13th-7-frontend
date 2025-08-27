@@ -19,6 +19,12 @@ export const clubQueries = {
       queryFn: () => getClubs(params),
       staleTime: 60_000,
     }),
+  popular: () =>
+    queryOptions({
+      queryKey: clubKeys.popular(),
+      queryFn: () => getClubs({ size: 4, sort: '인기순' }),
+      staleTime: 60_000,
+    }),
   detail: (clubId: number) =>
     queryOptions<ClubDetailsData>({
       queryKey: clubKeys.detail(clubId),
