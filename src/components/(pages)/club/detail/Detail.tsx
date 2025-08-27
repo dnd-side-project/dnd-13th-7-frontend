@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import * as React from 'react'
 import { Bell } from 'lucide-react'
 import Image from 'next/image'
 import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
 import { useClubDetails } from '@/features/clubs/queries'
+import { useToggleClubSubscription } from '@/features/subscribe'
 
 interface DetailProps {
   clubId: number
@@ -26,11 +27,27 @@ function isValidUrl(url: string | null | undefined): boolean {
 }
 
 export default function Detail({ clubId }: DetailProps) {
-  const [isSubscribed, setIsSubscribed] = useState(false)
-  const { data: clubDetails, isLoading, error } = useClubDetails(Number(clubId))
+  const {
+    data: clubDetails,
+    isLoading: isClubLoading,
+    error,
+  } = useClubDetails(Number(clubId))
 
-  const handleSubscribe = () => {
-    setIsSubscribed(!isSubscribed)
+  const toggleSubscriptionMutation = useToggleClubSubscription()
+
+  const [isSubscribed, setIsSubscribed] = React.useState(false)
+
+  const isLoading = isClubLoading
+
+  const handleSubscribe = async () => {
+    try {
+      const result = await toggleSubscriptionMutation.mutateAsync(
+        Number(clubId),
+      )
+      setIsSubscribed(result.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   if (isLoading) {

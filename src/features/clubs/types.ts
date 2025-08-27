@@ -89,3 +89,16 @@ export interface ApiResponse<T> {
 }
 
 export type ClubRecruitsResponse = ApiResponse<ClubRecruitsData>
+
+// Subscription types
+export interface SubscriptionRequest {
+  clubId: number
+}
+
+export interface SubscriptionResponse {
+  data: boolean
+  message: string
+  status: string
+}
+
+export type ClubSubscriptionResponse = ApiResponse<SubscriptionResponse>
