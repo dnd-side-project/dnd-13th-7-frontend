@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { usePostBasicReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -59,8 +60,8 @@ const PaperNormalFormSchema = z.object({
 export type PaperNormalFormType = z.infer<typeof PaperNormalFormSchema>
 
 export const usePaperNormalForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const postBasicReviewMutation = usePostBasicReview()
 
   const form = useForm<PaperNormalFormType>({
     resolver: zodResolver(PaperNormalFormSchema),
@@ -121,24 +122,20 @@ export const usePaperNormalForm = () => {
   }
 
   const onSubmit = async (data: PaperNormalFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postBasicReview(apiData)
+      await postBasicReviewMutation.mutateAsync(apiData)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postBasicReviewMutation.isPending,
   }
 }

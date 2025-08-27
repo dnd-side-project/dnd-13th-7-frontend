@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { useUploadFile } from '@/features/file'
+import { usePostPremiumReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -16,10 +18,10 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_DIFFICULT_PART: 16,
-  Q2_EXPRESSION_METHOD: 17,
-  Q3_FINAL_CHECK: 18,
-  TITLE: 19,
+  Q1_DIFFICULT_PART: 1,
+  Q2_EXPRESSION_METHOD: 2,
+  Q3_FINAL_CHECK: 3,
+  TITLE: 4,
 } as const
 
 const PaperPremiumFormSchema = z.object({
@@ -27,7 +29,7 @@ const PaperPremiumFormSchema = z.object({
   generation: appValidation.requiredNumber('지원 기수를 선택해주세요'),
   jobId: appValidation.requiredNumber('지원 파트를 선택해주세요'),
   resultType: z.enum(ResultType),
-  thumbnailImage: z.instanceof(File).optional(),
+  thumbnailImageUrl: z.string().optional(),
   title: appValidation.oneLineText(60, '제목을 입력해주세요'),
   difficultPart: appValidation.longText(10, 1200),
   expressionMethod: appValidation.longText(10, 1200),
@@ -37,8 +39,10 @@ const PaperPremiumFormSchema = z.object({
 export type PaperPremiumFormType = z.infer<typeof PaperPremiumFormSchema>
 
 export const usePaperPremiumForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const uploadFileMutation = useUploadFile()
+  const postPremiumReviewMutation = usePostPremiumReview()
+
   const form = useForm<PaperPremiumFormType>({
     resolver: zodResolver(PaperPremiumFormSchema),
     defaultValues: {
@@ -46,7 +50,7 @@ export const usePaperPremiumForm = () => {
       generation: undefined,
       jobId: undefined,
       resultType: ResultType.Ready,
-      thumbnailImage: undefined,
+      thumbnailImageUrl: '',
       title: '',
       difficultPart: '',
       expressionMethod: '',
@@ -54,6 +58,22 @@ export const usePaperPremiumForm = () => {
     },
     mode: 'onBlur',
   })
+
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (file: File | null) => {
+    if (!file) {
+      form.setValue('thumbnailImageUrl', '')
+      return
+    }
+
+    try {
+      const result = await uploadFileMutation.mutateAsync(file)
+      form.setValue('thumbnailImageUrl', result.fileUrl)
+    } catch (error) {
+      console.error('Image upload failed:', error)
+      // 에러 처리 (필요시 토스트 메시지 등 추가)
+    }
+  }
 
   // 폼 데이터를 API 요청 형식으로 변환
   const transformToApiRequest = (
@@ -85,30 +105,28 @@ export const usePaperPremiumForm = () => {
       resultType: data.resultType,
       reviewCategory: ReviewCategory.Document, // 서류 전형
       reviewType: ReviewType.Premium, // 프리미엄 후기
-      imageUrl: '', // TODO: 이미지 업로드 후 URL로 변경
+      imageUrl: data.thumbnailImageUrl || '',
       title: data.title,
     }
   }
 
   const onSubmit = async (data: PaperPremiumFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postPremiumReview(apiData)
+      await postPremiumReviewMutation.mutateAsync(apiData)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postPremiumReviewMutation.isPending,
+    handleImageUpload,
+    isUploading: uploadFileMutation.isPending,
   }
 }

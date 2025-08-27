@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { useUploadFile } from '@/features/file'
+import { usePostPremiumReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -36,7 +38,7 @@ const ActivityPremiumFormSchema = z.object({
   clubId: appValidation.requiredNumber('IT 동아리명을 선택해주세요'),
   generation: appValidation.requiredNumber('지원 기수를 선택해주세요'),
   jobId: appValidation.requiredNumber('지원 파트를 선택해주세요'),
-  thumbnailImage: z.instanceof(File).optional(),
+  thumbnailImageUrl: z.string().optional(),
   title: appValidation.oneLineText(60, '제목을 입력해주세요'),
   preparationBeforeStart: appValidation.longText(10, 1200),
   collaborationExperience: appValidation.longText(10, 1200),
@@ -47,8 +49,9 @@ const ActivityPremiumFormSchema = z.object({
 export type ActivityPremiumFormType = z.infer<typeof ActivityPremiumFormSchema>
 
 export const useActivityPremiumForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const uploadFileMutation = useUploadFile()
+  const postPremiumReviewMutation = usePostPremiumReview()
 
   const form = useForm<ActivityPremiumFormType>({
     resolver: zodResolver(ActivityPremiumFormSchema),
@@ -56,7 +59,7 @@ export const useActivityPremiumForm = () => {
       clubId: undefined,
       generation: undefined,
       jobId: undefined,
-      thumbnailImage: undefined,
+      thumbnailImageUrl: '',
       title: '',
       preparationBeforeStart: '',
       collaborationExperience: '',
@@ -66,10 +69,26 @@ export const useActivityPremiumForm = () => {
     mode: 'onBlur',
   })
 
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (file: File | null) => {
+    if (!file) {
+      form.setValue('thumbnailImageUrl', '')
+      return
+    }
+
+    try {
+      const result = await uploadFileMutation.mutateAsync(file)
+      form.setValue('thumbnailImageUrl', result.fileUrl)
+    } catch (error) {
+      console.error('Image upload failed:', error)
+      // 에러 처리 (필요시 토스트 메시지 등 추가)
+    }
+  }
+
   // 폼 데이터를 API 요청 형식으로 변환
   const transformToApiRequest = (
     data: ActivityPremiumFormType,
-  ): Partial<PremiumReviewCreateRequest> => {
+  ): Omit<PremiumReviewCreateRequest, 'resultType'> => {
     const questions: AnswerRequest[] = [
       {
         questionId: QUESTION_IDS.TITLE,
@@ -106,31 +125,31 @@ export const useActivityPremiumForm = () => {
       // Note: Activity Premium에는 resultType이 없음
       reviewCategory: ReviewCategory.Activity, // 활동 전형
       reviewType: ReviewType.Premium, // 프리미엄 후기
-      imageUrl: '', // TODO: 이미지 업로드 후 URL로 변경
+      imageUrl: data.thumbnailImageUrl || '',
       title: data.title,
       // resultType은 Activity Premium에는 없음
     }
   }
 
   const onSubmit = async (data: ActivityPremiumFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postPremiumReview(apiData)
+      await postPremiumReviewMutation.mutateAsync(
+        apiData as PremiumReviewCreateRequest,
+      )
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postPremiumReviewMutation.isPending,
+    handleImageUpload,
+    isUploading: uploadFileMutation.isPending,
   }
 }

@@ -15,6 +15,7 @@ export default function Header() {
   const router = useRouter()
   const { setOpen } = useSearchUrlState()
   const { user } = useAuth()
+
   return (
     <div className="w-full text-grey-color-5 max-desktop:hidden">
       <header className="mx-auto px-4 py-3 z-20 relative">
