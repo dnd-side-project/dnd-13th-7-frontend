@@ -1,8 +1,13 @@
 import { queryOptions } from '@tanstack/react-query'
-import { getBasicReviews, getPremiumReviews } from './api'
+import {
+  getBasicReviews,
+  getPremiumReviewDetail,
+  getPremiumReviews,
+} from './api'
 import { reviewKeys } from './keys'
 import {
   BasicReviewsPage,
+  PremiumReviewDetail,
   PremiumReviewsPage,
   ReviewsQueryParams,
 } from './types'
@@ -13,6 +18,14 @@ export const reviewQueries = {
     queryOptions<PremiumReviewsPage>({
       queryKey: reviewKeys.premiumList(params),
       queryFn: () => getPremiumReviews(params),
+      staleTime: 60_000,
+    }),
+
+  // Premium review detail
+  premiumDetail: (premiumReviewId: number) =>
+    queryOptions<PremiumReviewDetail>({
+      queryKey: reviewKeys.premiumDetail(premiumReviewId),
+      queryFn: () => getPremiumReviewDetail(premiumReviewId),
       staleTime: 60_000,
     }),
 
