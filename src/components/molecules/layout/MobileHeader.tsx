@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { MenuIcon, SearchIcon } from '@/assets/icons'
@@ -23,11 +22,11 @@ export default function MobileHeader() {
           {/* Left: Logo placeholder */}
           <div className="flex items-center gap-14">
             <Link href={AppPath.home()} className="block">
-              <Image
-                src={MoyeoitMiniLogo}
-                alt="moyeoit logo"
+              <MoyeoitMiniLogo
                 width={24}
                 height={25}
+                role="img"
+                aria-label="moyeoit logo"
               />
             </Link>
           </div>
@@ -47,7 +46,12 @@ export default function MobileHeader() {
               className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
               onClick={() => setOpen(true)}
             >
-              <Image src={SearchIcon} alt="search" width={24} height={24} />
+              <SearchIcon
+                width={24}
+                height={24}
+                role="img"
+                aria-label="search"
+              />
             </Button>
             <Button
               variant="none"
@@ -55,7 +59,7 @@ export default function MobileHeader() {
               size="none"
               className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
             >
-              <Image src={MenuIcon} alt="menu" width={24} height={24} />
+              <MenuIcon width={24} height={24} role="img" aria-label="menu" />
             </Button>
           </div>
         </div>

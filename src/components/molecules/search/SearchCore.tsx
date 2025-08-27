@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { DummyProfileIcon, SearchMainIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -89,7 +88,7 @@ export function SearchCore(props: SearchCoreProps) {
           aria-label="search"
           className="bg-transparent border-none"
         />
-        <Image src={SearchMainIcon} alt="search" width={24} height={24} />
+        <SearchMainIcon width={24} height={24} role="img" aria-label="search" />
       </div>
 
       <div className="desktop:min-h-[340px] max-desktop:max-h-[calc(100vh-200px)] overflow-auto">
@@ -131,11 +130,11 @@ export function SearchCore(props: SearchCoreProps) {
                     })
                   ) : (
                     <div className="flex flex-row items-center gap-2">
-                      <Image
-                        src={DummyProfileIcon}
-                        alt={it.clubName}
+                      <DummyProfileIcon
                         width={32}
                         height={32}
+                        role="img"
+                        aria-label={it.clubName}
                       />
                       <span className="typo-body-3-2-b text-grey-color-4">
                         {it.clubName}
