@@ -36,3 +36,7 @@ export function useClubRecruits(
 ): UseQueryResult<ClubRecruitsData, Error> {
   return useQuery(clubQueries.recruit(clubId))
 }
+
+export function usePopularClubs(): UseQueryResult<ClubsPage, Error> {
+  return useQuery(clubQueries.popular())
+}

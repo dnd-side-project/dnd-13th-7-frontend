@@ -13,6 +13,9 @@ export const reviewKeys = {
   basicLists: () => [...reviewKeys.lists(), 'basic'] as const,
   basicList: (params?: ReviewsQueryParams) =>
     [...reviewKeys.basicLists(), params ?? {}] as const,
+
+  // Popular premium reviews
+  popularPremium: () => [...reviewKeys.all(), 'popular-premium'] as const,
 } as const
 
 export type ReviewKeys = typeof reviewKeys

@@ -1,4 +1,5 @@
 // Domain types for Clubs
+
 export interface ClubActivity {
   hashtag: string
   activityName: string

@@ -23,6 +23,14 @@ export const reviewQueries = {
       queryFn: () => getBasicReviews(params),
       staleTime: 60_000,
     }),
+
+  // Popular premium reviews
+  popularPremium: () =>
+    queryOptions<PremiumReviewsPage>({
+      queryKey: reviewKeys.popularPremium(),
+      queryFn: () => getPremiumReviews({ size: 4, sort: '인기순' }),
+      staleTime: 60_000,
+    }),
 } as const
 
 export type ReviewQueries = typeof reviewQueries
