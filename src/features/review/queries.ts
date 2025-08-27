@@ -17,3 +17,10 @@ export function useBasicReviews(
 ): UseQueryResult<BasicReviewsPage, Error> {
   return useQuery(reviewQueries.basicList(params))
 }
+
+export function usePopularPremiumReviews(): UseQueryResult<
+  PremiumReviewsPage,
+  Error
+> {
+  return useQuery(reviewQueries.popularPremium())
+}
