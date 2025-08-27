@@ -1,5 +1,6 @@
 import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
+import { AuthProvider } from '@/shared/providers/auth-provider'
 import MSWProvider from '@/shared/providers/msw-provider'
 import ReactQueryProvider from '@/shared/providers/react-query-provider'
 import '@/styles/globals.css'
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="ko">
       <body className="antialiased">
         <MSWProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ReactQueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ReactQueryProvider>
         </MSWProvider>
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

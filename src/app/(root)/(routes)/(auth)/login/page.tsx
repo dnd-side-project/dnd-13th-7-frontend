@@ -1,16 +1,36 @@
 'use client'
 
+import { useEffect } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { KakaoIcon, GoogleIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
+import { useOAuthAuthorize } from '@/features/oauth'
+import AppPath from '@/shared/configs/appPath'
+import { useAuth } from '@/shared/providers/auth-provider'
 
 export default function LoginPage() {
+  const { mutate: authorize, isPending } = useOAuthAuthorize()
+  const { user, isLoading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isLoading) return
+    if (user) {
+      if (typeof window !== 'undefined' && window.history.length > 1) {
+        router.back()
+      } else {
+        router.push(AppPath.home())
+      }
+    }
+  }, [isLoading, user, router])
+
   const handleKakaoLogin = () => {
-    console.log('kakao login')
+    authorize('kakao')
   }
 
   const handleGoogleLogin = () => {
-    console.log('google login')
+    authorize('google')
   }
 
   return (
@@ -29,19 +49,21 @@ export default function LoginPage() {
         <div className="flex flex-col gap-4">
           <Button
             onClick={handleKakaoLogin}
+            disabled={isPending}
             size="medium"
-            className="typo-body-3-b bg-kakao-color text-black-color border-none hover:bg-kakao-color/80 gap-2 active:bg-kakao-color/50"
+            className="typo-body-3-b bg-kakao-color text-black-color border-none hover:bg-kakao-color/80 gap-2 active:bg-kakao-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Image src={KakaoIcon} alt="kakao" width={20} height={20} />
-            카카오 계정으로 계속하기
+            {isPending ? '로그인 중...' : '카카오 계정으로 계속하기'}
           </Button>
           <Button
             onClick={handleGoogleLogin}
+            disabled={isPending}
             size="medium"
-            className="typo-body-3-b bg-white-color border-light-color-3 text-black-color hover:bg-white-color/80 gap-2 active:bg-white-color/50"
+            className="typo-body-3-b bg-white-color border-light-color-3 text-black-color hover:bg-white-color/80 gap-2 active:bg-white-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Image src={GoogleIcon} alt="google" width={20} height={20} />
-            구글 계정으로 계속하기
+            {isPending ? '로그인 중...' : '구글 계정으로 계속하기'}
           </Button>
         </div>
       </main>

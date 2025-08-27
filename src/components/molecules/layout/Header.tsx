@@ -9,13 +9,13 @@ import { MoyeoitFullLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
 import AppPath from '@/shared/configs/appPath'
 import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
+import { useAuth } from '@/shared/providers/auth-provider'
 import { ReviewWriteDropdown } from './sections'
-
-const IS_LOGIN = false
 
 export default function Header() {
   const router = useRouter()
   const { setOpen } = useSearchUrlState()
+  const { user } = useAuth()
   return (
     <div className="w-full text-grey-color-5 max-desktop:hidden">
       <header className="mx-auto px-4 py-3 z-20 relative">
@@ -60,7 +60,7 @@ export default function Header() {
             >
               <Image src={SearchIcon} alt="search" width={24} height={24} />
             </Button>
-            {IS_LOGIN ? (
+            {user ? (
               <Button
                 variant="none"
                 size="none"
