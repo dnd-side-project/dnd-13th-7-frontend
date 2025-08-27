@@ -4,6 +4,7 @@ import {
   BasicReviewCreateRequest,
   BasicReviewsPage,
   PremiumReviewCreateRequest,
+  PremiumReviewDetail,
   PremiumReviewsPage,
   ReviewsQueryParams,
 } from './types'
@@ -39,6 +40,16 @@ export async function postBasicReview(
   data: BasicReviewCreateRequest,
 ): Promise<void> {
   await apiClient.post<ApiResponse<void>>('/api/v1/review/basic', data)
+}
+
+// 프리미엄 후기 상세 조회
+export async function getPremiumReviewDetail(
+  premiumReviewId: number,
+): Promise<PremiumReviewDetail> {
+  const res = await apiClient.get<ApiResponse<PremiumReviewDetail>>(
+    `/api/v1/review/premium/${premiumReviewId}`,
+  )
+  return res.data.data
 }
 
 // 프리미엄 후기 생성

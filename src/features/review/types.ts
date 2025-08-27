@@ -225,3 +225,52 @@ export interface PremiumReviewCreateRequest {
    */
   title: string
 }
+
+// Premium Review Detail Types
+export interface Club {
+  id: number
+  name: string
+  slogan: string
+  bio: string
+  establishment: number
+  totalParticipant: number
+  operation: number
+  offline: string
+  online: string
+  location: string
+  address: string
+  recruiting: boolean
+  imageUrl: string
+}
+
+export interface Job {
+  id: number
+  name: string
+  engName: string
+}
+
+export interface User {
+  id: number
+  name: string
+  email: string
+  nickname: string
+  profileImageUrl: string
+  jobDto: Job
+  provider: 'GOOGLE' | 'KAKAO'
+  active: boolean
+}
+
+export interface PremiumReviewDetail {
+  id: number
+  club: Club
+  cohort: number
+  job: Job
+  user: User
+  imageUrl: string
+  title: string
+  resultType: ResultType
+  reviewCategory: ReviewCategory
+  createDazte: string
+  updateDate: string
+  details: string[]
+}
