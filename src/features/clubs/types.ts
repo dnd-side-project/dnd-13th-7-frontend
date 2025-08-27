@@ -103,3 +103,20 @@ export interface SubscriptionResponse {
 }
 
 export type ClubSubscriptionResponse = ApiResponse<SubscriptionResponse>
+
+// Search types
+export interface ClubSearchRequest {
+  keyword?: string
+}
+
+export interface ClubSearchDatum {
+  clubId: number
+  imgUrl: string
+  name: string
+}
+
+export interface ClubSearchResponse {
+  data: ClubSearchDatum[]
+  message: string
+  status: string
+}
