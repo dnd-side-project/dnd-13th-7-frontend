@@ -11,8 +11,7 @@ type CardImageCSSVars = {
 }
 
 export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
-  coverSrc?: string | null
-  logoSrc?: string | null
+  logoUrl?: string | null
   fallbackSrc?: string | null
   alt?: string
   priority?: boolean
@@ -22,9 +21,19 @@ export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean
 }
 
+// URL 유효성 검사 함수
+function isValidUrl(url: string | null | undefined): boolean {
+  if (!url) return false
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export function CardImage({
-  coverSrc,
-  logoSrc,
+  logoUrl,
   fallbackSrc = '/images/default.svg',
   alt,
   priority,
@@ -37,9 +46,9 @@ export function CardImage({
   const { orientation, preset } = React.useContext(CardCtx)
   const p = PRESET[preset]
 
-  const wantSrc = coverSrc || logoSrc || fallbackSrc
   const [failed, setFailed] = React.useState(false)
-  const src = failed ? fallbackSrc : wantSrc
+  const src =
+    failed || !logoUrl || !isValidUrl(logoUrl) ? fallbackSrc! : logoUrl!
 
   const ratio = ratioOverride || p.ratio
 
@@ -69,7 +78,7 @@ export function CardImage({
       {...props}
     >
       <Image
-        src={src as string}
+        src={src}
         alt={alt || ''}
         fill
         priority={priority}

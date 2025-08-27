@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { KakaoIcon, GoogleIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
@@ -51,18 +50,18 @@ export default function LoginPage() {
             onClick={handleKakaoLogin}
             disabled={isPending}
             size="medium"
-            className="typo-body-3-b bg-kakao-color text-black-color border-none hover:bg-kakao-color/80 gap-2 active:bg-kakao-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="typo-body-3-b bg-kakao-color items-center text-black-color border-none hover:bg-kakao-color/80 gap-2 active:bg-kakao-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Image src={KakaoIcon} alt="kakao" width={20} height={20} />
+            <KakaoIcon width={25} height={25} role="img" aria-label="kakao" />
             {isPending ? '로그인 중...' : '카카오 계정으로 계속하기'}
           </Button>
           <Button
             onClick={handleGoogleLogin}
             disabled={isPending}
             size="medium"
-            className="typo-body-3-b bg-white-color border-light-color-3 text-black-color hover:bg-white-color/80 gap-2 active:bg-white-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="typo-body-3-b bg-white-color items-center border-light-color-3 text-black-color hover:bg-white-color/80 gap-2 active:bg-white-color/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Image src={GoogleIcon} alt="google" width={20} height={20} />
+            <GoogleIcon width={25} height={25} role="img" aria-label="google" />
             {isPending ? '로그인 중...' : '구글 계정으로 계속하기'}
           </Button>
         </div>

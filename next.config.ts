@@ -4,6 +4,19 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   /* config options here */
   transpilePackages: ['msw'],
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: 'upgrade-insecure-requests',
+          },
+        ],
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       {
@@ -18,11 +31,25 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+        port: '',
+        pathname: '/images/**',
+      },
     ],
   },
-  webpack: (config) => {
+  turbopack: {
+    rules: {
+      '*.svg': {
+        as: '*.js',
+        loaders: ['@svgr/webpack'],
+      },
+    },
+  },
+  webpack(config) {
     config.module.rules.push({
-      test: /\.svg$/,
+      test: /\.svg$/i,
       use: ['@svgr/webpack'],
     })
     return config

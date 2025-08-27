@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { InstagramIcon } from '@/assets/icons'
 import { MoyeoitFullLogo } from '@/assets/images'
@@ -13,7 +12,12 @@ export default function Footer() {
         {/* Top brand + desc + email */}
         <div className="flex flex-col gap-5 desktop:gap-8">
           <div className="flex flex-col gap-5 desktop:flex-row desktop:justify-between">
-            <Image src={MoyeoitFullLogo} alt="logo" width={144} height={40} />
+            <MoyeoitFullLogo
+              width={144}
+              height={40}
+              role="img"
+              aria-label="logo"
+            />
             <div className="flex flex-row gap-4 text-black-color typo-button-m desktop:typo-body-2-2-m">
               <Link href={AppPath.home()}>서비스 소개</Link>
               <Link href={AppPath.home()}>문의</Link>
@@ -47,7 +51,12 @@ export default function Footer() {
             aria-label="instagram"
             className="inline-flex items-center justify-center"
           >
-            <Image src={InstagramIcon} alt="instagram" width={32} height={32} />
+            <InstagramIcon
+              width={32}
+              height={32}
+              role="img"
+              aria-label="instagram"
+            />
           </a>
         </div>
       </footer>

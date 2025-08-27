@@ -5,7 +5,12 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query'
 import { clubQueries } from './queries.factory'
-import { ClubDetailsData, ClubsPage, ClubRecruitsData } from './types'
+import {
+  ClubDetailsData,
+  ClubsPage,
+  ClubRecruitsData,
+  SubscriptionResponse,
+} from './types'
 
 export function useClubsList(params?: {
   page?: number
@@ -21,13 +26,17 @@ export function useClubsList(params?: {
 }
 
 export function useClubDetails(
-  clubId: number | string,
+  clubId: number,
 ): UseQueryResult<ClubDetailsData, Error> {
   return useQuery(clubQueries.detail(clubId))
 }
 
 export function useClubRecruits(
-  clubId: number | string,
+  clubId: number,
 ): UseQueryResult<ClubRecruitsData, Error> {
   return useQuery(clubQueries.recruit(clubId))
+}
+
+export function usePopularClubs(): UseQueryResult<ClubsPage, Error> {
+  return useQuery(clubQueries.popular())
 }

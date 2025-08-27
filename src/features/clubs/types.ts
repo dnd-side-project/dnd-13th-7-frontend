@@ -1,10 +1,11 @@
 // Domain types for Clubs
+
 export interface ClubActivity {
   hashtag: string
   activityName: string
   activityDescribe: string
   imageUrl: string | null
-  order: number
+  activityOrder: number
 }
 
 export interface ClubSchedule {
@@ -14,22 +15,23 @@ export interface ClubSchedule {
 }
 
 export interface ClubDetailsData {
-  name: string
-  position: string | null
-  slogan: string
-  bio: string
-  establishment: number
-  total_participant: number
-  operation: number
-  offline: string
-  online: string
-  location: string
-  address: string
-  recruiting: boolean
-  imageUrl: string
-  recruitmentPart: string | null
+  club: {
+    name: string
+    slogan: string
+    bio: string
+    establishment: number
+    totalParticipant: number
+    operation: number
+    offline: string | null
+    online: string | null
+    location: string | null
+    address: string | null
+    recruiting: boolean
+    imageUrl: string | null
+    process: string[]
+  }
   activities: ClubActivity[]
-  schedules: ClubSchedule[]
+  clubSchedules: ClubSchedule[]
 }
 
 export interface ClubsListItem {
@@ -71,14 +73,33 @@ export interface ClubsPage {
 }
 
 export interface ClubRecruitsData {
-  clubName: string
-  clubLogoUrl: string
-  recruitmentParts: string[]
+  recruitmentPart: string[]
   qualification: string
   recruitmentSchedule: string
   activityPeriod: string
   activityMethod: string
   activityFee: string
   homepageUrl: string
-  noticeUrl: string
+  noticeUrl: string | null
 }
+
+export interface ApiResponse<T> {
+  status: 'SUCCESS' | 'ERROR'
+  message: string
+  data: T
+}
+
+export type ClubRecruitsResponse = ApiResponse<ClubRecruitsData>
+
+// Subscription types
+export interface SubscriptionRequest {
+  clubId: number
+}
+
+export interface SubscriptionResponse {
+  data: boolean
+  message: string
+  status: string
+}
+
+export type ClubSubscriptionResponse = ApiResponse<SubscriptionResponse>

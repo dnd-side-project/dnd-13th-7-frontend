@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DocumentPencilIcon, DocumentDiamondIcon } from '@/assets/icons'
@@ -50,7 +49,7 @@ export default async function Page({
               <div className="w-full p-6 border border-gray-200 rounded-xl cursor-pointer group">
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0">
-                    <Image src={DocumentPencilIcon} alt="일반 후기" />
+                    <DocumentPencilIcon role="img" aria-label="일반 후기" />
                   </div>
                   <div className="flex-1">
                     <h3 className="typo-body-3-b text-black-color mb-1">
@@ -68,7 +67,10 @@ export default async function Page({
               <div className="w-full p-6 border border-gray-200 rounded-xl cursor-pointer group">
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0">
-                    <Image src={DocumentDiamondIcon} alt="프리미엄 후기" />
+                    <DocumentDiamondIcon
+                      role="img"
+                      aria-label="프리미엄 후기"
+                    />
                   </div>
                   <div className="flex-1">
                     <h3 className="typo-body-3-b text-black-color mb-1">

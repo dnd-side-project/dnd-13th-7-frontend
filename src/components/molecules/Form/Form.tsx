@@ -12,7 +12,6 @@ import {
 } from 'react-hook-form'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
-import Image from 'next/image'
 import { InvalidIcon } from '@/assets/icons'
 import { Label } from '@/components/atoms/Label'
 import { cn } from '@/shared/utils/cn'
@@ -150,7 +149,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
       )}
       {...props}
     >
-      <Image src={InvalidIcon} alt="invalid" width={20} height={20} />
+      <InvalidIcon width={20} height={20} role="img" aria-label="invalid" />
       {body}
     </p>
   )

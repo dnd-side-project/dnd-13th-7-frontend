@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { QuickButton } from '@/components/atoms/quickButton'
 import { Card } from '@/components/molecules/card'
-import { clubs } from '@/mocks/mockData/mockClubs'
-import { premiumReviews } from '@/mocks/mockData/mockPremiumReview'
+import { usePopularClubs } from '@/features/clubs/queries'
+import { usePopularPremiumReviews } from '@/features/review/queries'
 import useMediaQuery from '@/shared/hooks/useMediaQuery'
 
 export default function HomePage() {
   const { isDesktop } = useMediaQuery()
+  const { data: popularClubs } = usePopularClubs()
+  const { data: popularPremiumReviews } = usePopularPremiumReviews()
 
   return (
     <div>
@@ -49,29 +51,36 @@ export default function HomePage() {
           <div
             className={`grid ${isDesktop ? 'grid-cols-4 gap-4 gap-y-4' : 'grid-cols-2 gap-3 gap-y-6'} mt-6 ${!isDesktop ? 'justify-items-center' : ''}`}
           >
-            {clubs.slice(0, 4).map((club) => (
-              <Link key={club.clubId} href={`/club/${club.clubId}`}>
-                <Card
-                  size={isDesktop ? 'col4Desktop' : 'col4Phone'}
-                  orientation="vertical"
-                  border={true}
-                  gap="12px"
-                  className="group cursor-pointer relative"
-                >
-                  <Card.Image
-                    coverSrc={club.logoUrl || '/images/default.svg'}
-                    alt={club.clubName}
-                    interactive
-                    className="transition-transform duration-300 ease-out"
-                  />
-                  <Card.Content className="px-[6px]">
-                    <Card.Title>{club.clubName}</Card.Title>
-                    <Card.Description>{club.description}</Card.Description>
-                    <Card.Meta part={club.categories.join(' · ')} />
-                  </Card.Content>
-                </Card>
-              </Link>
-            ))}
+            {popularClubs?.content
+              ? popularClubs.content.map((club) => (
+                  <Link key={club.clubId} href={`/club/${club.clubId}`}>
+                    <Card
+                      size={isDesktop ? 'col4Desktop' : 'col4Phone'}
+                      orientation="vertical"
+                      border={true}
+                      gap="12px"
+                      className="group cursor-pointer relative"
+                    >
+                      <Card.Image
+                        logoUrl={club.logoUrl}
+                        alt={club.clubName}
+                        interactive
+                        className="transition-transform duration-300 ease-out"
+                      />
+                      <Card.Content className="px-[6px]">
+                        <Card.Title>{club.clubName}</Card.Title>
+                        <Card.Description>{club.description}</Card.Description>
+                        <Card.Meta part={club.categories.join(' · ')} />
+                      </Card.Content>
+                      {club.isRecruiting && (
+                        <div className="w-[61px] h-[29px] absolute top-[16px] left-[16px] bg-white text-grey-color-5 typo-caption-sb rounded-[73px] border border-light-color-3 z-10 px-3 py-1.5 text-center flex items-center justify-center leading-none">
+                          모집중
+                        </div>
+                      )}
+                    </Card>
+                  </Link>
+                ))
+              : null}
           </div>
         </div>
         {/* IT 동아리 프리미엄 후기 */}
@@ -83,29 +92,33 @@ export default function HomePage() {
           <div
             className={`grid ${isDesktop ? 'grid-cols-2 gap-6' : 'grid-cols-1 gap-4'} mt-6 ${isDesktop ? 'mb-16' : 'mb-12'}`}
           >
-            {premiumReviews.map((review) => (
-              <Card
-                key={review.id}
-                size={isDesktop ? 'col3Desktop' : 'homeReviewPhone'}
-                orientation="horizontal"
-                border={true}
-                gap="12px"
-                className="group cursor-pointer relative"
-              >
-                <Card.Image
-                  coverSrc="/images/default.svg"
-                  alt={review.meta[0]}
-                  interactive
-                  className="transition-transform duration-300 ease-out"
-                />
-                <Card.Content className="px-[6px]">
-                  <Card.Title>{review.title}</Card.Title>
-                  <Card.Description>{review.description}</Card.Description>
-                  <Card.Meta part={review.meta.join(' · ')} />
-                  <Card.Stats likes={review.likes} comments={review.comments} />
-                </Card.Content>
-              </Card>
-            ))}
+            {popularPremiumReviews?.content
+              ? popularPremiumReviews.content.map((review) => (
+                  <Card
+                    key={review.reviewId}
+                    size={isDesktop ? 'col3Desktop' : 'homeReviewPhone'}
+                    orientation="horizontal"
+                    border={true}
+                    gap="12px"
+                    className="group cursor-pointer relative"
+                  >
+                    <Card.Image
+                      alt={review.title}
+                      interactive
+                      className="transition-transform duration-300 ease-out"
+                    />
+                    <Card.Content className="px-[6px]">
+                      <Card.Title>{review.title}</Card.Title>
+                      <Card.Description>{review.headLine}</Card.Description>
+                      <Card.Meta part={review.identifier.join(' · ')} />
+                      <Card.Stats
+                        likes={review.likeCount}
+                        comments={review.commentCount}
+                      />
+                    </Card.Content>
+                  </Card>
+                ))
+              : null}
           </div>
         </div>
 

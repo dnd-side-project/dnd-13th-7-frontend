@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ProfileIcon, SearchIcon } from '@/assets/icons'
@@ -25,11 +24,11 @@ export default function Header() {
           {/* Left: Logo placeholder */}
           <div className="flex items-center gap-14">
             <Link href={AppPath.home()} className="block">
-              <Image
-                src={MoyeoitFullLogo}
-                alt="moyeoit logo"
+              <MoyeoitFullLogo
                 width={132}
                 height={20}
+                role="img"
+                aria-label="moyeoit logo"
               />
             </Link>
 
@@ -59,7 +58,12 @@ export default function Header() {
               className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
               onClick={() => setOpen(true)}
             >
-              <Image src={SearchIcon} alt="search" width={24} height={24} />
+              <SearchIcon
+                width={24}
+                height={24}
+                role="img"
+                aria-label="search"
+              />
             </Button>
             {user ? (
               <Button
@@ -69,7 +73,12 @@ export default function Header() {
                 className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
                 onClick={() => router.push(AppPath.myPage())}
               >
-                <Image src={ProfileIcon} alt="profile" width={48} height={48} />
+                <ProfileIcon
+                  width={48}
+                  height={48}
+                  role="img"
+                  aria-label="profile"
+                />
               </Button>
             ) : (
               <Link

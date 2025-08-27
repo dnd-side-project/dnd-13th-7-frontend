@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ProfileIcon, BellIcon, ThumbsUpIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
@@ -84,11 +83,11 @@ export default function MyPage() {
                         공고 구독
                       </span>
                       <div className="w-6 h-6">
-                        <Image
-                          src={BellIcon}
-                          alt="bell"
+                        <BellIcon
                           width={24}
                           height={24}
+                          role="img"
+                          aria-label="bell"
                           className="text-grey-color-4"
                         />
                       </div>
@@ -101,11 +100,11 @@ export default function MyPage() {
                         추천 후기
                       </span>
                       <div className="w-6 h-6">
-                        <Image
-                          src={ThumbsUpIcon}
-                          alt="thumbs up"
+                        <ThumbsUpIcon
                           width={24}
                           height={24}
+                          role="img"
+                          aria-label="thumbs up"
                           className="text-grey-color-4"
                         />
                       </div>
@@ -135,11 +134,11 @@ export default function MyPage() {
                       </label>
                       <div className="flex items-center gap-4">
                         <div className="w-[120px] h-[120px] bg-light-color-2 rounded-2xl flex items-center justify-center">
-                          <Image
-                            src={ProfileIcon}
-                            alt="profile"
+                          <ProfileIcon
                             width={48}
                             height={48}
+                            role="img"
+                            aria-label="profile"
                           />
                         </div>
                         <Button variant="outlined-primary" size="small">
