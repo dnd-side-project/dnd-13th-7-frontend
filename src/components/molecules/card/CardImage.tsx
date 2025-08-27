@@ -1,0 +1,94 @@
+'use client'
+
+import * as React from 'react'
+import Image from 'next/image'
+import { cn } from '@/shared/utils/cn'
+import { CardCtx } from './Card'
+import { PRESET } from './presets'
+
+type CardImageCSSVars = {
+  '--thumb-w'?: string
+}
+
+export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
+  logoUrl?: string | null
+  fallbackSrc?: string | null
+  alt?: string
+  priority?: boolean
+  ImageWidth?: string
+  ratioOverride?: string
+  className?: string
+  interactive?: boolean
+}
+
+// URL 유효성 검사 함수
+function isValidUrl(url: string | null | undefined): boolean {
+  if (!url) return false
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export function CardImage({
+  logoUrl,
+  fallbackSrc = '/images/default.svg',
+  alt,
+  priority,
+  ImageWidth,
+  ratioOverride,
+  className,
+  interactive = false,
+  ...props
+}: CardImageProps) {
+  const { orientation, preset } = React.useContext(CardCtx)
+  const p = PRESET[preset]
+
+  const [failed, setFailed] = React.useState(false)
+  const src =
+    failed || !logoUrl || !isValidUrl(logoUrl) ? fallbackSrc! : logoUrl!
+
+  const ratio = ratioOverride || p.ratio
+
+  const aspectClass = ratio === '113/108' ? 'aspect-[113/108]' : 'aspect-[3/2]'
+
+  const sizes =
+    orientation === 'vertical' ? p.ImageSize : (ImageWidth ?? p.ImageWidth)
+
+  const imageBox =
+    orientation === 'vertical' ? 'w-full' : 'w-[var(--thumb-w)] shrink-0'
+
+  return (
+    <div
+      data-slot="card-image"
+      className={cn(
+        'relative w-full object-cover overflow-hidden border border-light-color-3 rounded-[12px]',
+        imageBox,
+        aspectClass,
+        className,
+      )}
+      style={{
+        ...((orientation === 'horizontal' && ImageWidth
+          ? { '--thumb-w': ImageWidth }
+          : {}) as CardImageCSSVars),
+        aspectRatio: ratio.replace('/', ' / '),
+      }}
+      {...props}
+    >
+      <Image
+        src={src}
+        alt={alt || ''}
+        fill
+        priority={priority}
+        sizes={sizes}
+        className={cn(
+          'object-cover  transition-transform duration-300 ease-out will-change-transform transform-gpu',
+          interactive && 'group-hover:scale-105',
+        )}
+        onError={() => setFailed(true)}
+      />
+    </div>
+  )
+}
