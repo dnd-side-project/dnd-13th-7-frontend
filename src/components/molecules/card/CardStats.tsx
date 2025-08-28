@@ -15,7 +15,7 @@ export function CardStats({
     <div
       data-slot="card-stats"
       className={cn(
-        'typo-caption-m text-grey-color-1 flex items-end justify-end flex-row',
+        'typo-caption-m text-grey-color-1 flex items-center justify-end flex-row',
         className,
       )}
       {...props}

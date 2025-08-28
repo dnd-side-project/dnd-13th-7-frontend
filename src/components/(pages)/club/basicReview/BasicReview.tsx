@@ -6,9 +6,13 @@ import { ClubRecruitsData } from '@/features/clubs/types'
 
 interface BasicReviewProps {
   recruitsData: ClubRecruitsData | null
+  clubId: number
 }
 
-export default function BasicReview({ recruitsData }: BasicReviewProps) {
+export default function BasicReview({
+  recruitsData,
+  clubId,
+}: BasicReviewProps) {
   const [selectedParts, setSelectedParts] = useState<string[]>([])
 
   // recruitsData에서 모집 파트를 멀티드롭다운 옵션으로 변환
