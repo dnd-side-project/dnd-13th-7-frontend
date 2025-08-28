@@ -3,6 +3,9 @@ export type {
   UserCategoryType,
   UserActivateRequest,
   UserActivateResponse,
+  UserProfile,
+  UpdateUserProfileImageRequest,
+  UserInterests,
 } from './types'
 export { UserCategory, USER_CATEGORY_TO_ID, ID_TO_USER_CATEGORY } from './types'
 
@@ -13,7 +16,7 @@ export { userApi } from './api'
 export { userKeys } from './keys'
 
 // Queries
-export { useUserMe } from './queries'
+export { useUserProfile, useUserInterests } from './queries'
 
 // Mutations
-export { useUserActivate } from './mutations'
+export { useUserActivate, useUpdateUserProfileImage } from './mutations'

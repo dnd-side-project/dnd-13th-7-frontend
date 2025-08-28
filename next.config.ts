@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'example.com',
+        hostname: 'moyeoit-bucket.s3.ap-northeast-2.amazonaws.com',
         port: '',
         pathname: '/images/**',
       },

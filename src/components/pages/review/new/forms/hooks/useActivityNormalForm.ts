@@ -17,9 +17,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_ACTIVITY_DURATION: 11,
-  Q2_SATISFACTION_SYSTEM: 12,
-  Q3_RECOMMENDATION_TARGET: 13,
+  Q1_ACTIVITY_DURATION: 1,
+  Q2_SATISFACTION_SYSTEM: 2,
+  Q3_RECOMMENDATION_TARGET: 3,
 } as const
 
 // 선택지 데이터
@@ -90,26 +90,26 @@ export const useActivityNormalForm = () => {
     const questions: AnswerRequest[] = [
       {
         questionId: QUESTION_IDS.Q1_ACTIVITY_DURATION,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.activityDuration,
       },
       {
         questionId: QUESTION_IDS.Q2_SATISFACTION_SYSTEM,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.satisfactionSystem,
       },
       {
         questionId: QUESTION_IDS.Q3_RECOMMENDATION_TARGET,
         questionType: QuestionType.MultipleChoice,
-        value: data.recommendationTarget.join(','), // 복수 선택은 콤마로 구분
+        value: data.recommendationTarget,
       },
       {
-        questionId: 14, // 한줄 요약 후기 질문 ID
+        questionId: 4, // 한줄 요약 후기 질문 ID
         questionType: QuestionType.Subjective,
         value: data.oneLineComment,
       },
       {
-        questionId: 15, // 인상깊은 포인트 질문 ID
+        questionId: 5, // 인상깊은 포인트 질문 ID
         questionType: QuestionType.Subjective,
         value: data.impressivePoint,
       },
@@ -121,7 +121,7 @@ export const useActivityNormalForm = () => {
       jobId: data.jobId,
       questions,
       rate: data.rate,
-      resultType: data.resultType,
+      resultType: ResultType.Ready,
       reviewCategory: ReviewCategory.Activity, // 활동 전형
       reviewType: ReviewType.Basic, // 일반 후기
     }
@@ -132,7 +132,8 @@ export const useActivityNormalForm = () => {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      await postBasicReviewMutation.mutateAsync(apiData)
+      const res = await postBasicReviewMutation.mutateAsync(apiData)
+      console.log(res)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)

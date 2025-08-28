@@ -91,3 +91,38 @@ export interface UserMeResponse {
   active: boolean
   email?: string
 }
+
+/**
+ * 사용자 프로필 타입 (GET /v1/user/profile 응답의 data)
+ */
+export interface UserJobDto {
+  id: number
+  name: string
+  engName: string
+}
+
+export interface UserProfile {
+  id: number
+  name: string
+  email: string
+  nickname: string
+  profileImageUrl: string
+  jobDto: UserJobDto
+  provider: string
+  active: boolean
+}
+
+/**
+ * 프로필 이미지 업데이트 요청 바디 (POST /v1/user/profile/image)
+ */
+export interface UpdateUserProfileImageRequest {
+  fileUrl: string
+}
+
+/**
+ * 관심 통계 (GET /v1/user/interests 응답의 data)
+ */
+export interface UserInterests {
+  like_count: number
+  club_subscribe_count: number
+}

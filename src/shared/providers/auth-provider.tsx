@@ -61,8 +61,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setAccessToken(token)
     setUser(userData)
 
-    // 쿠키에 토큰 정보 저장
-    const tokenExpiresIn = expiresIn || 900 // 기본값 15분
+    // 쿠키에 토큰 정보 저장 (1주일로 고정)
+    const tokenExpiresIn = 604800 // 1주일 (7일 * 24시간 * 60분 * 60초)
     tokenCookies.setAccessToken(token, tokenExpiresIn)
     tokenCookies.setUserId(userData.id.toString())
     tokenCookies.setExpiresAt(Date.now() + tokenExpiresIn * 1000)
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
 
       // 임시 토큰 저장 (회원가입 완료 후 정식 토큰으로 교체)
-      const expiresIn = parseInt(oauthData.expiresIn)
+      const expiresIn = 604800 // 1주일로 고정
       tokenCookies.setAccessToken(oauthData.accessToken, expiresIn)
       tokenCookies.setUserId(oauthData.userId)
       tokenCookies.setExpiresAt(Date.now() + expiresIn * 1000)

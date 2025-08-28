@@ -4,6 +4,7 @@
 export enum QuestionType {
   MultipleChoice = 'MULTIPLE_CHOICE',
   Subjective = 'SUBJECTIVE',
+  SingleChoice = 'SINGLE_CHOICE',
 }
 
 export enum ResultType {
@@ -36,7 +37,7 @@ export interface AnswerRequest {
   /**
    * 답변 값 (객관식 또는 주관식)
    */
-  value: number | string
+  value: number | string | number[]
 }
 
 export interface PageableSort {
@@ -176,7 +177,7 @@ export interface BasicReviewCreateRequest {
   /**
    * 결과
    */
-  resultType: ResultType
+  resultType?: ResultType
   /**
    * 리뷰 종류 (서류/면접/활동)
    */
@@ -224,6 +225,62 @@ export interface PremiumReviewCreateRequest {
    * 후기 제목
    */
   title: string
+}
+
+// Premium Review Detail Types
+export interface Club {
+  id: number
+  name: string
+  slogan: string
+  bio: string
+  establishment: number
+  totalParticipant: number
+  operation: number
+  offline: string
+  online: string
+  location: string
+  address: string
+  recruiting: boolean
+  imageUrl: string
+}
+
+export interface Job {
+  id: number
+  name: string
+  engName: string
+}
+
+export interface User {
+  id: number
+  name: string
+  email: string
+  nickname: string
+  profileImageUrl: string
+  jobDto: Job
+  provider: 'GOOGLE' | 'KAKAO'
+  active: boolean
+}
+
+export interface PremiumReviewDetail {
+  id: number
+  club: Club
+  cohort: number
+  job: Job
+  user: User
+  imageUrl: string
+  title: string
+  resultType: ResultType
+  reviewCategory: ReviewCategory
+  createDazte: string
+  updateDate: string
+  details: string[]
+}
+
+export interface PremiumReviewCreateResponse {
+  /**
+   * 저장된 리뷰 ID
+   */
+  savedReviewId: number
 }
 
 // Premium Review Detail Types
