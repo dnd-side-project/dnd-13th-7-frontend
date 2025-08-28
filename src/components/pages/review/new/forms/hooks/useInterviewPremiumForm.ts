@@ -18,10 +18,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_ATMOSPHERE_AND_INTERVIEWERS: 20,
-  Q2_MEMORABLE_QUESTIONS: 21,
-  Q3_FEELINGS_AND_REGRETS: 22,
-  TITLE: 23,
+  Q1_ATMOSPHERE_AND_INTERVIEWERS: 1,
+  Q2_MEMORABLE_QUESTIONS: 2,
+  Q3_FEELINGS_AND_REGRETS: 3,
 } as const
 
 const InterviewPremiumFormSchema = z.object({
@@ -83,11 +82,6 @@ export const useInterviewPremiumForm = () => {
   ): PremiumReviewCreateRequest => {
     const questions: AnswerRequest[] = [
       {
-        questionId: QUESTION_IDS.TITLE,
-        questionType: QuestionType.Subjective,
-        value: data.title,
-      },
-      {
         questionId: QUESTION_IDS.Q1_ATMOSPHERE_AND_INTERVIEWERS,
         questionType: QuestionType.Subjective,
         value: data.atmosphereAndInterviewers,
@@ -122,8 +116,12 @@ export const useInterviewPremiumForm = () => {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      await postPremiumReviewMutation.mutateAsync(apiData)
-      router.push(AppPath.reviewSubmitted())
+      const res = await postPremiumReviewMutation.mutateAsync(apiData)
+      console.log(res)
+      const url = res.savedReviewId
+        ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
+        : AppPath.reviewSubmitted()
+      router.push(url)
     } catch (error) {
       console.error('Form submission error:', error)
     }

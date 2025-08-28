@@ -21,7 +21,6 @@ const QUESTION_IDS = {
   Q1_DIFFICULT_PART: 1,
   Q2_EXPRESSION_METHOD: 2,
   Q3_FINAL_CHECK: 3,
-  TITLE: 4,
 } as const
 
 const PaperPremiumFormSchema = z.object({
@@ -115,8 +114,12 @@ export const usePaperPremiumForm = () => {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      await postPremiumReviewMutation.mutateAsync(apiData)
-      router.push(AppPath.reviewSubmitted())
+      const res = await postPremiumReviewMutation.mutateAsync(apiData)
+      console.log(res)
+      const url = res.savedReviewId
+        ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
+        : AppPath.reviewSubmitted()
+      router.push(url)
     } catch (error) {
       console.error('Form submission error:', error)
     }
