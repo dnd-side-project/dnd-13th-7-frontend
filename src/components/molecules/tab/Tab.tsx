@@ -4,7 +4,15 @@ import * as React from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { cn } from '@/shared/utils/cn'
 
-export type Tab = 'recruit' | 'name' | 'popular' | 'latest'
+export type Tab =
+  | 'recruit'
+  | 'name'
+  | 'popular'
+  | 'latest'
+  | '모집중'
+  | '이름순'
+  | '인기순'
+  | '최신순'
 export type TabOption = { label: string; value: Tab; disabled?: boolean }
 
 const OPTIONS: TabOption[] = [

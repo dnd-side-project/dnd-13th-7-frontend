@@ -146,7 +146,7 @@ export interface ReviewsQueryParams {
    */
   size?: number
   /**
-   * 이름순,인기순,모집중
+   * 최신순, 인기순
    */
   sort?: string
 }

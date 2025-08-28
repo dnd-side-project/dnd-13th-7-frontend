@@ -8,10 +8,18 @@ import { useRouter } from 'next/navigation'
 import { Tag } from '@/components/atoms/tag/Tag'
 import { Card } from '@/components/molecules/card'
 import { MultiDropDown } from '@/components/molecules/multiDropDown/MultiDropDown'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationWithHook,
+} from '@/components/molecules/pagination'
 import { Tab, type TabOption } from '@/components/molecules/tab/Tab'
 import { ClubRecruitsData } from '@/features/clubs/types'
-import { usePremiumReviews } from '@/features/review/queries'
-import useMediaQuery from '@/shared/hooks/useMediaQuery'
+import { useClubPremiumReviews } from '@/features/review/queries'
 import useQueryState from '@/shared/hooks/useQueryState'
 
 interface PremiumReviewProps {
@@ -30,6 +38,7 @@ export default function PremiumReview({
   const [result, setResult] = useQueryState('result')
   const [target, setTarget] = useQueryState('target')
   const [sort, setSort] = useQueryState('sort')
+  const [page, setPage] = useQueryState('page')
 
   // recruitsData에서 모집 파트를 멀티드롭다운 옵션으로 변환
   const recruitmentPartOptions =
@@ -39,6 +48,7 @@ export default function PremiumReview({
     })) || []
 
   const currentSort = React.useMemo(() => sort || 'popular', [sort])
+  const currentPage = React.useMemo(() => parseInt(page || '0'), [page])
 
   const reviewArray = React.useMemo(
     () => (review ? review.split(',').filter(Boolean) : []),
@@ -88,13 +98,29 @@ export default function PremiumReview({
   )
 
   const resetFilters = React.useCallback(() => {
-    router.replace(`/club/${clubId}/premium-review`)
+    router.replace(`/club/${clubId}`)
   }, [router, clubId])
 
-  const queryParams = {
-    page: 0,
-    size: 5,
-    review: reviewArray.length > 0 ? reviewArray.join(',') : undefined,
+  const handlePageChange = React.useCallback(
+    (newPage: number) => {
+      console.log('페이지 변경:', newPage, '-> API page:', newPage - 1)
+      setPage((newPage - 1).toString())
+    },
+    [setPage],
+  )
+
+  // 프리미엄 후기 데이터 가져오기
+  const {
+    data: premiumReviewsData,
+    isLoading,
+    error,
+  } = useClubPremiumReviews(clubId, {
+    page: currentPage,
+    size: 5, // 명시적으로 size 파라미터 추가
+    // reviewType:
+    //   reviewArray.filter((r) => r !== 'all').length > 0
+    //     ? reviewArray.filter((r) => r !== 'all').join(',')
+    //     : undefined,
     part:
       partArray.filter((p) => p !== 'all').length > 0
         ? partArray.filter((p) => p !== 'all').join(',')
@@ -103,15 +129,8 @@ export default function PremiumReview({
       resultArray.filter((r) => r !== 'all').length > 0
         ? resultArray.filter((r) => r !== 'all').join(',')
         : undefined,
-    target:
-      targetArray.filter((t) => t !== 'all').length > 0
-        ? targetArray.filter((t) => t !== 'all').join(',')
-        : undefined,
     sort: currentSort,
-  }
-
-  // 프리미엄 후기 데이터 가져오기
-  const { data: premiumReviewsData, isLoading } = usePremiumReviews(queryParams)
+  })
 
   const SORT_OPTIONS: TabOption[] = [
     { label: '최신순', value: 'latest' },
@@ -193,7 +212,7 @@ export default function PremiumReview({
       </div>
 
       {/* 프리미엄 후기 목록 */}
-      <div className="mt-8 p-6 flex justify-center">
+      <div className=" flex justify-center">
         {isLoading ? (
           <div className="text-center py-8">로딩 중...</div>
         ) : premiumReviewsData?.content &&
@@ -216,31 +235,15 @@ export default function PremiumReview({
                   <Card.Content className="flex flex-col justify-between h-full">
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        {review.identifier.length > 0 && (
-                          <>
-                            {/* 동아리명 */}
+                        {review.identifier.length > 0 &&
+                          review.identifier.map((tag, index) => (
                             <Tag
-                              label={review.identifier[0].split(' ')[0]}
+                              key={index}
+                              label={tag}
                               kind="premiumReview"
                               size="large"
                             />
-                            {/* 기수 */}
-                            <Tag
-                              label={review.identifier[0].split(' ')[1]}
-                              kind="premiumReview"
-                              size="large"
-                            />
-                            {/* 세부파트 */}
-                            <Tag
-                              label={review.identifier[0]
-                                .split(' ')
-                                .slice(2)
-                                .join(' ')}
-                              kind="premiumReview"
-                              size="large"
-                            />
-                          </>
-                        )}
+                          ))}
                       </div>
                       <div className="flex flex-col gap-1">
                         <Card.Title>{review.title}</Card.Title>
@@ -266,6 +269,16 @@ export default function PremiumReview({
       </div>
 
       {/* 페이지네이션 */}
+      {premiumReviewsData && premiumReviewsData.totalPages > 1 && (
+        <div className="mt-8">
+          <PaginationWithHook
+            totalPages={premiumReviewsData.totalPages}
+            maxVisiblePages={5}
+            initialPage={currentPage + 1}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   )
 }

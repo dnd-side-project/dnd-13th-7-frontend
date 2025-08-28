@@ -5,8 +5,6 @@ import {
   ClubsPage,
   ClubRecruitsData,
   ClubRecruitsResponse,
-  SubscriptionResponse,
-  ClubSubscriptionResponse,
 } from './types'
 
 export async function getClubs(params?: {

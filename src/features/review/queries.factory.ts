@@ -1,5 +1,9 @@
 import { queryOptions } from '@tanstack/react-query'
-import { getBasicReviews, getPremiumReviews } from './api'
+import {
+  getBasicReviews,
+  getPremiumReviews,
+  getClubPremiumReviews,
+} from './api'
 import { reviewKeys } from './keys'
 import {
   BasicReviewsPage,
@@ -13,6 +17,17 @@ export const reviewQueries = {
     queryOptions<PremiumReviewsPage>({
       queryKey: reviewKeys.premiumList(params),
       queryFn: () => getPremiumReviews(params),
+      staleTime: 60_000,
+    }),
+
+  // Club premium reviews (동아리 상세 페이지용)
+  clubPremiumList: (
+    clubId: number,
+    params?: Omit<ReviewsQueryParams, 'club'>,
+  ) =>
+    queryOptions<PremiumReviewsPage>({
+      queryKey: reviewKeys.clubPremiumList(clubId, params),
+      queryFn: () => getClubPremiumReviews(clubId, params),
       staleTime: 60_000,
     }),
 

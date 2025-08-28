@@ -29,9 +29,9 @@ const HERO_IMAGES = {
 } as const
 
 const SORT_OPTIONS: TabOption[] = [
-  { label: '모집중', value: 'recruit' },
-  { label: '이름순', value: 'name' },
-  { label: '인기순', value: 'popular' },
+  { label: '모집중', value: '모집중' },
+  { label: '이름순', value: '이름순' },
+  { label: '인기순', value: '인기순' },
 ]
 
 const PART_OPTIONS: Group[] = [
@@ -89,7 +89,7 @@ export function Explore() {
   const [target, setTarget] = useQueryState('target')
 
   const currentField = React.useMemo(() => field || 'all', [field])
-  const currentSort = React.useMemo(() => sort || 'popular', [sort])
+  const currentSort = React.useMemo(() => sort || '인기순', [sort])
 
   const partArray = React.useMemo(
     () => (part ? part.split(',').filter(Boolean) : []),
