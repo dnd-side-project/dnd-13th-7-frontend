@@ -227,13 +227,6 @@ export interface PremiumReviewCreateRequest {
   title: string
 }
 
-export interface PremiumReviewCreateResponse {
-  /**
-   * 저장된 리뷰 ID
-   */
-  savedReviewId: number
-}
-
 // Premium Review Detail Types
 export interface Club {
   id: number
@@ -261,11 +254,33 @@ export interface User {
   id: number
   name: string
   email: string
-  nickname: string
-  profileImageUrl: string
-  jobDto: Job
+  nickname: string | null
+  profileImageUrl: string | null
+  jobDto: Job | null
   provider: 'GOOGLE' | 'KAKAO'
   active: boolean
+}
+
+export interface Question {
+  id: number
+  title: string
+  subTitle: string
+  type: string
+  elements: QuestionElement[]
+}
+
+export interface QuestionElement {
+  id: number
+  elementTitle: string
+  sequence: number
+}
+
+export interface ReviewDetail {
+  id: number
+  question: Question
+  userDto: User
+  value: string | number | number[]
+  answerType: string
 }
 
 export interface PremiumReviewDetail {
@@ -280,5 +295,12 @@ export interface PremiumReviewDetail {
   reviewCategory: ReviewCategory
   createDazte: string
   updateDate: string
-  details: string[]
+  details: ReviewDetail[]
+}
+
+export interface PremiumReviewCreateResponse {
+  /**
+   * 저장된 리뷰 ID
+   */
+  savedReviewId: number
 }

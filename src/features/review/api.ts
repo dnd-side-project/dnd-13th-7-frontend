@@ -4,8 +4,8 @@ import {
   BasicReviewCreateRequest,
   BasicReviewsPage,
   PremiumReviewCreateRequest,
-  PremiumReviewCreateResponse,
   PremiumReviewDetail,
+  PremiumReviewCreateResponse,
   PremiumReviewsPage,
   ReviewsQueryParams,
 } from './types'
