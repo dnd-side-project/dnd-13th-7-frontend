@@ -1,33 +1,49 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useQueries } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { ProfileIcon, BellIcon, ThumbsUpIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
-import { Input } from '@/components/atoms/Input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/atoms/Select'
-import { useUserMe } from '@/features/user'
+import { useUploadFile } from '@/features/file'
+import { useUpdateUserProfileImage, userApi, userKeys } from '@/features/user'
 import AppPath from '@/shared/configs/appPath'
 import { useAuth } from '@/shared/providers/auth-provider'
 
 export default function MyPage() {
   const { logout, user, isLoading } = useAuth()
-  const { data: userMe } = useUserMe()
+  const [{ data: profile }, { data: interests }] = useQueries({
+    queries: [
+      {
+        queryKey: userKeys.profile(),
+        queryFn: () => userApi.getProfile(),
+        enabled: !!user,
+        staleTime: 1000 * 60,
+        gcTime: 1000 * 60 * 5,
+        retry: 1,
+      },
+      {
+        queryKey: userKeys.interests(),
+        queryFn: () => userApi.getInterests(),
+        enabled: !!user,
+        staleTime: 1000 * 60,
+        gcTime: 1000 * 60 * 5,
+        retry: 1,
+      },
+    ],
+  })
+  const { mutate: updateProfileImage, isPending: isUpdating } =
+    useUpdateUserProfileImage()
+  const { mutate: uploadFile, isPending: isUploading } = useUploadFile()
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [tempImageUrl, setTempImageUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.push(AppPath.login())
     }
   }, [isLoading, user, router])
-
-  console.log(userMe)
 
   return (
     <div className="min-h-screen bg-light-color-2">
@@ -92,7 +108,9 @@ export default function MyPage() {
                         />
                       </div>
                     </div>
-                    <div className="typo-title-1 text-black-color">0</div>
+                    <div className="typo-title-1 text-black-color">
+                      {interests?.club_subscribe_count ?? 0}
+                    </div>
                   </div>
                   <div className="flex-1 bg-light-color-1 rounded-2xl p-5 border border-light-color-2">
                     <div className="flex items-center justify-between mb-2">
@@ -109,7 +127,9 @@ export default function MyPage() {
                         />
                       </div>
                     </div>
-                    <div className="typo-title-1 text-black-color">100</div>
+                    <div className="typo-title-1 text-black-color">
+                      {interests?.like_count ?? 0}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -133,16 +153,75 @@ export default function MyPage() {
                         프로필 사진
                       </label>
                       <div className="flex items-center gap-4">
-                        <div className="w-[120px] h-[120px] bg-light-color-2 rounded-2xl flex items-center justify-center">
-                          <ProfileIcon
-                            width={48}
-                            height={48}
-                            role="img"
-                            aria-label="profile"
-                          />
+                        <div className="w-[120px] h-[120px] bg-light-color-2 rounded-2xl flex items-center justify-center overflow-hidden">
+                          {tempImageUrl || profile?.profileImageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={
+                                (tempImageUrl ||
+                                  profile?.profileImageUrl) as string
+                              }
+                              alt="profile"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ProfileIcon
+                              width={48}
+                              height={48}
+                              role="img"
+                              aria-label="profile"
+                            />
+                          )}
                         </div>
-                        <Button variant="outlined-primary" size="small">
-                          변경
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          aria-label="profile image upload"
+                          title="profile image upload"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            uploadFile(file, {
+                              onSuccess: (res) => {
+                                setTempImageUrl(res.fileUrl)
+                              },
+                            })
+                          }}
+                        />
+                        <Button
+                          variant="outlined-secondary"
+                          size="small"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isUploading}
+                        >
+                          {isUploading ? '업로드중...' : '이미지 선택'}
+                        </Button>
+                        <Button
+                          variant="outlined-primary"
+                          size="small"
+                          onClick={() => {
+                            if (!tempImageUrl) return
+                            updateProfileImage(
+                              { fileUrl: tempImageUrl },
+                              {
+                                onSuccess: () => {
+                                  setTempImageUrl(null)
+                                  alert(
+                                    '프로필 이미지가 성공적으로 변경되었습니다.',
+                                  )
+                                  router.refresh()
+                                },
+                                onError: () => {
+                                  alert('프로필 이미지 변경에 실패했습니다.')
+                                },
+                              },
+                            )
+                          }}
+                          disabled={!tempImageUrl || isUpdating}
+                        >
+                          {isUpdating ? '변경중...' : '변경'}
                         </Button>
                       </div>
                     </div>
@@ -152,8 +231,8 @@ export default function MyPage() {
                       <label className="typo-body-3-b text-black-color w-40">
                         이름
                       </label>
-                      <div className="flex-1">
-                        <Input type="text" value="김모여" className="h-12" />
+                      <div className="flex-1 typo-body-1-2-sb text-black-color">
+                        {profile?.name ?? '-'}
                       </div>
                     </div>
 
@@ -162,18 +241,8 @@ export default function MyPage() {
                       <label className="typo-body-3-b text-black-color w-40">
                         분야
                       </label>
-                      <div className="flex-1">
-                        <Select defaultValue="design">
-                          <SelectTrigger className="h-12">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="design">디자인</SelectItem>
-                            <SelectItem value="development">개발</SelectItem>
-                            <SelectItem value="marketing">마케팅</SelectItem>
-                            <SelectItem value="planning">기획</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex-1 typo-body-1-2-sb text-black-color">
+                        {profile?.jobDto?.name ?? '-'}
                       </div>
                     </div>
 
@@ -182,18 +251,8 @@ export default function MyPage() {
                       <label className="typo-body-3-b text-black-color w-40">
                         상태
                       </label>
-                      <div className="flex-1">
-                        <Select>
-                          <SelectTrigger className="h-12">
-                            <SelectValue placeholder="현재 상태를 선택해주세요" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="student">학생</SelectItem>
-                            <SelectItem value="job-seeker">구직자</SelectItem>
-                            <SelectItem value="employed">재직자</SelectItem>
-                            <SelectItem value="freelancer">프리랜서</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex-1 typo-body-1-2-sb text-black-color">
+                        {profile ? (profile.active ? '활성' : '비활성') : '-'}
                       </div>
                     </div>
                   </div>

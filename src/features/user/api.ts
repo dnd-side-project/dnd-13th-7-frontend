@@ -1,8 +1,11 @@
+import { ApiResponse } from '@/shared/types/api'
 import apiClient from '@/shared/utils/axios'
 import {
   UserActivateRequest,
   UserActivateResponse,
-  UserMeResponse,
+  UserProfile,
+  UpdateUserProfileImageRequest,
+  UserInterests,
 } from './types'
 
 export const userApi = {
@@ -25,10 +28,33 @@ export const userApi = {
     return response.data
   },
   /**
-   * 현재 사용자 정보 조회
+   * 사용자 프로필 조회 (GET /v1/user/profile)
    */
-  me: async (): Promise<UserMeResponse> => {
-    const response = await apiClient.get<UserMeResponse>('/api/v1/user/me')
-    return response.data
+  getProfile: async (): Promise<UserProfile> => {
+    const res = await apiClient.get<ApiResponse<UserProfile>>(
+      '/api/v1/user/profile',
+    )
+    return res.data.data
+  },
+  /**
+   * 프로필 이미지 업데이트 (POST /v1/user/profile/image)
+   */
+  updateProfileImage: async (
+    body: UpdateUserProfileImageRequest,
+  ): Promise<UserProfile> => {
+    const res = await apiClient.post<ApiResponse<UserProfile>>(
+      '/api/v1/user/profile/image',
+      body,
+    )
+    return res.data.data
+  },
+  /**
+   * 관심 통계 조회 (GET /v1/user/interests)
+   */
+  getInterests: async (): Promise<UserInterests> => {
+    const res = await apiClient.get<ApiResponse<UserInterests>>(
+      '/api/v1/user/interests',
+    )
+    return res.data.data
   },
 }
