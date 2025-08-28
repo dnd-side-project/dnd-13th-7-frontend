@@ -11,17 +11,17 @@ import {
   QuestionType,
   type PremiumReviewCreateRequest,
   type AnswerRequest,
+  ResultType,
 } from '@/features/review/types'
 import AppPath from '@/shared/configs/appPath'
 import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_PREPARATION_BEFORE_START: 30,
-  Q2_COLLABORATION_EXPERIENCE: 31,
-  Q3_PERSONAL_GROWTH: 32,
-  TITLE: 33,
-  GROWTH_KEYWORDS: 34,
+  Q1_PREPARATION_BEFORE_START: 1,
+  Q2_COLLABORATION_EXPERIENCE: 2,
+  Q3_PERSONAL_GROWTH: 3,
+  GROWTH_KEYWORDS: 4,
 } as const
 
 // 성장 키워드 옵션들
@@ -88,13 +88,8 @@ export const useActivityPremiumForm = () => {
   // 폼 데이터를 API 요청 형식으로 변환
   const transformToApiRequest = (
     data: ActivityPremiumFormType,
-  ): Omit<PremiumReviewCreateRequest, 'resultType'> => {
+  ): PremiumReviewCreateRequest => {
     const questions: AnswerRequest[] = [
-      {
-        questionId: QUESTION_IDS.TITLE,
-        questionType: QuestionType.Subjective,
-        value: data.title,
-      },
       {
         questionId: QUESTION_IDS.Q1_PREPARATION_BEFORE_START,
         questionType: QuestionType.Subjective,
@@ -110,11 +105,11 @@ export const useActivityPremiumForm = () => {
         questionType: QuestionType.Subjective,
         value: data.personalGrowth,
       },
-      {
-        questionId: QUESTION_IDS.GROWTH_KEYWORDS,
-        questionType: QuestionType.MultipleChoice,
-        value: data.growthKeywords, // 단일 선택
-      },
+      // {
+      //   questionId: QUESTION_IDS.GROWTH_KEYWORDS,
+      //   questionType: QuestionType.SingleChoice,
+      //   value: data.growthKeywords, // 단일 선택
+      // },
     ]
 
     return {
@@ -122,12 +117,11 @@ export const useActivityPremiumForm = () => {
       generation: data.generation,
       jobId: data.jobId,
       questions,
-      // Note: Activity Premium에는 resultType이 없음
       reviewCategory: ReviewCategory.Activity, // 활동 전형
       reviewType: ReviewType.Premium, // 프리미엄 후기
       imageUrl: data.thumbnailImageUrl || '',
       title: data.title,
-      // resultType은 Activity Premium에는 없음
+      resultType: ResultType.Ready,
     }
   }
 
@@ -136,10 +130,15 @@ export const useActivityPremiumForm = () => {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      await postPremiumReviewMutation.mutateAsync(
-        apiData as PremiumReviewCreateRequest,
-      )
-      router.push(AppPath.reviewSubmitted())
+
+      const res = await postPremiumReviewMutation.mutateAsync(apiData)
+      console.log(res)
+
+      // savedReviewId를 URL 파라미터로 전달
+      const url = res.savedReviewId
+        ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
+        : AppPath.reviewSubmitted()
+      router.push(url)
     } catch (error) {
       console.error('Form submission error:', error)
     }

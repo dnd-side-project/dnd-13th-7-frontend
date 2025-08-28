@@ -84,18 +84,18 @@ export const usePaperNormalForm = () => {
     const questions: AnswerRequest[] = [
       {
         questionId: QUESTION_IDS.Q1_APPEAL_AREA,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.appealArea,
       },
       {
         questionId: QUESTION_IDS.Q2_REFERENCE_MATERIAL,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.referenceMaterial,
       },
       {
         questionId: QUESTION_IDS.Q3_ADDITIONAL_DOCUMENTS,
         questionType: QuestionType.MultipleChoice,
-        value: data.additionalDocuments.join(','), // 복수 선택은 콤마로 구분
+        value: data.additionalDocuments,
       },
       {
         questionId: 4, // 한줄 요약 후기 질문 ID
@@ -126,7 +126,8 @@ export const usePaperNormalForm = () => {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      await postBasicReviewMutation.mutateAsync(apiData)
+      const res = await postBasicReviewMutation.mutateAsync(apiData)
+      console.log(res)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)

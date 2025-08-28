@@ -4,6 +4,7 @@
 export enum QuestionType {
   MultipleChoice = 'MULTIPLE_CHOICE',
   Subjective = 'SUBJECTIVE',
+  SingleChoice = 'SINGLE_CHOICE',
 }
 
 export enum ResultType {
@@ -36,7 +37,7 @@ export interface AnswerRequest {
   /**
    * 답변 값 (객관식 또는 주관식)
    */
-  value: number | string
+  value: number | string | number[]
 }
 
 export interface PageableSort {
@@ -176,7 +177,7 @@ export interface BasicReviewCreateRequest {
   /**
    * 결과
    */
-  resultType: ResultType
+  resultType?: ResultType
   /**
    * 리뷰 종류 (서류/면접/활동)
    */
@@ -224,6 +225,13 @@ export interface PremiumReviewCreateRequest {
    * 후기 제목
    */
   title: string
+}
+
+export interface PremiumReviewCreateResponse {
+  /**
+   * 저장된 리뷰 ID
+   */
+  savedReviewId: number
 }
 
 // Premium Review Detail Types
