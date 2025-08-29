@@ -119,6 +119,7 @@ export default function Detail({ clubId }: DetailProps) {
             isSubscribed={isSubscribed}
             onClick={handleSubscribe}
           />
+          </SubscriptionButton> */}
         </div>
 
         {/* 슬로건 */}

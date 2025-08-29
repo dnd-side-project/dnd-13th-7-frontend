@@ -14,8 +14,6 @@ import {
   ClubSearchResponse,
 } from './types'
 
-// import { getClubDetails, getClubRecruits, getClubs, searchClubs } from './api'
-
 export const clubQueries = {
   list: (params?: {
     page?: number
