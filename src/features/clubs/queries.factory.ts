@@ -5,7 +5,6 @@ import {
   getClubs,
   searchClubs,
   checkUserSubscription,
-  searchClubs
 } from './api'
 import { clubKeys } from './keys'
 import {

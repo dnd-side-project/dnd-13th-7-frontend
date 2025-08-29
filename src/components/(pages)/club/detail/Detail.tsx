@@ -50,26 +50,6 @@ export default function Detail({ clubId }: DetailProps) {
 
   const handleSubscribe = async () => {
     try {
-      await toggleSubscriptionMutation.mutateAsync(Number(clubId))
-  // const {
-  //   data: subscriptionData,
-  //   isLoading: isSubscriptionLoading,
-  //   error: subscriptionError,
-  // } = useUserSubscriptionCheck(Number(clubId))
-  // const isSubscribed = subscriptionData?.isSubscribed ?? false
-
-  // console.log('구독 상태:', {
-  //   subscriptionData,
-  //   isSubscribed,
-  //   isSubscriptionLoading,
-  //   subscriptionError,
-  // })
-
-  const isLoading = isClubLoading
-  // || isSubscriptionLoading
-
-  const handleSubscribe = async () => {
-    try {
       console.log('구독 버튼 클릭됨, clubId:', clubId)
       const result = await toggleSubscriptionMutation.mutateAsync(
         Number(clubId),
@@ -137,12 +117,11 @@ export default function Detail({ clubId }: DetailProps) {
             <div className="typo-title-1">{clubDetails.club.name}</div>
           </div>
 
-          {/* 구독 버튼
-          <SubscriptionButton
+          {/* 구독 버튼 */}
+          {/* <SubscriptionButton
             icon={<Bell size={20} />}
             isSubscribed={isSubscribed}
             onClick={handleSubscribe}
-          />
             disabled={toggleSubscriptionMutation.isPending}
           >
             {toggleSubscriptionMutation.isPending
