@@ -115,6 +115,10 @@ export default function Detail({ clubId }: DetailProps) {
 
           {/* 구독 버튼 */}
           <SubscriptionButton
+            icon={<Bell size={20} />}
+            isSubscribed={isSubscribed}
+            onClick={handleSubscribe}
+          />
         </div>
 
         {/* 슬로건 */}
