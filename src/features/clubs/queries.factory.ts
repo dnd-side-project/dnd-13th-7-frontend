@@ -3,6 +3,7 @@ import {
   getClubDetails,
   getClubRecruits,
   getClubs,
+  searchClubs
   // checkUserSubscription,
 } from './api'
 import { clubKeys } from './keys'
@@ -10,10 +11,9 @@ import {
   ClubDetailsData,
   ClubRecruitsData,
   UserSubscriptionCheckData,
+  ClubSearchResponse
 } from './types'
-import { getClubDetails, getClubRecruits, getClubs, searchClubs } from './api'
-import { clubKeys } from './keys'
-import { ClubDetailsData, ClubRecruitsData, ClubSearchResponse } from './types'
+// import { getClubDetails, getClubRecruits, getClubs, searchClubs } from './api'
 
 export const clubQueries = {
   list: (params?: {

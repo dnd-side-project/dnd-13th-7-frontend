@@ -7,7 +7,6 @@ export const reviewKeys = {
   // Premium reviews - 후기 탐색 페이지 (/review/explore)
   premiumLists: () => [...reviewKeys.lists(), 'premium'] as const,
   premiumList: (params?: ReviewsQueryParams) =>
-    [...reviewKeys.premiumLists(), params] as const,
     [...reviewKeys.premiumLists(), params ?? {}] as const,
   premiumDetails: () => [...reviewKeys.all(), 'premium-detail'] as const,
   premiumDetail: (premiumReviewId: number) =>

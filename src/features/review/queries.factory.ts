@@ -5,7 +5,6 @@ import {
   getClubPremiumReviews,
   getClubBasicReviews,
   getPremiumReviewDetail,
-  getPremiumReviews,
 } from './api'
 import { reviewKeys } from './keys'
 import {
@@ -32,6 +31,9 @@ export const reviewQueries = {
     queryOptions<PremiumReviewsPage>({
       queryKey: reviewKeys.clubPremiumList(clubId, params),
       queryFn: () => getClubPremiumReviews(clubId, params),
+      staleTime: 60_000,
+    }),
+
   // Premium review detail
   premiumDetail: (premiumReviewId: number) =>
     queryOptions<PremiumReviewDetail>({
