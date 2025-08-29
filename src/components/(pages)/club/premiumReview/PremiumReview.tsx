@@ -120,7 +120,6 @@ export default function PremiumReview({
 
   const handleResultChange = React.useCallback(
     (values: string[]) => {
-      // "전체" 선택 시 특별한 값 "all" 사용
       if (values.includes('all')) {
         setResult('all') // "전체" 선택 시 "all"로 설정
       } else {

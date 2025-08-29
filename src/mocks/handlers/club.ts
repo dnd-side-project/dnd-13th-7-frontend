@@ -161,27 +161,6 @@ const clubHandlers = [
   //   }
   //   return HttpResponse.json(body)
   // }),
-
-  // GET /api/v1/clubs/:id/recruits (모집정보)
-  // http.get('*/api/v1/clubs/:clubId/recruits', ({ params }) => {
-  //   const id = Number(params.clubId)
-  //   const recruits = recruitsById[id]
-  //   if (!recruits) {
-  //     const notFound: ApiResponse<null> = {
-  //       status: 'NOT_FOUND',
-  //       message: 'Recruit info not found',
-  //       data: null,
-  //     }
-  //     return HttpResponse.json(notFound, { status: 404 })
-  //   }
-  //   const body: ApiResponse<ClubRecruitsData> = {
-  //     status: 'SUCCESS',
-  //     message: '조회에 성공하였습니다.',
-  //     data: recruits,
-  //   }
-  //   return HttpResponse.json(body)
-  // ),
-
   // GET /api/v1/clubs/user-subscribe/check (구독 상태 확인)
   http.get('/api/v1/clubs/user-subscribe/check', ({ request }) => {
     const url = new URL(request.url)
