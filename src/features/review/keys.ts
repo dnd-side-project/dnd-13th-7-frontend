@@ -21,6 +21,11 @@ export const reviewKeys = {
   basicList: (params?: ReviewsQueryParams) =>
     [...reviewKeys.basicLists(), params ?? {}] as const,
 
+  // Club basic reviews - 동아리 상세 페이지 일반 후기 탭 (/club/[clubId])
+  clubBasicLists: () => [...reviewKeys.lists(), 'club-basic'] as const,
+  clubBasicList: (clubId: number, params?: Omit<ReviewsQueryParams, 'club'>) =>
+    [...reviewKeys.clubBasicLists(), clubId, params] as const,
+
   // Popular premium reviews - 메인 페이지 (/)
   popularPremium: () => [...reviewKeys.all(), 'popular-premium'] as const,
 } as const

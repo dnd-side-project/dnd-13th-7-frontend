@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import { subscribeApi } from './api'
 import { subscribeKeys } from './keys'
-import { SubscribeResponse, SubscriptionStatusResponse } from './types'
+import { SubscribeResponse } from './types'
 
 export const subscribeQueries = {
   userSubscribes: () =>

@@ -99,6 +99,8 @@ export interface BasicReviewItem {
   oneLineComment: string
   impressiveContentPreview: string
   qaPreviews: QAPreview[]
+  reviewCategory: string
+  position: string
 }
 
 export interface BasicReviewsPage {

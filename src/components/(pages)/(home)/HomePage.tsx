@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { QuickButton } from '@/components/atoms/quickButton'
 import { Card } from '@/components/molecules/card'
@@ -14,7 +15,15 @@ export default function HomePage() {
 
   return (
     <div>
-      <div className="bg-grey-color-5 text-white h-64 lg:h-100 flex items-end justify-center px-5 py-14 lg:py-18 -mt-20">
+      <div className="h-64 lg:h-100 flex items-end justify-center px-5 py-14 lg:py-18 -mt-20 relative">
+        <Image
+          src="/images/mainBanner.gif"
+          alt="메인 배너"
+          width={1200}
+          height={400}
+          unoptimized
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="max-w-7xl w-full relative z-10"></div>
       </div>
 
@@ -128,9 +137,13 @@ export default function HomePage() {
 
         {/* 하단 광고 배너 */}
         <div className="mx-5 mb-12">
-          <div
-            className={`w-full ${isDesktop ? 'h-66' : 'h-44'} bg-[#5846CB] rounded-[24px] p-6 flex items-center justify-between`}
-          />
+          <div>
+            <img
+              src="/icons/main.svg"
+              alt="main"
+              className={`w-full ${isDesktop ? 'h-66' : 'h-44'} rounded-[24px] p-6 flex items-center justify-between`}
+            />
+          </div>
         </div>
       </div>
     </div>

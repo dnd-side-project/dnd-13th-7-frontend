@@ -28,6 +28,14 @@ export function useBasicReviews(
   return useQuery(reviewQueries.basicList(params))
 }
 
+// 동아리 상세 페이지 일반 후기 탭 (/club/[clubId]) - 특정 동아리 일반 후기 (size 4)
+export function useClubBasicReviews(
+  clubId: number,
+  params?: Omit<ReviewsQueryParams, 'club'>,
+): UseQueryResult<BasicReviewsPage, Error> {
+  return useQuery(reviewQueries.clubBasicList(clubId, { ...params, size: 4 }))
+}
+
 // 메인 페이지 (/) - 인기 프리미엄 후기 4개
 export function usePopularPremiumReviews(): UseQueryResult<
   PremiumReviewsPage,

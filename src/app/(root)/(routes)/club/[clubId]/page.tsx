@@ -42,8 +42,8 @@ export default async function Page({
               ),
             },
             {
-              value: '프리미엄 리뷰',
-              label: '프리미엄 리뷰',
+              value: '프리미엄 후기',
+              label: '프리미엄 후기',
               content: (
                 <PremiumReview recruitsData={recruitsData} clubId={clubId} />
               ),

@@ -3,6 +3,7 @@ import {
   getBasicReviews,
   getPremiumReviews,
   getClubPremiumReviews,
+  getClubBasicReviews,
 } from './api'
 import { reviewKeys } from './keys'
 import {
@@ -36,6 +37,14 @@ export const reviewQueries = {
     queryOptions<BasicReviewsPage>({
       queryKey: reviewKeys.basicList(params),
       queryFn: () => getBasicReviews(params),
+      staleTime: 60_000,
+    }),
+
+  // Club basic reviews (동아리 상세 페이지용)
+  clubBasicList: (clubId: number, params?: Omit<ReviewsQueryParams, 'club'>) =>
+    queryOptions<BasicReviewsPage>({
+      queryKey: reviewKeys.clubBasicList(clubId, params),
+      queryFn: () => getClubBasicReviews(clubId, params),
       staleTime: 60_000,
     }),
 

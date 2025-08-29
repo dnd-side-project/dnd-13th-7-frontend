@@ -5,6 +5,8 @@ import {
   ClubsPage,
   ClubRecruitsData,
   ClubRecruitsResponse,
+  UserSubscriptionCheckData,
+  UserSubscriptionCheckResponse,
 } from './types'
 
 export async function getClubs(params?: {
@@ -38,3 +40,14 @@ export async function getClubRecruits(
   )
   return res.data.data
 }
+
+// export async function checkUserSubscription(
+//   clubId: number,
+// ): Promise<UserSubscriptionCheckData> {
+//   console.log('구독 상태 확인 API 호출:', clubId)
+//   const res = await apiClient.get<UserSubscriptionCheckResponse>(
+//     `/api/v1/clubs/user-subscribe/check?clubId=${clubId}`,
+//   )
+//   console.log('구독 상태 확인 API 응답:', res.data)
+//   return res.data.data
+// }

@@ -1,7 +1,16 @@
 import { queryOptions } from '@tanstack/react-query'
-import { getClubDetails, getClubRecruits, getClubs } from './api'
+import {
+  getClubDetails,
+  getClubRecruits,
+  getClubs,
+  // checkUserSubscription,
+} from './api'
 import { clubKeys } from './keys'
-import { ClubDetailsData, ClubRecruitsData } from './types'
+import {
+  ClubDetailsData,
+  ClubRecruitsData,
+  UserSubscriptionCheckData,
+} from './types'
 
 export const clubQueries = {
   list: (params?: {
@@ -37,6 +46,12 @@ export const clubQueries = {
       queryFn: () => getClubRecruits(clubId),
       enabled: Boolean(clubId),
     }),
+  // userSubscriptionCheck: (clubId: number) =>
+  //   queryOptions<UserSubscriptionCheckData>({
+  //     queryKey: clubKeys.userSubscriptionCheck(clubId),
+  //     queryFn: () => checkUserSubscription(clubId),
+  //     enabled: Boolean(clubId),
+  //   }),
 } as const
 
 export type ClubQueries = typeof clubQueries

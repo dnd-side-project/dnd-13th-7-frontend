@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,15 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Tag } from '@/components/atoms/tag/Tag'
 import { Card } from '@/components/molecules/card'
 import { MultiDropDown } from '@/components/molecules/multiDropDown/MultiDropDown'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationWithHook,
-} from '@/components/molecules/pagination'
+import { PaginationWithHook } from '@/components/molecules/pagination'
 import { Tab, type TabOption } from '@/components/molecules/tab/Tab'
 import { ClubRecruitsData } from '@/features/clubs/types'
 import { useClubPremiumReviews } from '@/features/review/queries'
@@ -47,22 +38,47 @@ export default function PremiumReview({
       value: part,
     })) || []
 
-  const currentSort = React.useMemo(() => sort || 'popular', [sort])
+  const currentSort = React.useMemo(() => sort || '인기순', [sort])
   const currentPage = React.useMemo(() => parseInt(page || '0'), [page])
 
-  const reviewArray = React.useMemo(
-    () => (review ? review.split(',').filter(Boolean) : []),
-    [review],
-  )
-  const partArray = React.useMemo(
-    () => (part ? part.split(',').filter(Boolean) : []),
-    [part],
-  )
+  const reviewArray = React.useMemo(() => {
+    if (review === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      return ['all']
+    }
+    if (review === null || review === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      return []
+    }
+    return review ? review.split(',').filter(Boolean) : []
+  }, [review])
+  const partArray = React.useMemo(() => {
+    if (part === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      return ['all']
+    }
+    if (part === null || part === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      return []
+    }
+    return part ? part.split(',').filter(Boolean) : []
+  }, [part])
 
-  const resultArray = React.useMemo(
-    () => (result ? result.split(',').filter(Boolean) : []),
-    [result],
-  )
+  const resultArray = React.useMemo(() => {
+    if (result === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      console.log('Returning ["all"] for "all" result')
+      return ['all']
+    }
+    if (result === null || result === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      console.log('Returning [] for null/undefined result')
+      return []
+    }
+    const parsed = result ? result.split(',').filter(Boolean) : []
+    console.log('Returning parsed result:', parsed)
+    return parsed
+  }, [result])
 
   const targetArray = React.useMemo(
     () => (target ? target.split(',').filter(Boolean) : []),
@@ -71,28 +87,54 @@ export default function PremiumReview({
 
   const handleReviewChange = React.useCallback(
     (values: string[]) => {
-      setReview(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        setReview('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        setReview(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setReview],
   )
 
   const handlePartChange = React.useCallback(
     (values: string[]) => {
-      setPart(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        setPart('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        setPart(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setPart],
   )
 
   const handleTargetChange = React.useCallback(
     (values: string[]) => {
-      setTarget(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 빈배열로 쿼리스트링 요청
+      if (values.includes('all')) {
+        setTarget('') // "전체" 선택 시 빈 문자열로 설정
+      } else {
+        setTarget(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setTarget],
   )
 
   const handleResultChange = React.useCallback(
     (values: string[]) => {
-      setResult(values.length > 0 ? values.join(',') : null)
+      console.log('handleResultChange called:', values)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        console.log('Setting result to "all"')
+        setResult('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        console.log(
+          'Setting result to:',
+          values.length > 0 ? values.join(',') : null,
+        )
+        setResult(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setResult],
   )
@@ -103,7 +145,6 @@ export default function PremiumReview({
 
   const handlePageChange = React.useCallback(
     (newPage: number) => {
-      console.log('페이지 변경:', newPage, '-> API page:', newPage - 1)
       setPage((newPage - 1).toString())
     },
     [setPage],
@@ -116,25 +157,17 @@ export default function PremiumReview({
     error,
   } = useClubPremiumReviews(clubId, {
     page: currentPage,
-    size: 5, // 명시적으로 size 파라미터 추가
-    // reviewType:
-    //   reviewArray.filter((r) => r !== 'all').length > 0
-    //     ? reviewArray.filter((r) => r !== 'all').join(',')
-    //     : undefined,
-    part:
-      partArray.filter((p) => p !== 'all').length > 0
-        ? partArray.filter((p) => p !== 'all').join(',')
-        : undefined,
-    result:
-      resultArray.filter((r) => r !== 'all').length > 0
-        ? resultArray.filter((r) => r !== 'all').join(',')
-        : undefined,
+    size: 5,
+    reviewType:
+      review && review !== '' && review !== 'all' ? review : undefined,
+    part: part && part !== '' && part !== 'all' ? part : undefined,
+    result: result && result !== '' && result !== 'all' ? result : undefined,
     sort: currentSort,
   })
 
   const SORT_OPTIONS: TabOption[] = [
-    { label: '최신순', value: 'latest' },
-    { label: '인기순', value: 'popular' },
+    { label: '최신순', value: '최신순' },
+    { label: '인기순', value: '인기순' },
   ]
 
   const REVIEW_OPTIONS = [
@@ -142,9 +175,9 @@ export default function PremiumReview({
       title: '후기 종류',
       options: [
         { label: '전체', value: 'all' },
-        { label: '서류 후기', value: '서류 후기' },
-        { label: '인터뷰 후기', value: '인터뷰 후기' },
-        { label: '활동 후기', value: '활동 후기' },
+        { label: '서류 후기', value: '서류' },
+        { label: '인터뷰 후기', value: '인터뷰' },
+        { label: '활동 후기', value: '활동' },
       ],
     },
   ]
@@ -205,8 +238,8 @@ export default function PremiumReview({
         </div>
         <Tab
           options={SORT_OPTIONS}
-          value={currentSort as 'latest' | 'popular'}
-          defaultValue="popular"
+          value={currentSort as '최신순' | '인기순'}
+          defaultValue="인기순"
           onChange={(value) => setSort(value)}
         />
       </div>
@@ -268,9 +301,8 @@ export default function PremiumReview({
         )}
       </div>
 
-      {/* 페이지네이션 */}
       {premiumReviewsData && premiumReviewsData.totalPages > 1 && (
-        <div className="mt-8">
+        <div className="mt-8 mb-48">
           <PaginationWithHook
             totalPages={premiumReviewsData.totalPages}
             maxVisiblePages={5}

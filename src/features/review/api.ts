@@ -48,6 +48,20 @@ export async function getBasicReviews(
   return res.data.data
 }
 
+// 동아리별 베이직 후기 목록 조회 (동아리 상세페이지용)
+export async function getClubBasicReviews(
+  clubId: number,
+  params?: Omit<ReviewsQueryParams, 'club'>,
+): Promise<BasicReviewsPage> {
+  const res = await apiClient.get<ApiResponse<BasicReviewsPage>>(
+    `/api/v1/reviews/basic?clubId=${clubId}`,
+    {
+      params,
+    },
+  )
+  return res.data.data
+}
+
 // 일반 후기 생성
 export async function postBasicReview(
   data: BasicReviewCreateRequest,
