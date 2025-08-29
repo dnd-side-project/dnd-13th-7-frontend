@@ -3,11 +3,11 @@
 import * as React from 'react'
 // import { Bell } from 'lucide-react'
 import Image from 'next/image'
-// import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
+import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
 import { useToggleClubSubscription } from '@/features/clubs/mutations'
 import {
   useClubDetails,
-  // useUserSubscriptionCheck,
+  useUserSubscriptionCheck,
 } from '@/features/clubs/queries'
 
 interface DetailProps {
@@ -39,30 +39,18 @@ export default function Detail({ clubId }: DetailProps) {
   const toggleSubscriptionMutation = useToggleClubSubscription()
 
   // 구독 상태 확인
-  // const {
-  //   data: subscriptionData,
-  //   isLoading: isSubscriptionLoading,
-  //   error: subscriptionError,
-  // } = useUserSubscriptionCheck(Number(clubId))
-  // const isSubscribed = subscriptionData?.isSubscribed ?? false
+  const {
+    data: subscriptionData,
+    isLoading: isSubscriptionLoading,
+    error: subscriptionError,
+  } = useUserSubscriptionCheck(Number(clubId))
+  const isSubscribed = subscriptionData?.subscribed ?? false
 
-  // console.log('구독 상태:', {
-  //   subscriptionData,
-  //   isSubscribed,
-  //   isSubscriptionLoading,
-  //   subscriptionError,
-  // })
-
-  const isLoading = isClubLoading
-  // || isSubscriptionLoading
+  const isLoading = isClubLoading || isSubscriptionLoading
 
   const handleSubscribe = async () => {
     try {
-      console.log('구독 버튼 클릭됨, clubId:', clubId)
-      const result = await toggleSubscriptionMutation.mutateAsync(
-        Number(clubId),
-      )
-      console.log('구독 성공:', result)
+      await toggleSubscriptionMutation.mutateAsync(Number(clubId))
     } catch (error) {
       console.error('구독 실패:', error)
     }
@@ -130,15 +118,7 @@ export default function Detail({ clubId }: DetailProps) {
             icon={<Bell size={20} />}
             isSubscribed={isSubscribed}
             onClick={handleSubscribe}
-            disabled={toggleSubscriptionMutation.isPending}
-          >
-            {toggleSubscriptionMutation.isPending
-              ? '처리중...'
-              : isSubscribed
-                ? '구독중'
-                : '구독'}
-          </SubscriptionButton> */}
-        </div>
+          />
 
         {/* 슬로건 */}
         <div className="bg-white rounded-[16px] py-4 mb-12">

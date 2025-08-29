@@ -171,7 +171,7 @@ export function Explore() {
 
   const queryParams = {
     page: 0,
-    size: 10,
+    size: 14,
     field: currentField !== 'all' ? mapCategory(currentField) : undefined,
     part: part && part !== 'all' ? part : undefined,
     way: way && way !== 'all' ? way : undefined,

@@ -32,7 +32,7 @@ import {
 export default function ActivityNormalForm() {
   const router = useRouter()
   const { form, onSubmit, isSubmitting } = useActivityNormalForm()
-  const { data: clubsData } = useClubsList()
+  const { data: clubsData } = useClubsList({ size: 20 })
 
   // 추천 대상 체크박스 상태 관리
   const watchedRecommendationTarget = form.watch('recommendationTarget')

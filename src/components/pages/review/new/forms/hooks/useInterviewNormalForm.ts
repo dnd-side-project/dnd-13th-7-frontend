@@ -17,9 +17,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_INTERVIEW_DURATION: 1,
-  Q2_QUESTION_TYPE: 2,
-  Q3_UNEXPECTED_RESPONSE: 3,
+  Q1_INTERVIEW_DURATION: 4,
+  Q2_QUESTION_TYPE: 5,
+  Q3_UNEXPECTED_RESPONSE: 6,
 } as const
 
 // 선택지 데이터
@@ -101,12 +101,12 @@ export const useInterviewNormalForm = () => {
         value: data.unexpectedResponse,
       },
       {
-        questionId: 9, // 한줄 요약 후기 질문 ID
+        questionId: 19, // 한줄 요약 후기 질문 ID
         questionType: QuestionType.Subjective,
         value: data.oneLineComment,
       },
       {
-        questionId: 10, // 인상깊은 포인트 질문 ID
+        questionId: 20, // 인상깊은 포인트 질문 ID
         questionType: QuestionType.Subjective,
         value: data.impressivePoint,
       },
@@ -127,10 +127,8 @@ export const useInterviewNormalForm = () => {
   const onSubmit = async (data: InterviewNormalFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
-      const res = await postBasicReviewMutation.mutateAsync(apiData)
-      console.log(res)
+
+      await postBasicReviewMutation.mutateAsync(apiData)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)

@@ -18,10 +18,10 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_PREPARATION_BEFORE_START: 1,
-  Q2_COLLABORATION_EXPERIENCE: 2,
-  Q3_PERSONAL_GROWTH: 3,
-  GROWTH_KEYWORDS: 4,
+  Q1_PREPARATION_BEFORE_START: 16,
+  Q2_COLLABORATION_EXPERIENCE: 17,
+  Q3_PERSONAL_GROWTH: 18,
+  GROWTH_KEYWORDS: 21,
 } as const
 
 // 성장 키워드 옵션들
@@ -128,11 +128,8 @@ export const useActivityPremiumForm = () => {
   const onSubmit = async (data: ActivityPremiumFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
 
       const res = await postPremiumReviewMutation.mutateAsync(apiData)
-      console.log(res)
 
       // savedReviewId를 URL 파라미터로 전달
       const url = res.savedReviewId

@@ -8,8 +8,7 @@ export const useUserActivate = () => {
 
   return useMutation({
     mutationFn: (data: UserActivateRequest) => userApi.activate(data),
-    onSuccess: (data) => {
-      console.log('사용자 활성화 성공:', data)
+    onSuccess: (_data) => {
       // 성공 시 관련 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: userKeys.all })
     },

@@ -116,9 +116,6 @@ export const useSignupForm = () => {
         }
       }
 
-      console.log('회원가입 데이터:', data)
-      console.log('OAuth 데이터:', oauthData)
-
       if (oauthData) {
         // OAuth 회원가입인 경우 - 사용자 활성화 API 호출
         const activateData = {
@@ -133,8 +130,6 @@ export const useSignupForm = () => {
 
         activateUser(activateData, {
           onSuccess: (response) => {
-            console.log('사용자 활성화 성공:', response)
-
             // OAuth 토큰으로 최종 로그인 처리
             login(oauthData.accessToken, {
               id: parseInt(oauthData.userId),
@@ -154,7 +149,6 @@ export const useSignupForm = () => {
         })
       } else {
         // 일반 회원가입인 경우 (현재는 지원하지 않음)
-        console.log('일반 회원가입은 현재 지원하지 않습니다.')
         router.push(AppPath.login())
       }
     } catch (error) {

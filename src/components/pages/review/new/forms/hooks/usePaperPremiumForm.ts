@@ -18,9 +18,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_DIFFICULT_PART: 1,
-  Q2_EXPRESSION_METHOD: 2,
-  Q3_FINAL_CHECK: 3,
+  Q1_DIFFICULT_PART: 10,
+  Q2_EXPRESSION_METHOD: 11,
+  Q3_FINAL_CHECK: 12,
 } as const
 
 const PaperPremiumFormSchema = z.object({
@@ -112,10 +112,9 @@ export const usePaperPremiumForm = () => {
   const onSubmit = async (data: PaperPremiumFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
+
       const res = await postPremiumReviewMutation.mutateAsync(apiData)
-      console.log(res)
+
       const url = res.savedReviewId
         ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
         : AppPath.reviewSubmitted()

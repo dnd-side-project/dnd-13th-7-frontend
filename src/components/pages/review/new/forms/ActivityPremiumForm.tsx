@@ -32,7 +32,7 @@ export default function ActivityPremiumForm() {
   const router = useRouter()
   const { form, onSubmit, isSubmitting, handleImageUpload, isUploading } =
     useActivityPremiumForm()
-  const { data: clubsData } = useClubsList()
+  const { data: clubsData } = useClubsList({ size: 20 })
 
   // 성장 키워드 단일 선택 핸들러
   const handleGrowthKeywordChange = (value: string) => {

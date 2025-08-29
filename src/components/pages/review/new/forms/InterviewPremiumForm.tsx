@@ -30,7 +30,7 @@ export default function InterviewPremiumForm() {
   const router = useRouter()
   const { form, onSubmit, isSubmitting, handleImageUpload, isUploading } =
     useInterviewPremiumForm()
-  const { data: clubsData } = useClubsList()
+  const { data: clubsData } = useClubsList({ size: 20 })
 
   return (
     <div className="space-y-8">

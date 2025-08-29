@@ -115,6 +115,7 @@ export default function HomePage() {
                       className="group cursor-pointer relative"
                     >
                       <Card.Image
+                        logoUrl={review.imageUrl}
                         alt={review.title}
                         interactive
                         className="transition-transform duration-300 ease-out"
@@ -137,11 +138,13 @@ export default function HomePage() {
 
         {/* 하단 광고 배너 */}
         <div className="mx-5 mb-12">
-          <div>
+          <div
+            className={`w-full ${isDesktop ? 'h-full' : 'h-44'} rounded-[24px] p-6 flex items-center justify-between`}
+          >
             <img
               src="/icons/main.svg"
               alt="main"
-              className={`w-full ${isDesktop ? 'h-66' : 'h-44'} rounded-[24px] p-6 flex items-center justify-between`}
+              className="w-full h-full object-cover rounded-[24px]"
             />
           </div>
         </div>

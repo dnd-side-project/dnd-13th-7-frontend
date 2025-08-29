@@ -6,7 +6,6 @@ export default async function MSWSSRPage() {
   })
 
   if (!response.ok) {
-    console.log('응답 실패:', response.status, response.statusText)
     return <p>데이터가 없습니다.</p>
   }
 

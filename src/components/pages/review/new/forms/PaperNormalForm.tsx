@@ -33,8 +33,7 @@ import {
 export default function PaperNormalForm() {
   const router = useRouter()
   const { form, onSubmit, isSubmitting } = usePaperNormalForm()
-  const { data: clubsData } = useClubsList()
-  console.log('clubsData', clubsData)
+  const { data: clubsData } = useClubsList({ size: 20 })
 
   // 추가 서류 체크박스 상태 관리
   const watchedAdditionalDocs = form.watch('additionalDocuments')
