@@ -30,7 +30,8 @@ import {
 
 export default function ActivityPremiumForm() {
   const router = useRouter()
-  const { form, onSubmit, isSubmitting } = useActivityPremiumForm()
+  const { form, onSubmit, isSubmitting, handleImageUpload, isUploading } =
+    useActivityPremiumForm()
   const { data: clubsData } = useClubsList()
 
   // 성장 키워드 단일 선택 핸들러
@@ -152,7 +153,7 @@ export default function ActivityPremiumForm() {
           {/* 대표 이미지 */}
           <FormField
             control={form.control}
-            name="thumbnailImage"
+            name="thumbnailImageUrl"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="mb-4 typo-body-1-b text-black-color">
@@ -160,9 +161,11 @@ export default function ActivityPremiumForm() {
                 </FormLabel>
                 <FormControl>
                   <ImageUpload
-                    onFileChange={field.onChange}
+                    onFileChange={handleImageUpload}
+                    defaultImageUrl={field.value}
+                    disabled={isUploading}
                     height="h-32"
-                    error={form.formState.errors.thumbnailImage?.message}
+                    error={form.formState.errors.thumbnailImageUrl?.message}
                   />
                 </FormControl>
                 <FormMessage />

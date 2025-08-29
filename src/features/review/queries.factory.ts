@@ -4,10 +4,13 @@ import {
   getPremiumReviews,
   getClubPremiumReviews,
   getClubBasicReviews,
+  getPremiumReviewDetail,
+  getPremiumReviews,
 } from './api'
 import { reviewKeys } from './keys'
 import {
   BasicReviewsPage,
+  PremiumReviewDetail,
   PremiumReviewsPage,
   ReviewsQueryParams,
 } from './types'
@@ -29,6 +32,11 @@ export const reviewQueries = {
     queryOptions<PremiumReviewsPage>({
       queryKey: reviewKeys.clubPremiumList(clubId, params),
       queryFn: () => getClubPremiumReviews(clubId, params),
+  // Premium review detail
+  premiumDetail: (premiumReviewId: number) =>
+    queryOptions<PremiumReviewDetail>({
+      queryKey: reviewKeys.premiumDetail(premiumReviewId),
+      queryFn: () => getPremiumReviewDetail(premiumReviewId),
       staleTime: 60_000,
     }),
 

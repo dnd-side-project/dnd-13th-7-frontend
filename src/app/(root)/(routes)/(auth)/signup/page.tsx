@@ -33,6 +33,64 @@ export default function SignupPage() {
   const { form, onSubmit, isSubmitting, allAgreed, handleAllAgreementChange } =
     useSignupForm()
 
+  // 뒤로가기 막기 기능
+  useEffect(() => {
+    // 뒤로가기 이벤트 핸들러
+    const handlePopState = (event: PopStateEvent) => {
+      // 확인 메시지 표시
+      const shouldLeave = window.confirm(
+        '회원가입이 진행 중입니다. 정말로 페이지를 떠나시겠습니까?',
+      )
+
+      if (!shouldLeave) {
+        // 사용자가 머물기를 원하면 현재 URL로 다시 이동
+        window.history.pushState(
+          { page: 'signup', timestamp: Date.now() },
+          '',
+          window.location.pathname + window.location.search,
+        )
+      }
+    }
+
+    // 페이지 새로고침/닫기 시 경고
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const message = '회원가입 정보가 사라질 수 있습니다.'
+      event.preventDefault()
+      event.returnValue = message
+      return message
+    }
+
+    // 기존 히스토리 비우고 새로 시작
+    const clearHistoryAndSetup = () => {
+      // 현재 URL로 히스토리 대체 (기존 히스토리 제거)
+      window.history.replaceState(
+        { page: 'signup', initial: true },
+        '',
+        window.location.pathname + window.location.search,
+      )
+
+      // 더미 히스토리 항목 추가 (뒤로가기 감지용)
+      window.history.pushState(
+        { page: 'signup', timestamp: Date.now() },
+        '',
+        window.location.pathname + window.location.search,
+      )
+    }
+
+    // 히스토리 초기화 및 설정
+    clearHistoryAndSetup()
+
+    // 이벤트 리스너 등록
+    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    // 클린업
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
+
   // OAuth 데이터가 있는지 확인하고 처리
   useEffect(() => {
     const oauthDataStr = sessionStorage.getItem('oauth_data')

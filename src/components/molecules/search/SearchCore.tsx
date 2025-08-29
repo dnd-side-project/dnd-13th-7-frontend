@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { DummyProfileIcon, SearchMainIcon } from '@/assets/icons'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { useClubsList } from '@/features/clubs/queries'
+import { useClubsSearch } from '@/features/clubs/queries'
 import useDebouncedValue from '@/shared/hooks/useDebouncedValue'
 import { cn } from '@/shared/utils/cn'
 
@@ -64,13 +64,11 @@ export function SearchCore(props: SearchCoreProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedInput])
 
-  const { data, isLoading } = useClubsList(
-    debouncedInput
-      ? { page: 0, size: 10, search: debouncedInput }
-      : { page: 0, size: 10 },
+  const { data, isLoading } = useClubsSearch(
+    debouncedInput ? { keyword: debouncedInput } : undefined,
   )
 
-  const items = data?.content ?? []
+  const items = data ?? []
 
   return (
     <div
@@ -108,7 +106,14 @@ export function SearchCore(props: SearchCoreProps) {
                   요청해주시면 빠르게 확인해드릴게요.
                 </p>
               </div>
-              <Button variant="solid" size="small">
+              <Button
+                variant="solid"
+                size="small"
+                onClick={() => {
+                  window.location.href =
+                    'https://docs.google.com/forms/d/e/1FAIpQLSc7dWNU-ghxS1Ajwpk4P2VLMj-6wk7ohOF-BsbqvuvcrZGLKw/viewform'
+                }}
+              >
                 <span className="typo-caption-m">IT 동아리 등록 요청</span>
               </Button>
             </div>
@@ -125,8 +130,8 @@ export function SearchCore(props: SearchCoreProps) {
                   {renderItem ? (
                     renderItem({
                       clubId: it.clubId,
-                      clubName: it.clubName,
-                      description: it.description,
+                      clubName: it.name,
+                      description: it.imgUrl || '',
                     })
                   ) : (
                     <div className="flex flex-row items-center gap-2">
@@ -134,10 +139,10 @@ export function SearchCore(props: SearchCoreProps) {
                         width={32}
                         height={32}
                         role="img"
-                        aria-label={it.clubName}
+                        aria-label={it.name}
                       />
                       <span className="typo-body-3-2-b text-grey-color-4">
-                        {it.clubName}
+                        {it.name}
                       </span>
                     </div>
                   )}

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { usePostBasicReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -16,9 +17,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_INTERVIEW_DURATION: 6,
-  Q2_QUESTION_TYPE: 7,
-  Q3_UNEXPECTED_RESPONSE: 8,
+  Q1_INTERVIEW_DURATION: 1,
+  Q2_QUESTION_TYPE: 2,
+  Q3_UNEXPECTED_RESPONSE: 3,
 } as const
 
 // 선택지 데이터
@@ -59,8 +60,8 @@ const InterviewNormalFormSchema = z.object({
 export type InterviewNormalFormType = z.infer<typeof InterviewNormalFormSchema>
 
 export const useInterviewNormalForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const postBasicReviewMutation = usePostBasicReview()
 
   const form = useForm<InterviewNormalFormType>({
     resolver: zodResolver(InterviewNormalFormSchema),
@@ -86,18 +87,18 @@ export const useInterviewNormalForm = () => {
     const questions: AnswerRequest[] = [
       {
         questionId: QUESTION_IDS.Q1_INTERVIEW_DURATION,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.interviewDuration,
       },
       {
         questionId: QUESTION_IDS.Q2_QUESTION_TYPE,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.questionType,
       },
       {
         questionId: QUESTION_IDS.Q3_UNEXPECTED_RESPONSE,
         questionType: QuestionType.MultipleChoice,
-        value: data.unexpectedResponse.join(','), // 복수 선택은 콤마로 구분
+        value: data.unexpectedResponse,
       },
       {
         questionId: 9, // 한줄 요약 후기 질문 ID
@@ -124,24 +125,21 @@ export const useInterviewNormalForm = () => {
   }
 
   const onSubmit = async (data: InterviewNormalFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postBasicReview(apiData)
+      const res = await postBasicReviewMutation.mutateAsync(apiData)
+      console.log(res)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postBasicReviewMutation.isPending,
   }
 }

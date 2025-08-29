@@ -2,6 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { reviewQueries } from './queries.factory'
 import {
   BasicReviewsPage,
+  PremiumReviewDetail,
   PremiumReviewsPage,
   ReviewsQueryParams,
 } from './types'
@@ -22,6 +23,12 @@ export function useClubPremiumReviews(
 }
 
 // 동아리 상세 페이지 일반 후기 탭 (/club/[clubId]) - 특정 동아리 일반 후기
+export function usePremiumReviewDetail(
+  premiumReviewId: number,
+): UseQueryResult<PremiumReviewDetail, Error> {
+  return useQuery(reviewQueries.premiumDetail(premiumReviewId))
+}
+
 export function useBasicReviews(
   params?: ReviewsQueryParams,
 ): UseQueryResult<BasicReviewsPage, Error> {

@@ -8,6 +8,10 @@ export const reviewKeys = {
   premiumLists: () => [...reviewKeys.lists(), 'premium'] as const,
   premiumList: (params?: ReviewsQueryParams) =>
     [...reviewKeys.premiumLists(), params] as const,
+    [...reviewKeys.premiumLists(), params ?? {}] as const,
+  premiumDetails: () => [...reviewKeys.all(), 'premium-detail'] as const,
+  premiumDetail: (premiumReviewId: number) =>
+    [...reviewKeys.premiumDetails(), premiumReviewId] as const,
 
   // Club premium reviews - 동아리 상세 페이지 프리미엄 후기 탭 (/club/[clubId])
   clubPremiumLists: () => [...reviewKeys.lists(), 'club-premium'] as const,

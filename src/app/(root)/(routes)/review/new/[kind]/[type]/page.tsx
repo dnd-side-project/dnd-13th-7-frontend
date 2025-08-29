@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import ReviewCardTemplate from '@/components/pages/review/new/ReviewCardTemplate'
 import {
   FormFactory,
@@ -9,12 +9,15 @@ import {
   type FormKind,
   type FormType,
 } from '@/components/pages/review/new/forms'
+import AppPath from '@/shared/configs/appPath'
+import { useAuth } from '@/shared/providers/auth-provider'
 
 interface PageProps {
   params: Promise<{ kind: string; type: string }>
 }
 
 export default function Page({ params }: PageProps) {
+  const { user, isLoading } = useAuth()
   const [formParams, setFormParams] = useState<{
     kind: string
     type: string
@@ -33,6 +36,24 @@ export default function Page({ params }: PageProps) {
 
     loadParams()
   }, [params])
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      redirect(AppPath.login())
+    }
+  }, [user, isLoading])
+
+  if (isLoading || !user) {
+    return (
+      <main className="">
+        <div className="max-w-[800px] mx-auto pt-20">
+          <div className="text-center">
+            <p className="typo-body-2-r text-grey-color-4">로딩 중...</p>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   const getKindDisplayName = (kind: string) => {
     switch (kind) {

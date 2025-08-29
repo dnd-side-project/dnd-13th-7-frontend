@@ -6,7 +6,11 @@ import {
 } from '@tanstack/react-query'
 import { postBasicReview, postPremiumReview } from './api'
 import { reviewKeys } from './keys'
-import { BasicReviewCreateRequest, PremiumReviewCreateRequest } from './types'
+import {
+  BasicReviewCreateRequest,
+  PremiumReviewCreateRequest,
+  PremiumReviewCreateResponse,
+} from './types'
 
 // 일반 후기 생성 뮤테이션
 export function usePostBasicReview(
@@ -29,8 +33,16 @@ export function usePostBasicReview(
 
 // 프리미엄 후기 생성 뮤테이션
 export function usePostPremiumReview(
-  options?: UseMutationOptions<void, Error, PremiumReviewCreateRequest>,
-): UseMutationResult<void, Error, PremiumReviewCreateRequest> {
+  options?: UseMutationOptions<
+    PremiumReviewCreateResponse,
+    Error,
+    PremiumReviewCreateRequest
+  >,
+): UseMutationResult<
+  PremiumReviewCreateResponse,
+  Error,
+  PremiumReviewCreateRequest
+> {
   const queryClient = useQueryClient()
 
   return useMutation({

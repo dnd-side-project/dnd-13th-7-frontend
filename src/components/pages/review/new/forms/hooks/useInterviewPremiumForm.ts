@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { useUploadFile } from '@/features/file'
+import { usePostPremiumReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -16,10 +18,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_ATMOSPHERE_AND_INTERVIEWERS: 20,
-  Q2_MEMORABLE_QUESTIONS: 21,
-  Q3_FEELINGS_AND_REGRETS: 22,
-  TITLE: 23,
+  Q1_ATMOSPHERE_AND_INTERVIEWERS: 1,
+  Q2_MEMORABLE_QUESTIONS: 2,
+  Q3_FEELINGS_AND_REGRETS: 3,
 } as const
 
 const InterviewPremiumFormSchema = z.object({
@@ -27,7 +28,7 @@ const InterviewPremiumFormSchema = z.object({
   generation: appValidation.requiredNumber('지원 기수를 선택해주세요'),
   jobId: appValidation.requiredNumber('지원 파트를 선택해주세요'),
   resultType: z.enum(ResultType),
-  thumbnailImage: z.instanceof(File).optional(),
+  thumbnailImageUrl: z.string().optional(),
   title: appValidation.oneLineText(60, '제목을 입력해주세요'),
   atmosphereAndInterviewers: appValidation.longText(10, 1200),
   memorableQuestions: appValidation.longText(10, 1200),
@@ -39,8 +40,9 @@ export type InterviewPremiumFormType = z.infer<
 >
 
 export const useInterviewPremiumForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const uploadFileMutation = useUploadFile()
+  const postPremiumReviewMutation = usePostPremiumReview()
 
   const form = useForm<InterviewPremiumFormType>({
     resolver: zodResolver(InterviewPremiumFormSchema),
@@ -49,7 +51,7 @@ export const useInterviewPremiumForm = () => {
       generation: undefined,
       jobId: undefined,
       resultType: ResultType.Ready,
-      thumbnailImage: undefined,
+      thumbnailImageUrl: '',
       title: '',
       atmosphereAndInterviewers: '',
       memorableQuestions: '',
@@ -58,16 +60,27 @@ export const useInterviewPremiumForm = () => {
     mode: 'onBlur',
   })
 
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (file: File | null) => {
+    if (!file) {
+      form.setValue('thumbnailImageUrl', '')
+      return
+    }
+
+    try {
+      const result = await uploadFileMutation.mutateAsync(file)
+      form.setValue('thumbnailImageUrl', result.fileUrl)
+    } catch (error) {
+      console.error('Image upload failed:', error)
+      // 에러 처리 (필요시 토스트 메시지 등 추가)
+    }
+  }
+
   // 폼 데이터를 API 요청 형식으로 변환
   const transformToApiRequest = (
     data: InterviewPremiumFormType,
   ): PremiumReviewCreateRequest => {
     const questions: AnswerRequest[] = [
-      {
-        questionId: QUESTION_IDS.TITLE,
-        questionType: QuestionType.Subjective,
-        value: data.title,
-      },
       {
         questionId: QUESTION_IDS.Q1_ATMOSPHERE_AND_INTERVIEWERS,
         questionType: QuestionType.Subjective,
@@ -93,30 +106,32 @@ export const useInterviewPremiumForm = () => {
       resultType: data.resultType,
       reviewCategory: ReviewCategory.Interview, // 인터뷰 전형
       reviewType: ReviewType.Premium, // 프리미엄 후기
-      imageUrl: '', // TODO: 이미지 업로드 후 URL로 변경
+      imageUrl: data.thumbnailImageUrl || '',
       title: data.title,
     }
   }
 
   const onSubmit = async (data: InterviewPremiumFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postPremiumReview(apiData)
-      router.push(AppPath.reviewSubmitted())
+      const res = await postPremiumReviewMutation.mutateAsync(apiData)
+      console.log(res)
+      const url = res.savedReviewId
+        ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
+        : AppPath.reviewSubmitted()
+      router.push(url)
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postPremiumReviewMutation.isPending,
+    handleImageUpload,
+    isUploading: uploadFileMutation.isPending,
   }
 }

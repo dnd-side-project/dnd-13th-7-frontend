@@ -11,6 +11,9 @@ import {
   ClubRecruitsData,
   UserSubscriptionCheckData,
 } from './types'
+import { getClubDetails, getClubRecruits, getClubs, searchClubs } from './api'
+import { clubKeys } from './keys'
+import { ClubDetailsData, ClubRecruitsData, ClubSearchResponse } from './types'
 
 export const clubQueries = {
   list: (params?: {
@@ -52,6 +55,13 @@ export const clubQueries = {
   //     queryFn: () => checkUserSubscription(clubId),
   //     enabled: Boolean(clubId),
   //   }),
+  search: (params?: { keyword?: string }) =>
+    queryOptions<ClubSearchResponse['data']>({
+      queryKey: clubKeys.search(params),
+      queryFn: () => searchClubs(params),
+      enabled: Boolean(params?.keyword),
+      staleTime: 30_000,
+    }),
 } as const
 
 export type ClubQueries = typeof clubQueries

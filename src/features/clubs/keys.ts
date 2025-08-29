@@ -20,6 +20,9 @@ export const clubKeys = {
   userSubscription: () => [...clubKeys.all(), 'user-subscription'] as const,
   userSubscriptionCheck: (clubId: number) =>
     [...clubKeys.userSubscription(), 'check', clubId] as const,
+  searches: () => [...clubKeys.all(), 'searches'] as const,
+  search: (params?: { keyword?: string }) =>
+    [...clubKeys.searches(), params ?? {}] as const,
 } as const
 
 export type ClubKeys = typeof clubKeys

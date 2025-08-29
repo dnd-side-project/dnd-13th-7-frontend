@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { usePostBasicReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
@@ -16,9 +17,9 @@ import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_ACTIVITY_DURATION: 11,
-  Q2_SATISFACTION_SYSTEM: 12,
-  Q3_RECOMMENDATION_TARGET: 13,
+  Q1_ACTIVITY_DURATION: 1,
+  Q2_SATISFACTION_SYSTEM: 2,
+  Q3_RECOMMENDATION_TARGET: 3,
 } as const
 
 // 선택지 데이터
@@ -62,8 +63,8 @@ const ActivityNormalFormSchema = z.object({
 export type ActivityNormalFormType = z.infer<typeof ActivityNormalFormSchema>
 
 export const useActivityNormalForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const postBasicReviewMutation = usePostBasicReview()
 
   const form = useForm<ActivityNormalFormType>({
     resolver: zodResolver(ActivityNormalFormSchema),
@@ -89,26 +90,26 @@ export const useActivityNormalForm = () => {
     const questions: AnswerRequest[] = [
       {
         questionId: QUESTION_IDS.Q1_ACTIVITY_DURATION,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.activityDuration,
       },
       {
         questionId: QUESTION_IDS.Q2_SATISFACTION_SYSTEM,
-        questionType: QuestionType.MultipleChoice,
+        questionType: QuestionType.SingleChoice,
         value: data.satisfactionSystem,
       },
       {
         questionId: QUESTION_IDS.Q3_RECOMMENDATION_TARGET,
         questionType: QuestionType.MultipleChoice,
-        value: data.recommendationTarget.join(','), // 복수 선택은 콤마로 구분
+        value: data.recommendationTarget,
       },
       {
-        questionId: 14, // 한줄 요약 후기 질문 ID
+        questionId: 4, // 한줄 요약 후기 질문 ID
         questionType: QuestionType.Subjective,
         value: data.oneLineComment,
       },
       {
-        questionId: 15, // 인상깊은 포인트 질문 ID
+        questionId: 5, // 인상깊은 포인트 질문 ID
         questionType: QuestionType.Subjective,
         value: data.impressivePoint,
       },
@@ -120,31 +121,28 @@ export const useActivityNormalForm = () => {
       jobId: data.jobId,
       questions,
       rate: data.rate,
-      resultType: data.resultType,
+      resultType: ResultType.Ready,
       reviewCategory: ReviewCategory.Activity, // 활동 전형
       reviewType: ReviewType.Basic, // 일반 후기
     }
   }
 
   const onSubmit = async (data: ActivityNormalFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postBasicReview(apiData)
+      const res = await postBasicReviewMutation.mutateAsync(apiData)
+      console.log(res)
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postBasicReviewMutation.isPending,
   }
 }
