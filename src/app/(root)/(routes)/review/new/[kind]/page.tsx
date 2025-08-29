@@ -1,8 +1,49 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DocumentPencilIcon, DocumentDiamondIcon } from '@/assets/icons'
 
 const validKinds = ['paper', 'interview', 'activity'] as const
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ kind: string }>
+}): Promise<Metadata> {
+  const { kind } = await params
+  const isValidKind = (validKinds as readonly string[]).includes(kind)
+
+  if (!isValidKind) {
+    return {
+      title: '페이지를 찾을 수 없습니다',
+    }
+  }
+
+  const getKindDisplayName = (kind: string) => {
+    switch (kind) {
+      case 'paper':
+        return '서류'
+      case 'interview':
+        return '인터뷰/면접'
+      case 'activity':
+        return '활동'
+      default:
+        return kind
+    }
+  }
+
+  const kindName = getKindDisplayName(kind)
+
+  return {
+    title: `${kindName} 후기 작성`,
+    description: `IT 동아리 ${kindName} 후기를 작성해보세요. 일반 후기와 프리미엄 후기 중 선택하여 경험을 공유하고 다른 분들에게 도움을 주세요.`,
+    keywords: [`IT 동아리 ${kindName} 후기`, '동아리 후기 작성', '경험 공유'],
+    openGraph: {
+      title: `${kindName} 후기 작성 | 모여잇`,
+      description: `IT 동아리 ${kindName} 후기를 작성해보세요. 일반 후기와 프리미엄 후기 중 선택하여 경험을 공유하고 다른 분들에게 도움을 주세요.`,
+    },
+  }
+}
 
 export default async function Page({
   params,

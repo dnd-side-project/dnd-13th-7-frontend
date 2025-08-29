@@ -28,5 +28,5 @@
 
 @theme {
   --breakpoint-phone: 360px;
-  --breakpoint-desktop: 1440px;
+  --breakpoint-desktop: 768px;
 }
