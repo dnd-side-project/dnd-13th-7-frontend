@@ -1,11 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ProfileIcon, SearchIcon } from '@/assets/icons'
 import { MoyeoitFullLogo } from '@/assets/images'
 import { Button } from '@/components/atoms/Button'
+import { useUserProfile } from '@/features/user'
 import AppPath from '@/shared/configs/appPath'
 import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
 import { useAuth } from '@/shared/providers/auth-provider'
@@ -15,6 +17,8 @@ export default function Header() {
   const router = useRouter()
   const { setOpen } = useSearchUrlState()
   const { user } = useAuth()
+  const { data: profile } = useUserProfile()
+
   return (
     <div className="w-full text-grey-color-5 max-desktop:hidden">
       <header className="mx-auto px-4 py-3 z-20 relative">
@@ -72,12 +76,22 @@ export default function Header() {
                 className="w-full h-full rounded-full grid place-items-center transition-colors hover:opacity-50 focus:opacity-50"
                 onClick={() => router.push(AppPath.myPage())}
               >
-                <ProfileIcon
-                  width={48}
-                  height={48}
-                  role="img"
-                  aria-label="profile"
-                />
+                {profile?.profileImageUrl ? (
+                  <Image
+                    src={profile.profileImageUrl}
+                    alt="profile"
+                    className="w-full h-full object-cover rounded-full"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <ProfileIcon
+                    width={40}
+                    height={40}
+                    role="img"
+                    aria-label="profile"
+                  />
+                )}
               </Button>
             ) : (
               <Link

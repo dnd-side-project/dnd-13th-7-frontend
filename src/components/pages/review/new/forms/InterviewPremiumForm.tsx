@@ -28,7 +28,8 @@ import { useInterviewPremiumForm } from './hooks/useInterviewPremiumForm'
 
 export default function InterviewPremiumForm() {
   const router = useRouter()
-  const { form, onSubmit, isSubmitting } = useInterviewPremiumForm()
+  const { form, onSubmit, isSubmitting, handleImageUpload, isUploading } =
+    useInterviewPremiumForm()
   const { data: clubsData } = useClubsList()
 
   return (
@@ -145,7 +146,7 @@ export default function InterviewPremiumForm() {
           {/* 대표 이미지 */}
           <FormField
             control={form.control}
-            name="thumbnailImage"
+            name="thumbnailImageUrl"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="typo-body-1-b text-black-color mb-4">
@@ -153,9 +154,11 @@ export default function InterviewPremiumForm() {
                 </FormLabel>
                 <FormControl>
                   <ImageUpload
-                    onFileChange={field.onChange}
+                    onFileChange={handleImageUpload}
+                    defaultImageUrl={field.value}
+                    disabled={isUploading}
                     height="h-32"
-                    error={form.formState.errors.thumbnailImage?.message}
+                    error={form.formState.errors.thumbnailImageUrl?.message}
                   />
                 </FormControl>
                 <FormMessage />

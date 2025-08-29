@@ -10,6 +10,7 @@ import {
   ClubsPage,
   ClubRecruitsData,
   SubscriptionResponse,
+  ClubSearchResponse,
 } from './types'
 
 export function useClubsList(params?: {
@@ -35,4 +36,14 @@ export function useClubRecruits(
   clubId: number,
 ): UseQueryResult<ClubRecruitsData, Error> {
   return useQuery(clubQueries.recruit(clubId))
+}
+
+export function usePopularClubs(): UseQueryResult<ClubsPage, Error> {
+  return useQuery(clubQueries.popular())
+}
+
+export function useClubsSearch(params?: {
+  keyword?: string
+}): UseQueryResult<ClubSearchResponse['data'], Error> {
+  return useQuery(clubQueries.search(params))
 }

@@ -16,6 +16,10 @@ export const clubKeys = {
   recruits: () => [...clubKeys.all(), 'recruits'] as const,
   recruit: (clubId: number | string) =>
     [...clubKeys.recruits(), clubId] as const,
+  popular: () => [...clubKeys.all(), 'popular'] as const,
+  searches: () => [...clubKeys.all(), 'searches'] as const,
+  search: (params?: { keyword?: string }) =>
+    [...clubKeys.searches(), params ?? {}] as const,
 } as const
 
 export type ClubKeys = typeof clubKeys

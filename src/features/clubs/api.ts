@@ -7,6 +7,8 @@ import {
   ClubRecruitsResponse,
   SubscriptionResponse,
   ClubSubscriptionResponse,
+  ClubSearchRequest,
+  ClubSearchResponse,
 } from './types'
 
 export async function getClubs(params?: {
@@ -38,5 +40,14 @@ export async function getClubRecruits(
   const res = await apiClient.get<ClubRecruitsResponse>(
     `/api/v1/clubs/${clubId}/recruits`,
   )
+  return res.data.data
+}
+
+export async function searchClubs(
+  params?: ClubSearchRequest,
+): Promise<ClubSearchResponse['data']> {
+  const res = await apiClient.get<ClubSearchResponse>('/api/v1/clubs/search', {
+    params,
+  })
   return res.data.data
 }

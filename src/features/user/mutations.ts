@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { userApi } from './api'
 import { userKeys } from './keys'
-import { UserActivateRequest } from './types'
+import { UpdateUserProfileImageRequest, UserActivateRequest } from './types'
 
 export const useUserActivate = () => {
   const queryClient = useQueryClient()
@@ -15,6 +15,20 @@ export const useUserActivate = () => {
     },
     onError: (error) => {
       console.error('사용자 활성화 실패:', error)
+    },
+  })
+}
+
+export const useUpdateUserProfileImage = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: userKeys.updateProfileImage(),
+    mutationFn: (body: UpdateUserProfileImageRequest) =>
+      userApi.updateProfileImage(body),
+    onSuccess: () => {
+      // 프로필 데이터 갱신
+      queryClient.invalidateQueries({ queryKey: userKeys.profile() })
     },
   })
 }

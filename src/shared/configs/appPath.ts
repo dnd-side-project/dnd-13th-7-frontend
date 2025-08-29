@@ -6,8 +6,7 @@ const AppPath = {
   login: () => '/login' as const,
   logout: () => '/logout' as const,
   signup: () => '/signup' as const,
-  oauthCallback: (provider: 'google' | 'kakao') =>
-    `/api/oauth-callback/${provider}` as const,
+  oauthCallback: (provider: 'google' | 'kakao') => `/oauth-callback/` as const,
   kakaoLogin: () =>
     `${Environment.apiAddress()}/api/users/oauth2/authorize/kakao/login` as const,
   googleLogin: () =>

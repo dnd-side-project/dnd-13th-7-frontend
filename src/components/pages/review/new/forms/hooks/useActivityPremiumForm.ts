@@ -3,23 +3,25 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import z from 'zod'
+import { useUploadFile } from '@/features/file'
+import { usePostPremiumReview } from '@/features/review/mutations'
 import {
   ReviewCategory,
   ReviewType,
   QuestionType,
   type PremiumReviewCreateRequest,
   type AnswerRequest,
+  ResultType,
 } from '@/features/review/types'
 import AppPath from '@/shared/configs/appPath'
 import { appValidation } from '@/shared/configs/appValidation'
 
 // Q&A 질문 ID 정의
 const QUESTION_IDS = {
-  Q1_PREPARATION_BEFORE_START: 30,
-  Q2_COLLABORATION_EXPERIENCE: 31,
-  Q3_PERSONAL_GROWTH: 32,
-  TITLE: 33,
-  GROWTH_KEYWORDS: 34,
+  Q1_PREPARATION_BEFORE_START: 1,
+  Q2_COLLABORATION_EXPERIENCE: 2,
+  Q3_PERSONAL_GROWTH: 3,
+  GROWTH_KEYWORDS: 4,
 } as const
 
 // 성장 키워드 옵션들
@@ -36,7 +38,7 @@ const ActivityPremiumFormSchema = z.object({
   clubId: appValidation.requiredNumber('IT 동아리명을 선택해주세요'),
   generation: appValidation.requiredNumber('지원 기수를 선택해주세요'),
   jobId: appValidation.requiredNumber('지원 파트를 선택해주세요'),
-  thumbnailImage: z.instanceof(File).optional(),
+  thumbnailImageUrl: z.string().optional(),
   title: appValidation.oneLineText(60, '제목을 입력해주세요'),
   preparationBeforeStart: appValidation.longText(10, 1200),
   collaborationExperience: appValidation.longText(10, 1200),
@@ -47,8 +49,9 @@ const ActivityPremiumFormSchema = z.object({
 export type ActivityPremiumFormType = z.infer<typeof ActivityPremiumFormSchema>
 
 export const useActivityPremiumForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const uploadFileMutation = useUploadFile()
+  const postPremiumReviewMutation = usePostPremiumReview()
 
   const form = useForm<ActivityPremiumFormType>({
     resolver: zodResolver(ActivityPremiumFormSchema),
@@ -56,7 +59,7 @@ export const useActivityPremiumForm = () => {
       clubId: undefined,
       generation: undefined,
       jobId: undefined,
-      thumbnailImage: undefined,
+      thumbnailImageUrl: '',
       title: '',
       preparationBeforeStart: '',
       collaborationExperience: '',
@@ -66,16 +69,27 @@ export const useActivityPremiumForm = () => {
     mode: 'onBlur',
   })
 
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (file: File | null) => {
+    if (!file) {
+      form.setValue('thumbnailImageUrl', '')
+      return
+    }
+
+    try {
+      const result = await uploadFileMutation.mutateAsync(file)
+      form.setValue('thumbnailImageUrl', result.fileUrl)
+    } catch (error) {
+      console.error('Image upload failed:', error)
+      // 에러 처리 (필요시 토스트 메시지 등 추가)
+    }
+  }
+
   // 폼 데이터를 API 요청 형식으로 변환
   const transformToApiRequest = (
     data: ActivityPremiumFormType,
-  ): Partial<PremiumReviewCreateRequest> => {
+  ): PremiumReviewCreateRequest => {
     const questions: AnswerRequest[] = [
-      {
-        questionId: QUESTION_IDS.TITLE,
-        questionType: QuestionType.Subjective,
-        value: data.title,
-      },
       {
         questionId: QUESTION_IDS.Q1_PREPARATION_BEFORE_START,
         questionType: QuestionType.Subjective,
@@ -91,11 +105,11 @@ export const useActivityPremiumForm = () => {
         questionType: QuestionType.Subjective,
         value: data.personalGrowth,
       },
-      {
-        questionId: QUESTION_IDS.GROWTH_KEYWORDS,
-        questionType: QuestionType.MultipleChoice,
-        value: data.growthKeywords, // 단일 선택
-      },
+      // {
+      //   questionId: QUESTION_IDS.GROWTH_KEYWORDS,
+      //   questionType: QuestionType.SingleChoice,
+      //   value: data.growthKeywords, // 단일 선택
+      // },
     ]
 
     return {
@@ -103,34 +117,38 @@ export const useActivityPremiumForm = () => {
       generation: data.generation,
       jobId: data.jobId,
       questions,
-      // Note: Activity Premium에는 resultType이 없음
       reviewCategory: ReviewCategory.Activity, // 활동 전형
       reviewType: ReviewType.Premium, // 프리미엄 후기
-      imageUrl: '', // TODO: 이미지 업로드 후 URL로 변경
+      imageUrl: data.thumbnailImageUrl || '',
       title: data.title,
-      // resultType은 Activity Premium에는 없음
+      resultType: ResultType.Ready,
     }
   }
 
   const onSubmit = async (data: ActivityPremiumFormType) => {
-    setIsSubmitting(true)
     try {
       const apiData = transformToApiRequest(data)
       console.log('Form submitted:', data)
       console.log('Form submitted:', apiData)
-      // TODO: API 호출
-      // await postPremiumReview(apiData)
-      router.push(AppPath.reviewSubmitted())
+
+      const res = await postPremiumReviewMutation.mutateAsync(apiData)
+      console.log(res)
+
+      // savedReviewId를 URL 파라미터로 전달
+      const url = res.savedReviewId
+        ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
+        : AppPath.reviewSubmitted()
+      router.push(url)
     } catch (error) {
       console.error('Form submission error:', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   return {
     form,
     onSubmit,
-    isSubmitting,
+    isSubmitting: postPremiumReviewMutation.isPending,
+    handleImageUpload,
+    isUploading: uploadFileMutation.isPending,
   }
 }
