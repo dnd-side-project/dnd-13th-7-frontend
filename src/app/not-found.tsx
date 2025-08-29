@@ -23,7 +23,7 @@ export default function NotFound() {
         </h1>
         <div className="relative h-[237px] w-[363.838px]">
           <Image
-            src="/images/sorry.png"
+            src="/images/sorry.svg"
             alt="페이지를 찾을 수 없음"
             fill
             className="object-contain"
