@@ -114,10 +114,9 @@ export const useInterviewPremiumForm = () => {
   const onSubmit = async (data: InterviewPremiumFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
+
       const res = await postPremiumReviewMutation.mutateAsync(apiData)
-      console.log(res)
+
       const url = res.savedReviewId
         ? `${AppPath.reviewSubmitted()}?reviewId=${res.savedReviewId}`
         : AppPath.reviewSubmitted()

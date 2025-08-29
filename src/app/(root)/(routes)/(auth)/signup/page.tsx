@@ -97,7 +97,6 @@ export default function SignupPage() {
     if (oauthDataStr) {
       try {
         const oauthData: OAuthCallbackParams = JSON.parse(oauthDataStr)
-        console.log('OAuth 데이터 확인:', oauthData)
 
         const isActive = oauthData.active === 'true'
 
@@ -120,9 +119,8 @@ export default function SignupPage() {
     }
   }, [setUserFromOAuth, router, form])
 
-  const handleArrowClick = (itemId: string) => {
+  const handleArrowClick = (_itemId: string) => {
     // 약관 상세 페이지로 이동하는 로직
-    console.log(`약관 상세 보기: ${itemId}`)
   }
 
   return (

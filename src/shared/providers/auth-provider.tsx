@@ -36,21 +36,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const userIdStr = tokenCookies.getUserId()
     const isTokenValid = tokenCookies.isTokenValid()
 
-    console.log('AuthProvider - token:', token)
-    console.log('AuthProvider - userIdStr:', userIdStr)
-    console.log('AuthProvider - isTokenValid:', isTokenValid)
-
     if (token && userIdStr && isTokenValid) {
       const userData = {
         id: parseInt(userIdStr),
         active: true, // 쿠키에 있다는 것은 active 상태
       }
-      console.log('AuthProvider - setting user:', userData)
       setAccessToken(token)
       setUser(userData)
     } else if (!isTokenValid && token) {
       // 토큰이 만료된 경우 쿠키 정리
-      console.log('AuthProvider - clearing expired token')
       tokenCookies.clearAll()
     }
 

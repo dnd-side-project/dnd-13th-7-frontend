@@ -128,11 +128,8 @@ export const useActivityPremiumForm = () => {
   const onSubmit = async (data: ActivityPremiumFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
 
       const res = await postPremiumReviewMutation.mutateAsync(apiData)
-      console.log(res)
 
       // savedReviewId를 URL 파라미터로 전달
       const url = res.savedReviewId

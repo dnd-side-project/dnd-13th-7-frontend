@@ -67,16 +67,13 @@ export default function PremiumReview({
   const resultArray = React.useMemo(() => {
     if (result === 'all') {
       // "전체" 선택 시 ['all'] 반환
-      console.log('Returning ["all"] for "all" result')
       return ['all']
     }
     if (result === null || result === undefined) {
       // 초기 상태 또는 선택 없음 시 빈 배열 반환
-      console.log('Returning [] for null/undefined result')
       return []
     }
     const parsed = result ? result.split(',').filter(Boolean) : []
-    console.log('Returning parsed result:', parsed)
     return parsed
   }, [result])
 
@@ -123,16 +120,10 @@ export default function PremiumReview({
 
   const handleResultChange = React.useCallback(
     (values: string[]) => {
-      console.log('handleResultChange called:', values)
       // "전체" 선택 시 특별한 값 "all" 사용
       if (values.includes('all')) {
-        console.log('Setting result to "all"')
         setResult('all') // "전체" 선택 시 "all"로 설정
       } else {
-        console.log(
-          'Setting result to:',
-          values.length > 0 ? values.join(',') : null,
-        )
         setResult(values.length > 0 ? values.join(',') : null)
       }
     },

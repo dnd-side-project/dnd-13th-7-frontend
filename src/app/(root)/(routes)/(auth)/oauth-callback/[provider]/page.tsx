@@ -15,8 +15,6 @@ export default function OAuthCallbackPage() {
   // provider는 URL 파라미터에서 추출
   const provider = params.provider as OAuthProvider
 
-  console.log('OAuth Callback - Provider:', provider)
-
   // 유효하지 않은 provider인 경우 처리
   useEffect(() => {
     if (provider && !['google', 'kakao'].includes(provider)) {
@@ -30,8 +28,6 @@ export default function OAuthCallbackPage() {
     const oauthData = parseOAuthCallbackParams(searchParams)
 
     if (oauthData) {
-      console.log('OAuth 쿼리 파라미터 데이터:', oauthData)
-
       const isActive = oauthData.active === 'true'
 
       if (!isActive) {
@@ -45,7 +41,6 @@ export default function OAuthCallbackPage() {
         tokenCookies.setUserId(oauthData.userId)
         tokenCookies.setExpiresAt(Date.now() + expiresIn * 1000)
 
-        console.log('로그인 성공 - 홈으로 이동')
         router.push(AppPath.home())
       }
     } else {

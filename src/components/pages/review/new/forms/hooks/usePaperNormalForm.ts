@@ -124,10 +124,9 @@ export const usePaperNormalForm = () => {
   const onSubmit = async (data: PaperNormalFormType) => {
     try {
       const apiData = transformToApiRequest(data)
-      console.log('Form submitted:', data)
-      console.log('Form submitted:', apiData)
-      const res = await postBasicReviewMutation.mutateAsync(apiData)
-      console.log(res)
+
+      await postBasicReviewMutation.mutateAsync(apiData)
+
       router.push(AppPath.reviewSubmitted())
     } catch (error) {
       console.error('Form submission error:', error)
