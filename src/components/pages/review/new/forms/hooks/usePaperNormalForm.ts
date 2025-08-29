@@ -98,12 +98,12 @@ export const usePaperNormalForm = () => {
         value: data.additionalDocuments,
       },
       {
-        questionId: 4, // 한줄 요약 후기 질문 ID
+        questionId: 19, // 한줄 요약 후기 질문 ID
         questionType: QuestionType.Subjective,
         value: data.oneLineComment,
       },
       {
-        questionId: 5, // 인상깊은 포인트 질문 ID
+        questionId: 20, // 인상깊은 포인트 질문 ID
         questionType: QuestionType.Subjective,
         value: data.impressivePoint,
       },

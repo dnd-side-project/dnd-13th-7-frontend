@@ -3,11 +3,11 @@
 import * as React from 'react'
 // import { Bell } from 'lucide-react'
 import Image from 'next/image'
-// import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
+import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
 import { useToggleClubSubscription } from '@/features/clubs/mutations'
 import {
   useClubDetails,
-  // useUserSubscriptionCheck,
+  useUserSubscriptionCheck,
 } from '@/features/clubs/queries'
 
 interface DetailProps {
@@ -39,6 +39,18 @@ export default function Detail({ clubId }: DetailProps) {
   const toggleSubscriptionMutation = useToggleClubSubscription()
 
   // 구독 상태 확인
+  const {
+    data: subscriptionData,
+    isLoading: isSubscriptionLoading,
+    error: subscriptionError,
+  } = useUserSubscriptionCheck(Number(clubId))
+  const isSubscribed = subscriptionData?.subscribed ?? false
+
+  const isLoading = isClubLoading || isSubscriptionLoading
+
+  const handleSubscribe = async () => {
+    try {
+      await toggleSubscriptionMutation.mutateAsync(Number(clubId))
   // const {
   //   data: subscriptionData,
   //   isLoading: isSubscriptionLoading,
@@ -130,6 +142,7 @@ export default function Detail({ clubId }: DetailProps) {
             icon={<Bell size={20} />}
             isSubscribed={isSubscribed}
             onClick={handleSubscribe}
+          />
             disabled={toggleSubscriptionMutation.isPending}
           >
             {toggleSubscriptionMutation.isPending

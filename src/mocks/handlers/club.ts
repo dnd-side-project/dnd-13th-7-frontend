@@ -9,7 +9,7 @@ import {
 } from '@/features/clubs/types'
 import { ApiResponse } from '@/shared/types/api'
 
-// Mock data
+const subscriptionState = new Map<number, boolean>()
 
 function buildPageableSort(): PageableSort {
   return { sorted: false, unsorted: true, empty: true }
@@ -161,6 +161,67 @@ const clubHandlers = [
   //   }
   //   return HttpResponse.json(body)
   // }),
+
+  // GET /api/v1/clubs/:id/recruits (모집정보)
+  // http.get('*/api/v1/clubs/:clubId/recruits', ({ params }) => {
+  //   const id = Number(params.clubId)
+  //   const recruits = recruitsById[id]
+  //   if (!recruits) {
+  //     const notFound: ApiResponse<null> = {
+  //       status: 'NOT_FOUND',
+  //       message: 'Recruit info not found',
+  //       data: null,
+  //     }
+  //     return HttpResponse.json(notFound, { status: 404 })
+  //   }
+  //   const body: ApiResponse<ClubRecruitsData> = {
+  //     status: 'SUCCESS',
+  //     message: '조회에 성공하였습니다.',
+  //     data: recruits,
+  //   }
+  //   return HttpResponse.json(body)
+  // ),
+
+  // GET /api/v1/clubs/user-subscribe/check (구독 상태 확인)
+  http.get('/api/v1/clubs/user-subscribe/check', ({ request }) => {
+    const url = new URL(request.url)
+    const clubId = Number(url.searchParams.get('clubId'))
+
+    // 저장된 구독 상태 반환 (기본값: false)
+    const isSubscribed = subscriptionState.get(clubId) ?? false
+
+    const body: ApiResponse<{ subscribed: boolean }> = {
+      status: 'SUCCESS',
+      message: '구독 상태 확인에 성공하였습니다.',
+      data: {
+        subscribed: isSubscribed,
+      },
+    }
+
+    return HttpResponse.json(body)
+  }),
+
+  // POST /api/v1/clubs/:clubId/subscribe (구독 토글)
+  http.post('*/api/v1/clubs/:clubId/subscribe', ({ params }) => {
+    const clubId = Number(params.clubId)
+
+    // 현재 구독 상태를 토글
+    const currentState = subscriptionState.get(clubId) ?? false
+    const newState = !currentState
+    subscriptionState.set(clubId, newState)
+
+    const body: ApiResponse<{ subscribed: boolean }> = {
+      status: 'SUCCESS',
+      message: newState
+        ? '구독에 성공하였습니다.'
+        : '구독 해제에 성공하였습니다.',
+      data: {
+        subscribed: newState,
+      },
+    }
+
+    return HttpResponse.json(body)
+  }),
 
   // GET /api/v1/clubs/:id/recruits (모집정보)
   // http.get('*/api/v1/clubs/:clubId/recruits', ({ params }) => {
