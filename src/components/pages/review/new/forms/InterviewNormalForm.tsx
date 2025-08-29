@@ -33,7 +33,7 @@ import {
 export default function InterviewNormalForm() {
   const router = useRouter()
   const { form, onSubmit, isSubmitting } = useInterviewNormalForm()
-  const { data: clubsData } = useClubsList()
+  const { data: clubsData } = useClubsList({ size: 20 })
 
   // 예상치 못한 질문 대응 체크박스 상태 관리
   const watchedUnexpectedResponse = form.watch('unexpectedResponse')
