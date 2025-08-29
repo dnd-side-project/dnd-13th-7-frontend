@@ -45,16 +45,23 @@ export async function getClubRecruits(
   return res.data.data
 }
 
-// export async function checkUserSubscription(
-//   clubId: number,
-// ): Promise<UserSubscriptionCheckData> {
-//   console.log('구독 상태 확인 API 호출:', clubId)
-//   const res = await apiClient.get<UserSubscriptionCheckResponse>(
-//     `/api/v1/clubs/user-subscribe/check?clubId=${clubId}`,
-//   )
-//   console.log('구독 상태 확인 API 응답:', res.data)
-//   return res.data.data
-// }
+export async function checkUserSubscription(
+  clubId: number,
+): Promise<UserSubscriptionCheckData> {
+  const res = await apiClient.get<UserSubscriptionCheckResponse>(
+    `/api/v1/clubs/user-subscribe/check?clubId=${clubId}`,
+  )
+  return res.data.data
+}
+
+export async function toggleClubSubscription(
+  clubId: number,
+): Promise<SubscriptionResponse['data']> {
+  const res = await apiClient.post<SubscriptionResponse>(
+    `/api/v1/clubs/${clubId}/subscribe`,
+  )
+  return res.data.data
+}
 export async function searchClubs(
   params?: ClubSearchRequest,
 ): Promise<ClubSearchResponse['data']> {
