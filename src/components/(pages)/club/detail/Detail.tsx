@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Bell } from 'lucide-react'
 // import { Bell } from 'lucide-react'
 import Image from 'next/image'
 import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
@@ -94,36 +95,39 @@ export default function Detail({ clubId }: DetailProps) {
           />
         </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          {/* 로고 */}
-          <div className="w-16 h-16 border border-light-color-3 rounded-[16px] flex-shrink-0">
-            {isValidUrl(clubDetails.club.imageUrl) && (
-              <Image
-                src={clubDetails.club.imageUrl!}
-                alt={clubDetails.club.name}
-                width={64}
-                height={64}
-                className="w-full h-full object-cover rounded-[16px]"
-              />
-            )}
+        {/* 동아리 정보 섹션 */}
+        <div className="mb-12">
+          {/* 로고, 동아리명, 구독 버튼 */}
+          <div className="flex items-center gap-4 mb-6">
+            {/* 로고 */}
+            <div className="w-16 h-16 border border-light-color-3 rounded-[16px] flex-shrink-0">
+              {isValidUrl(clubDetails.club.imageUrl) && (
+                <Image
+                  src={clubDetails.club.imageUrl!}
+                  alt={clubDetails.club.name}
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover rounded-[16px]"
+                />
+              )}
+            </div>
+            {/* 동아리명 */}
+            <div className="flex-1">
+              <div className="typo-title-1">{clubDetails.club.name}</div>
+            </div>
+            {/* 구독 버튼 */}
+            <SubscriptionButton
+              icon={<Bell size={20} />}
+              isSubscribed={isSubscribed}
+              onClick={handleSubscribe}
+            />
           </div>
 
-          {/* 동아리명 */}
-          <div className="flex-1">
-            <div className="typo-title-1">{clubDetails.club.name}</div>
-          </div>
-
-          {/* 구독 버튼
-          <SubscriptionButton
-            icon={<Bell size={20} />}
-            isSubscribed={isSubscribed}
-            onClick={handleSubscribe}
-          />
-
-        {/* 슬로건 */}
-        <div className="bg-white rounded-[16px] py-4 mb-12">
-          <div className="text-center typo-body-3-2-m text-grey-color-4">
-            {clubDetails.club.slogan}
+          {/* 슬로건 */}
+          <div className="bg-white rounded-[16px] py-4">
+            <div className="text-center typo-body-3-2-m text-grey-color-4">
+              {clubDetails.club.slogan}
+            </div>
           </div>
         </div>
       </div>

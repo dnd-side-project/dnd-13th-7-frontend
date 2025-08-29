@@ -8,6 +8,7 @@ import { PaginationWithHook } from '@/components/molecules/pagination'
 import { StandardReview } from '@/components/molecules/standardReview'
 import { Tab, type TabOption } from '@/components/molecules/tab/Tab'
 import { ClubRecruitsData } from '@/features/clubs/types'
+import { useToggleLike } from '@/features/like'
 import { useClubBasicReviews } from '@/features/review/queries'
 import useQueryState from '@/shared/hooks/useQueryState'
 import { formatDateToYYMMDD } from '@/shared/utils'
@@ -21,6 +22,9 @@ export default function BasicReview({
   recruitsData,
   clubId,
 }: BasicReviewProps) {
+  console.log('🚀 BasicReview 컴포넌트 렌더링 시작')
+  console.log('📋 Props:', { recruitsData, clubId })
+
   const router = useRouter()
 
   const [review, setReview] = useQueryState('review')
@@ -120,8 +124,42 @@ export default function BasicReview({
     sort: currentSort,
   })
 
-  const handleRecommend = () => {
-    console.log('후기 추천하기 클릭')
+  console.log('📊 리뷰 데이터 상태:', {
+    isLoading,
+    error: error?.message,
+    dataLength: basicReviewsData?.content?.length || 0,
+    hasData: !!basicReviewsData?.content,
+  })
+
+  // 좋아요 뮤테이션 (구독 기능처럼 구현)
+  const toggleLikeMutation = useToggleLike()
+
+  const handleLikeToggle = async (reviewId: number) => {
+    try {
+      console.log('🎯 좋아요 토글 시도:', reviewId)
+      await toggleLikeMutation.mutateAsync({
+        reviewId: reviewId.toString(),
+        reviewType: 'BASIC',
+      })
+      console.log('✅ 좋아요 토글 성공')
+    } catch (error) {
+      console.error('❌ 좋아요 토글 실패:', error)
+    }
+  }
+
+  const handleRecommend = async (reviewId: number) => {
+    try {
+      console.log('🎯 후기 추천하기 클릭!')
+      console.log('📋 추천할 리뷰 ID:', reviewId)
+
+      await toggleLikeMutation.mutateAsync({
+        reviewId: reviewId.toString(),
+        reviewType: 'BASIC',
+      })
+      console.log('✅ 후기 추천 성공')
+    } catch (error) {
+      console.error('❌ 후기 추천 실패:', error)
+    }
   }
 
   const SORT_OPTIONS: TabOption[] = [
@@ -240,47 +278,57 @@ export default function BasicReview({
       <div className="space-y-8">
         {basicReviewsData?.content && basicReviewsData.content.length > 0 ? (
           <div className="space-y-4">
-            {basicReviewsData.content.map((review, index) => (
-              <StandardReview
-                key={review.reviewId || index}
-                className="pt-8 pb-8 px-6 border-b border-light-color-3 w-full"
-              >
-                <div className="flex gap-6 w-full">
-                  <StandardReview.Left>
-                    <StandardReview.Profile
-                      nickname={review.nickname}
-                      clubName={review.clubName}
-                      generation={review.cohort}
-                      part={review.part}
-                      profileImage={review.position}
-                    />
-                    <StandardReview.Questions
-                      questions={review.qaPreviews.map((qa) => ({
-                        question: qa.questionTitle,
-                        answers: [qa.answerValue],
-                      }))}
-                    />
-                  </StandardReview.Left>
+            {basicReviewsData.content.map((review, index) => {
+              console.log(`📝 리뷰 ${index + 1} 렌더링:`, {
+                reviewId: review.reviewId,
+                clubName: review.clubName,
+                likeCount: review.likeCount,
+              })
 
-                  <StandardReview.Right>
-                    <StandardReview.Meta
-                      rating={review.rate}
-                      reviewType={review.reviewCategory}
-                      date={`작성날짜 (${formatDateToYYMMDD(review.createdAt)})`}
-                    />
-                    <StandardReview.Content
-                      title={review.oneLineComment}
-                      content={review.impressiveContentPreview}
-                    />
-                  </StandardReview.Right>
-                </div>
+              return (
+                <StandardReview
+                  key={review.reviewId || index}
+                  className="pt-8 pb-8 px-6 border-b border-light-color-3 w-full"
+                >
+                  <div className="flex gap-6 w-full">
+                    <StandardReview.Left>
+                      <StandardReview.Profile
+                        nickname={review.nickname}
+                        clubName={review.clubName}
+                        generation={review.cohort}
+                        part={review.part}
+                        profileImage={review.position}
+                      />
+                      <StandardReview.Questions
+                        questions={review.qaPreviews.map((qa) => ({
+                          question: qa.questionTitle,
+                          answers: [qa.answerValue],
+                        }))}
+                      />
+                    </StandardReview.Left>
 
-                <StandardReview.Bottom>
-                  <StandardReview.Likes likeCount={review.likeCount} />
-                  <StandardReview.Recommend onRecommend={handleRecommend} />
-                </StandardReview.Bottom>
-              </StandardReview>
-            ))}
+                    <StandardReview.Right>
+                      <StandardReview.Meta
+                        rating={review.rate}
+                        reviewType={review.reviewCategory}
+                        date={`작성날짜 (${formatDateToYYMMDD(review.createdAt)})`}
+                      />
+                      <StandardReview.Content
+                        title={review.oneLineComment}
+                        content={review.impressiveContentPreview}
+                      />
+                    </StandardReview.Right>
+                  </div>
+
+                  <StandardReview.Bottom>
+                    <StandardReview.Recommend
+                      onRecommend={() => handleRecommend(review.reviewId)}
+                      likeCount={review.likeCount}
+                    />
+                  </StandardReview.Bottom>
+                </StandardReview>
+              )
+            })}
           </div>
         ) : (
           <div className="flex items-center justify-center py-8">

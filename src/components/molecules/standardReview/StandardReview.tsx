@@ -361,15 +361,25 @@ export function StandardReviewContent({
 interface StandardReviewLikesProps
   extends React.HTMLAttributes<HTMLDivElement> {
   likeCount: number
+  onLike?: () => void
 }
 
 export function StandardReviewLikes({
   likeCount,
+  onLike,
   className,
   ...props
 }: StandardReviewLikesProps) {
   return (
-    <div className={cn('flex items-center gap-1 h-6', className)} {...props}>
+    <div
+      className={cn(
+        'flex items-center gap-1 h-6 cursor-pointer transition-colors',
+        onLike && 'hover:text-primary-color',
+        className,
+      )}
+      onClick={onLike}
+      {...props}
+    >
       <ThumbsUp className="w-3 h-3 text-grey-color-4 flex-shrink-0" />
       <span className="typo-caption-m text-grey-color-4">
         {likeCount}명에게 도움이 된 후기에요
@@ -382,10 +392,12 @@ export function StandardReviewLikes({
 interface StandardReviewRecommendProps
   extends React.HTMLAttributes<HTMLDivElement> {
   onRecommend?: () => void
+  likeCount?: number
 }
 
 export function StandardReviewRecommend({
   onRecommend,
+  likeCount = 0,
   className,
   ...props
 }: StandardReviewRecommendProps) {
@@ -394,6 +406,14 @@ export function StandardReviewRecommend({
       <Button variant="outlined-primary" size="small" onClick={onRecommend}>
         후기 추천하기
       </Button>
+      {likeCount > 0 && (
+        <div className="flex items-center gap-1 mt-1">
+          <ThumbsUp className="w-3 h-3 text-grey-color-4 flex-shrink-0" />
+          <span className="typo-caption-m text-grey-color-4">
+            {likeCount}명에게 도움이 된 후기에요
+          </span>
+        </div>
+      )}
     </div>
   )
 }
