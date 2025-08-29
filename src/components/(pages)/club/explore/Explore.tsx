@@ -265,7 +265,7 @@ export function Explore() {
               <div className="flex">
                 <Tab
                   options={SORT_OPTIONS}
-                  value={currentSort as 'recruit' | 'name' | 'popular'}
+                  value={currentSort as '모집중' | '이름순' | '인기순'}
                   onChange={(value) => setSort(value)}
                 />
               </div>
