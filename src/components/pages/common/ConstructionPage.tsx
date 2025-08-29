@@ -9,7 +9,7 @@ export default function ConstructionPage() {
         </h1>
         <div className="relative h-[252px] w-[454.759px]">
           <Image
-            src="/images/construction.png"
+            src="/images/construction.svg"
             alt="작업 중"
             fill
             className="object-contain"

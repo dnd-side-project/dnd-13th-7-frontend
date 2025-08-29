@@ -44,8 +44,7 @@ export function SideBar({
                 className={cn(
                   'block w-full py-3 px-5',
                   'cursor-pointer select-none',
-                  // 선택 상태
-                  'peer-data-[state=checked]:bg-white rounded-[4px]',
+                  'peer-data-[state=checked]:bg-white rounded-[8px]',
                 )}
               >
                 {o.label}

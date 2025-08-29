@@ -17,6 +17,9 @@ export const clubKeys = {
   recruit: (clubId: number | string) =>
     [...clubKeys.recruits(), clubId] as const,
   popular: () => [...clubKeys.all(), 'popular'] as const,
+  userSubscription: () => [...clubKeys.all(), 'user-subscription'] as const,
+  userSubscriptionCheck: (clubId: number) =>
+    [...clubKeys.userSubscription(), 'check', clubId] as const,
   searches: () => [...clubKeys.all(), 'searches'] as const,
   search: (params?: { keyword?: string }) =>
     [...clubKeys.searches(), params ?? {}] as const,

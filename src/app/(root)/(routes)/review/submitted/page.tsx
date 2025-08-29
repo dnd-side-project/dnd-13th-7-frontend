@@ -34,13 +34,14 @@ const ReviewSubmittedContent = () => {
             </h2>
             {reviewId ? (
               <div className="flex flex-col gap-4">
-                <Image
-                  src={'/images/cheerup.png'}
-                  width={285}
-                  height={211.5}
-                  alt="응원"
-                  className="w-[285px] h-[211.5px] mx-auto"
-                />
+                <div className="relative w-[285px] h-[211.5px] mx-auto">
+                  <Image
+                    src="/images/cheerup.svg"
+                    alt="프리미엄 리뷰 완료"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
                 <p className="typo-body-2-2-m text-grey-color-5">
                   프리미엄 리뷰 작성을 완료했습니다.
                   <br />
@@ -49,13 +50,14 @@ const ReviewSubmittedContent = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                <Image
-                  src={'/images/music.png'}
-                  width={494}
-                  height={222}
-                  alt="응원"
-                  className="w-[494px] h-[222px] mx-auto"
-                />
+                <div className="relative w-[494px] h-[222px] mx-auto">
+                  <Image
+                    src="/images/dance.svg"
+                    alt="일반 리뷰 완료"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
                 <p className="typo-body-2-2-m text-grey-color-5">
                   일반 리뷰 작성을 완료했습니다.
                   <br />

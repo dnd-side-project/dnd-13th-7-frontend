@@ -23,9 +23,9 @@ export default function Error({
         <h1 className="typo-main-title text-black-color">
           내용을 불러오지 못했어요..
         </h1>
-        <div className="relative h-[237px] w-[363.838px]">
+        <div className="relative h-[236px] w-[363.838px]">
           <Image
-            src="/images/sorry.png"
+            src="/images/sorry.svg"
             alt="에러"
             fill
             className="object-contain"

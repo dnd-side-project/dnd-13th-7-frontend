@@ -20,16 +20,24 @@ const CATEGORY_OPTIONS: SideOption[] = [
   { label: '개발', value: '개발' },
 ]
 
+// 히어로 이미지 매핑
+const HERO_IMAGES = {
+  all: '/images/heroAll.svg',
+  기획: '/images/heroPlanning.svg',
+  디자인: '/images/heroDesign.svg',
+  개발: '/images/heroDevelop.svg',
+} as const
+
 const SORT_OPTIONS: TabOption[] = [
-  { label: '모집중', value: 'recruit' },
-  { label: '이름순', value: 'name' },
-  { label: '인기순', value: 'popular' },
+  { label: '모집중', value: '모집중' },
+  { label: '이름순', value: '이름순' },
+  { label: '인기순', value: '인기순' },
 ]
 
 const PART_OPTIONS: Group[] = [
   {
     title: '전체',
-    options: [{ label: '전체', value: '전체' }],
+    options: [{ label: '전체', value: 'all' }],
   },
   {
     title: '기획',
@@ -54,7 +62,7 @@ const WAY_OPTIONS: Group[] = [
   {
     title: '활동 방식',
     options: [
-      { label: '전체', value: '전체' },
+      { label: '전체', value: 'all' },
       { label: '온라인', value: '온라인' },
       { label: '오프라인', value: '오프라인' },
     ],
@@ -65,7 +73,7 @@ const TARGET_OPTIONS: Group[] = [
   {
     title: '모집 대상',
     options: [
-      { label: '전체', value: '전체' },
+      { label: '전체', value: 'all' },
       { label: '대학생', value: '대학생' },
       { label: '직장인', value: '직장인' },
     ],
@@ -81,38 +89,74 @@ export function Explore() {
   const [target, setTarget] = useQueryState('target')
 
   const currentField = React.useMemo(() => field || 'all', [field])
-  const currentSort = React.useMemo(() => sort || 'popular', [sort])
+  const currentSort = React.useMemo(() => sort || '인기순', [sort])
 
-  const partArray = React.useMemo(
-    () => (part ? part.split(',').filter(Boolean) : []),
-    [part],
-  )
-  const wayArray = React.useMemo(
-    () => (way ? way.split(',').filter(Boolean) : []),
-    [way],
-  )
-  const targetArray = React.useMemo(
-    () => (target ? target.split(',').filter(Boolean) : []),
-    [target],
-  )
+  const partArray = React.useMemo(() => {
+    if (part === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      return ['all']
+    }
+    if (part === null || part === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      return []
+    }
+    return part ? part.split(',').filter(Boolean) : []
+  }, [part])
+  const wayArray = React.useMemo(() => {
+    if (way === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      return ['all']
+    }
+    if (way === null || way === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      return []
+    }
+    return way ? way.split(',').filter(Boolean) : []
+  }, [way])
+  const targetArray = React.useMemo(() => {
+    if (target === 'all') {
+      // "전체" 선택 시 ['all'] 반환
+      return ['all']
+    }
+    if (target === null || target === undefined) {
+      // 초기 상태 또는 선택 없음 시 빈 배열 반환
+      return []
+    }
+    return target ? target.split(',').filter(Boolean) : []
+  }, [target])
 
   const handlePartChange = React.useCallback(
     (values: string[]) => {
-      setPart(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        setPart('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        setPart(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setPart],
   )
 
   const handleWayChange = React.useCallback(
     (values: string[]) => {
-      setWay(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        setWay('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        setWay(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setWay],
   )
 
   const handleTargetChange = React.useCallback(
     (values: string[]) => {
-      setTarget(values.length > 0 ? values.join(',') : null)
+      // "전체" 선택 시 특별한 값 "all" 사용
+      if (values.includes('all')) {
+        setTarget('all') // "전체" 선택 시 "all"로 설정
+      } else {
+        setTarget(values.length > 0 ? values.join(',') : null)
+      }
     },
     [setTarget],
   )
@@ -121,22 +165,17 @@ export function Explore() {
     router.replace('/club/explore')
   }, [router])
 
+  const mapCategory = (category: string): string => {
+    return category
+  }
+
   const queryParams = {
     page: 0,
     size: 10,
-    field: currentField !== 'all' ? currentField : undefined,
-    part:
-      partArray.filter((p) => p !== 'all').length > 0
-        ? partArray.filter((p) => p !== 'all').join(',')
-        : undefined,
-    way:
-      wayArray.filter((w) => w !== 'all').length > 0
-        ? wayArray.filter((w) => w !== 'all').join(',')
-        : undefined,
-    target:
-      targetArray.filter((t) => t !== 'all').length > 0
-        ? targetArray.filter((t) => t !== 'all').join(',')
-        : undefined,
+    field: currentField !== 'all' ? mapCategory(currentField) : undefined,
+    part: part && part !== 'all' ? part : undefined,
+    way: way && way !== 'all' ? way : undefined,
+    target: target && target !== 'all' ? target : undefined,
     sort: currentSort,
   }
 
@@ -156,12 +195,15 @@ export function Explore() {
   return (
     <div className="min-h-screen bg-[var(--moyeoit-light-1)]">
       {/* 히어로 섹션 */}
-      <div className="bg-[#5846CB] text-white h-[200px] lg:h-100 flex items-end justify-center px-5 py-18 -mt-20">
-        <div className="max-w-7xl w-full relative z-10">
-          <h1 className="text-[22px] lg:text-4xl font-bold text-left uppercase">
-            {fieldLabel}
-          </h1>
-        </div>
+      <div className="relative h-[200px] lg:h-100 flex items-end justify-center px-5 py-18 -mt-20 overflow-hidden">
+        {/* 배경 이미지 */}
+        <Image
+          src={HERO_IMAGES[currentField as keyof typeof HERO_IMAGES]}
+          alt={`${fieldLabel} 히어로 이미지`}
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
 
       {/* 메인 컨텐츠  */}

@@ -1,12 +1,14 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import VisuallyHidden from '@/components/molecules/a11y/VisuallyHidden'
 import {
   Dialog,
   DialogContent,
   DialogTitle,
 } from '@/components/molecules/dialog'
+import AppPath from '@/shared/configs/appPath'
 import useSearchUrlState from '@/shared/hooks/useSearchUrlState'
 import SearchCore from './SearchCore'
 
@@ -20,6 +22,14 @@ export default function MobileSearchSheet({
   onOpenChange,
 }: MobileSearchSheetProps) {
   const { keyword, setKeyword } = useSearchUrlState()
+
+  const router = useRouter()
+
+  const handleSelect = (clubId: number) => {
+    onOpenChange(false)
+    router.push(AppPath.clubDetail(clubId.toString()))
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -35,6 +45,7 @@ export default function MobileSearchSheet({
           placeholder="검색어를 입력해주세요"
           keyword={keyword}
           onKeywordChange={setKeyword}
+          onSelect={handleSelect}
         />
       </DialogContent>
     </Dialog>

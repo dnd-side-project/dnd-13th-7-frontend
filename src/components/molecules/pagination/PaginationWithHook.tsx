@@ -41,7 +41,7 @@ export function PaginationWithHook({
     <div className="flex flex-col items-center gap-4">
       <div className="text-center">
         <p className="text-body-2 text-grey-color-5">
-          현재 페이지: {currentPage} / {totalPages}
+          {/* 현재 페이지: {currentPage} / {totalPages} */}
         </p>
       </div>
 

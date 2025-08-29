@@ -29,6 +29,7 @@ export interface ClubDetailsData {
     recruiting: boolean
     imageUrl: string | null
     process: string[]
+    significant: string
   }
   activities: ClubActivity[]
   clubSchedules: ClubSchedule[]
@@ -104,6 +105,13 @@ export interface SubscriptionResponse {
 
 export type ClubSubscriptionResponse = ApiResponse<SubscriptionResponse>
 
+// User subscription check types
+export interface UserSubscriptionCheckData {
+  isSubscribed: boolean
+}
+
+export type UserSubscriptionCheckResponse =
+  ApiResponse<UserSubscriptionCheckData>
 // Search types
 export interface ClubSearchRequest {
   keyword?: string

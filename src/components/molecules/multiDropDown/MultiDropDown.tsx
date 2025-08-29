@@ -17,8 +17,8 @@ export type Group = { title?: string; options: Option[] }
 
 function summarize(labels: string[], maxShown = 2, empty = '선택') {
   if (labels.length === 0) return empty
-  if (labels.length <= maxShown) return labels.join(', ')
-  return `${labels.slice(0, maxShown).join(', ')} 외 ${labels.length - maxShown}`
+  if (labels.length <= maxShown) return labels.join(',')
+  return `${labels.slice(0, maxShown).join(',')} 외 ${labels.length - maxShown}`
 }
 
 const triggerVariants = cva(
@@ -67,8 +67,14 @@ const MultiDropDown: React.FC<Props> = ({
   const [inner, setInner] = React.useState<string[]>(defaultValue)
   const selected = isControlled ? value! : inner
 
+  // 디버깅용 로그
+  console.log('MultiDropDown Props:', { value, isControlled, inner, selected })
+
   const allOptions = React.useMemo(
-    () => groups.flatMap((g) => g.options.map((o) => o.value)),
+    () =>
+      groups
+        .flatMap((g) => g.options.map((o) => o.value))
+        .filter((v) => v !== 'all'),
     [groups],
   )
 
@@ -84,7 +90,9 @@ const MultiDropDown: React.FC<Props> = ({
 
   const setSelected = React.useCallback(
     (next: string[]) => {
-      if (!isControlled) setInner(next)
+      if (!isControlled) {
+        setInner(next)
+      }
       onChange?.(next)
     },
     [isControlled, onChange],
@@ -92,16 +100,36 @@ const MultiDropDown: React.FC<Props> = ({
 
   const toggleOne = React.useCallback(
     (val: string, next: boolean) => {
+      console.log('toggleOne called:', { val, next, selected, allOptions })
+
       if (val === 'all' && next) {
-        setSelected(allOptions)
+        // "전체" 선택 시 모든 옵션 선택
+        const newSelection = [...allOptions, 'all']
+        console.log('Setting all selected:', newSelection)
+        setSelected(newSelection)
       } else if (val === 'all' && !next) {
+        // "전체" 해제 시 모든 선택 해제
+        console.log('Clearing all selections')
         setSelected([])
       } else {
-        setSelected(
-          next
-            ? [...new Set([...selected, val])]
-            : selected.filter((v) => v !== val),
-        )
+        // 개별 옵션 선택/해제
+        let newSelected: string[]
+
+        if (next) {
+          // 옵션 선택 시 - "all"이 있으면 제거하고 개별 옵션 추가
+          newSelected = [...selected.filter((v) => v !== 'all'), val]
+        } else {
+          // 옵션 해제 시 - "all"이 있으면 제거하고 해당 옵션도 제거
+          newSelected = selected.filter((v) => v !== val && v !== 'all')
+        }
+
+        // 모든 개별 옵션이 선택되었으면 "all" 추가
+        if (newSelected.length === allOptions.length) {
+          newSelected.push('all')
+        }
+
+        console.log('Setting individual selections:', newSelected)
+        setSelected(newSelected)
       }
     },
     [selected, setSelected, allOptions],
@@ -122,15 +150,25 @@ const MultiDropDown: React.FC<Props> = ({
     })
   }, [groups, selected])
 
-  const total = allOptions.length
-  const count = selected.length
-  const showAllLabel = count === total
+  const isAllSelected = selected.includes('all')
+  const showAllLabel = isAllSelected
   const hasSelected = selected.length > 0
 
-  const selectedLabels = React.useMemo(
-    () => selected.map((v) => valueToLabel.get(v) || v),
-    [selected, valueToLabel],
-  )
+  // 디버깅용 로그
+  console.log('MultiDropDown State:', {
+    selected,
+    allOptions,
+    isAllSelected,
+    hasSelected,
+    showAllLabel,
+  })
+
+  const selectedLabels = React.useMemo(() => {
+    if (isAllSelected) {
+      return ['전체']
+    }
+    return selected.map((v) => valueToLabel.get(v) || v)
+  }, [selected, valueToLabel, isAllSelected])
 
   const summary = React.useMemo(
     () =>
@@ -206,9 +244,10 @@ const MultiDropDown: React.FC<Props> = ({
                       label={o.label}
                       checked={
                         o.value === 'all'
-                          ? selected.length === allOptions.length &&
-                            allOptions.length > 0
-                          : selected.includes(o.value)
+                          ? selected.includes('all')
+                          : selected.includes(o.value) ||
+                            (selected.includes('all') &&
+                              allOptions.includes(o.value))
                       }
                       onChange={(next) => toggleOne(o.value, next as boolean)}
                     />
