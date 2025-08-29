@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Bell } from 'lucide-react'
+// import { Bell } from 'lucide-react'
 import Image from 'next/image'
 import { SubscriptionButton } from '@/components/atoms/SubscriptionButton'
 import { useToggleClubSubscription } from '@/features/clubs/mutations'
@@ -113,13 +113,12 @@ export default function Detail({ clubId }: DetailProps) {
             <div className="typo-title-1">{clubDetails.club.name}</div>
           </div>
 
-          {/* 구독 버튼 */}
+          {/* 구독 버튼
           <SubscriptionButton
             icon={<Bell size={20} />}
             isSubscribed={isSubscribed}
             onClick={handleSubscribe}
           />
-        </div>
 
         {/* 슬로건 */}
         <div className="bg-white rounded-[16px] py-4 mb-12">

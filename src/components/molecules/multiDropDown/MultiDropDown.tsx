@@ -67,6 +67,9 @@ const MultiDropDown: React.FC<Props> = ({
   const [inner, setInner] = React.useState<string[]>(defaultValue)
   const selected = isControlled ? value! : inner
 
+  // 디버깅용 로그
+  console.log('MultiDropDown Props:', { value, isControlled, inner, selected })
+
   const allOptions = React.useMemo(
     () =>
       groups
@@ -97,6 +100,8 @@ const MultiDropDown: React.FC<Props> = ({
 
   const toggleOne = React.useCallback(
     (val: string, next: boolean) => {
+      console.log('toggleOne called:', { val, next, selected, allOptions })
+
       if (val === 'all' && next) {
         // "전체" 선택 시 모든 옵션 선택
         const newSelection = [...allOptions, 'all']
@@ -145,7 +150,6 @@ const MultiDropDown: React.FC<Props> = ({
   const isAllSelected = selected.includes('all')
   const showAllLabel = isAllSelected
   const hasSelected = selected.length > 0
-
   const selectedLabels = React.useMemo(() => {
     if (isAllSelected) {
       return ['전체']
