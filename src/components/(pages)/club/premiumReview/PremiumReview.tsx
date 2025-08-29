@@ -251,6 +251,7 @@ export default function PremiumReview({
                   className="group cursor-pointer border border-light-color-3 rounded-[16px] transition-all duration-300 w-170 h-50"
                 >
                   <Card.Image
+                    logoUrl={review.imageUrl || ''}
                     alt={review.title}
                     interactive
                     className="transition-transform duration-300 ease-out w-56 h-38"

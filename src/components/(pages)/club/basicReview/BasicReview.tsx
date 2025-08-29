@@ -251,12 +251,6 @@ export default function BasicReview({
         {basicReviewsData?.content && basicReviewsData.content.length > 0 ? (
           <div className="space-y-4">
             {basicReviewsData.content.map((review, index) => {
-              console.log(`📝 리뷰 ${index + 1} 렌더링:`, {
-                reviewId: review.reviewId,
-                clubName: review.clubName,
-                likeCount: review.likeCount,
-              })
-
               return (
                 <StandardReview
                   key={review.reviewId || index}
@@ -272,7 +266,7 @@ export default function BasicReview({
                         profileImage={review.position}
                       />
                       <StandardReview.Questions
-                        questions={review.qaPreviews.map((qa) => ({
+                        questions={review.qaPreviews.slice(0, 3).map((qa) => ({
                           question: qa.questionTitle,
                           answers: [qa.answerValue],
                         }))}
