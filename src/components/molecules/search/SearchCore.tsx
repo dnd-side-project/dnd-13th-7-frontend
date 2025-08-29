@@ -106,7 +106,14 @@ export function SearchCore(props: SearchCoreProps) {
                   요청해주시면 빠르게 확인해드릴게요.
                 </p>
               </div>
-              <Button variant="solid" size="small">
+              <Button
+                variant="solid"
+                size="small"
+                onClick={() => {
+                  window.location.href =
+                    'https://docs.google.com/forms/d/e/1FAIpQLSc7dWNU-ghxS1Ajwpk4P2VLMj-6wk7ohOF-BsbqvuvcrZGLKw/viewform'
+                }}
+              >
                 <span className="typo-caption-m">IT 동아리 등록 요청</span>
               </Button>
             </div>
