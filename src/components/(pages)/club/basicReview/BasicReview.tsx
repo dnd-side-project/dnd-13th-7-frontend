@@ -8,7 +8,6 @@ import { PaginationWithHook } from '@/components/molecules/pagination'
 import { StandardReview } from '@/components/molecules/standardReview'
 import { Tab, type TabOption } from '@/components/molecules/tab/Tab'
 import { ClubRecruitsData } from '@/features/clubs/types'
-import { useToggleLike } from '@/features/like'
 import { useClubBasicReviews } from '@/features/review/queries'
 import useQueryState from '@/shared/hooks/useQueryState'
 import { formatDateToYYMMDD } from '@/shared/utils'
@@ -131,35 +130,8 @@ export default function BasicReview({
     hasData: !!basicReviewsData?.content,
   })
 
-  // 좋아요 뮤테이션 (구독 기능처럼 구현)
-  const toggleLikeMutation = useToggleLike()
-
-  const handleLikeToggle = async (reviewId: number) => {
-    try {
-      console.log('🎯 좋아요 토글 시도:', reviewId)
-      await toggleLikeMutation.mutateAsync({
-        reviewId: reviewId.toString(),
-        reviewType: 'BASIC',
-      })
-      console.log('✅ 좋아요 토글 성공')
-    } catch (error) {
-      console.error('❌ 좋아요 토글 실패:', error)
-    }
-  }
-
-  const handleRecommend = async (reviewId: number) => {
-    try {
-      console.log('🎯 후기 추천하기 클릭!')
-      console.log('📋 추천할 리뷰 ID:', reviewId)
-
-      await toggleLikeMutation.mutateAsync({
-        reviewId: reviewId.toString(),
-        reviewType: 'BASIC',
-      })
-      console.log('✅ 후기 추천 성공')
-    } catch (error) {
-      console.error('❌ 후기 추천 실패:', error)
-    }
+  const handleRecommend = () => {
+    console.log('후기 추천하기 클릭')
   }
 
   const SORT_OPTIONS: TabOption[] = [
@@ -314,17 +286,17 @@ export default function BasicReview({
                         date={`작성날짜 (${formatDateToYYMMDD(review.createdAt)})`}
                       />
                       <StandardReview.Content
-                        title={review.oneLineComment}
-                        content={review.impressiveContentPreview}
+                        title={review.qaPreviews[3]?.answerValue || ''}
+                        content={review.qaPreviews[4]?.answerValue || ''}
                       />
                     </StandardReview.Right>
                   </div>
 
                   <StandardReview.Bottom>
-                    <StandardReview.Recommend
-                      onRecommend={() => handleRecommend(review.reviewId)}
-                      likeCount={review.likeCount}
+                    <StandardReview.Likes
+                      likeCount={review.likeCount ? review.likeCount : 0}
                     />
+                    <StandardReview.Recommend onRecommend={handleRecommend} />
                   </StandardReview.Bottom>
                 </StandardReview>
               )
