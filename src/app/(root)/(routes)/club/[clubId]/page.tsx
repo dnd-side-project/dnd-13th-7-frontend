@@ -37,12 +37,16 @@ export default async function Page({
             {
               value: '일반 후기',
               label: '일반 후기',
-              content: <BasicReview recruitsData={recruitsData} />,
+              content: (
+                <BasicReview recruitsData={recruitsData} clubId={clubId} />
+              ),
             },
             {
-              value: '프리미엄 리뷰',
-              label: '프리미엄 리뷰',
-              content: <PremiumReview recruitsData={recruitsData} />,
+              value: '프리미엄 후기',
+              label: '프리미엄 후기',
+              content: (
+                <PremiumReview recruitsData={recruitsData} clubId={clubId} />
+              ),
             },
           ]}
         />

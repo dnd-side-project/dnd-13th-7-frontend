@@ -4,13 +4,22 @@ import * as React from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { cn } from '@/shared/utils/cn'
 
-export type Tab = 'recruit' | 'name' | 'popular'
+export type Tab =
+  | 'recruit'
+  | 'name'
+  | 'popular'
+  | 'latest'
+  | '모집중'
+  | '이름순'
+  | '인기순'
+  | '최신순'
 export type TabOption = { label: string; value: Tab; disabled?: boolean }
 
 const OPTIONS: TabOption[] = [
   { label: '모집중', value: 'recruit' },
   { label: '이름순', value: 'name' },
   { label: '인기순', value: 'popular' },
+  { label: '최신순', value: 'latest' },
 ]
 
 export type TabProps = {
@@ -24,7 +33,9 @@ export type TabProps = {
 function Tab({
   options = OPTIONS,
   value,
-  defaultValue = options[2].value,
+  defaultValue = options.find((option) => option.value === 'popular')?.value ||
+    options[0]?.value ||
+    'popular',
   onChange,
   className,
 }: TabProps) {
