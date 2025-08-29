@@ -115,6 +115,7 @@ export default function HomePage() {
                       className="group cursor-pointer relative"
                     >
                       <Card.Image
+                        logoUrl={review.imageUrl}
                         alt={review.title}
                         interactive
                         className="transition-transform duration-300 ease-out"

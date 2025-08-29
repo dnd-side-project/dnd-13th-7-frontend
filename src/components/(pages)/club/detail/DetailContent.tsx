@@ -163,7 +163,7 @@ export default function DetailContent({ clubId }: DetailContentProps) {
                   size="none"
                   color={schedule.period === '공통' ? 'purple' : 'lightPurple'}
                   label={`${schedule.periodValue}주차`}
-                  className="w-16 h-8 px-3 py-1 mr-4 rounded-full typo-body-3-b"
+                  className="min-w-[64px] w-fit h-8 px-3 py-1 mr-4 rounded-full typo-body-3-b"
                 />
                 <div className="typo-body-3-3-r">{schedule.activity}</div>
               </div>
