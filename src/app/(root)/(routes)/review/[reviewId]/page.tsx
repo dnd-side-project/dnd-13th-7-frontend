@@ -111,14 +111,21 @@ export default function Page({
                   {reviewDetail.reviewCategory === ReviewCategory.Activity &&
                     '활동'}
                 </span>
-                <span className="typo-title-3 text-black-color">·</span>
-                <span className="typo-title-3 text-main-color-1">
-                  {' '}
-                  {reviewDetail.resultType === ResultType.Pass
-                    ? '합격'
-                    : '불합격'}{' '}
-                  후기
-                </span>
+                {reviewDetail.reviewCategory !== ReviewCategory.Activity && (
+                  <>
+                    <span className="typo-title-3 text-black-color">·</span>
+                    <span className="typo-title-3 text-main-color-1">
+                      {' '}
+                      {reviewDetail.resultType === ResultType.Pass
+                        ? '합격'
+                        : '불합격'}{' '}
+                      후기
+                    </span>
+                  </>
+                )}
+                {reviewDetail.reviewCategory === ReviewCategory.Activity && (
+                  <span className="typo-title-3 text-main-color-1"> 후기</span>
+                )}
               </div>
               {/* 그림자용 가상 요소 */}
               <div className="absolute inset-0 rounded-tr-4xl rounded-b-4xl shadow-xs pointer-events-none top-[55px] z-[5]" />

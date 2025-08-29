@@ -35,6 +35,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const token = tokenCookies.getAccessToken()
     const userIdStr = tokenCookies.getUserId()
     const isTokenValid = tokenCookies.isTokenValid()
+    const expiresAt = tokenCookies.getExpiresAt()
+
+    // console.log('🔍 AuthProvider 초기화 디버깅:', {
+    //   token: token ? `존재 (${token.substring(0, 10)}...)` : '없음',
+    //   userId: userIdStr,
+    //   isTokenValid,
+    //   expiresAt: expiresAt ? new Date(expiresAt).toLocaleString() : '없음',
+    //   currentTime: new Date().toLocaleString(),
+    //   timeDiff: expiresAt
+    //     ? Math.floor((expiresAt - Date.now()) / 1000 / 60)
+    //     : 'N/A', // 분 단위
+    // })
 
     if (token && userIdStr && isTokenValid) {
       const userData = {
@@ -43,6 +55,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       setAccessToken(token)
       setUser(userData)
+      // console.log('✅ 사용자 로그인 상태로 설정됨:', userData)
+    } else {
+      // console.log('❌ 토큰이 유효하지 않음:', {
+      //   hasToken: !!token,
+      //   hasUserId: !!userIdStr,
+      //   isTokenValid,
+      //   reason: !token
+      //     ? '토큰 없음'
+      //     : !userIdStr
+      //       ? '사용자 ID 없음'
+      //       : !isTokenValid
+      //         ? '토큰 만료'
+      //         : '알 수 없음',
+      // })
     }
     // 토큰이 만료되어도 쿠키는 유지 (로그아웃 시에만 삭제)
 

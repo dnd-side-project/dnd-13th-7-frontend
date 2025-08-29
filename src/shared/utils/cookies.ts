@@ -162,15 +162,14 @@ export const tokenCookies = {
   // 토큰이 유효한지 확인
   isTokenValid: (): boolean => {
     const token = getCookie('access_token')
-    const expiresAt = getCookie('expires_at')
+    // const expiresAt = getCookie('expires_at')
 
-    if (!token || !expiresAt) {
+    // 토큰이 없으면 유효하지 않음
+    if (!token) {
+      // console.log('🔍 isTokenValid: 토큰이 없음')
       return false
     }
 
-    const now = Date.now()
-    const expires = parseInt(expiresAt)
-
-    return now < expires
+    return true
   },
 }
