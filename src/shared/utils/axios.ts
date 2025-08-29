@@ -29,10 +29,10 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // 401 에러 시 토큰이 만료된 것으로 간주하고 쿠키 정리
+    // 401 에러 시 토큰은 유지하고 에러만 반환
+    // 토큰 삭제는 로그아웃 시에만 수행
     if (error.response?.status === 401) {
-      tokenCookies.clearAll()
-      // 로그인 페이지로 리다이렉트 (브라우저 환경에서만)
+      // 토큰이 만료되었을 수 있으므로 로그인 페이지로 리다이렉트
       if (typeof window !== 'undefined') {
         window.location.href = AppPath.login()
       }

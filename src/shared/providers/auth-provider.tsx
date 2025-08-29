@@ -43,10 +43,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       setAccessToken(token)
       setUser(userData)
-    } else if (!isTokenValid && token) {
-      // 토큰이 만료된 경우 쿠키 정리
-      tokenCookies.clearAll()
     }
+    // 토큰이 만료되어도 쿠키는 유지 (로그아웃 시에만 삭제)
 
     setIsLoading(false)
   }, [])
