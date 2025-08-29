@@ -4,8 +4,8 @@ import {
   getClubRecruits,
   getClubs,
   searchClubs,
-  // checkUserSubscription,
   checkUserSubscription,
+  searchClubs
 } from './api'
 import { clubKeys } from './keys'
 import {
@@ -14,8 +14,6 @@ import {
   UserSubscriptionCheckData,
   ClubSearchResponse,
 } from './types'
-
-// import { getClubDetails, getClubRecruits, getClubs, searchClubs } from './api'
 
 export const clubQueries = {
   list: (params?: {
