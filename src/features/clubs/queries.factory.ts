@@ -5,6 +5,7 @@ import {
   getClubs,
   searchClubs,
   // checkUserSubscription,
+  checkUserSubscription,
 } from './api'
 import { clubKeys } from './keys'
 import {
@@ -50,12 +51,12 @@ export const clubQueries = {
       queryFn: () => getClubRecruits(clubId),
       enabled: Boolean(clubId),
     }),
-  // userSubscriptionCheck: (clubId: number) =>
-  //   queryOptions<UserSubscriptionCheckData>({
-  //     queryKey: clubKeys.userSubscriptionCheck(clubId),
-  //     queryFn: () => checkUserSubscription(clubId),
-  //     enabled: Boolean(clubId),
-  //   }),
+  userSubscriptionCheck: (clubId: number) =>
+    queryOptions<UserSubscriptionCheckData>({
+      queryKey: clubKeys.userSubscriptionCheck(clubId),
+      queryFn: () => checkUserSubscription(clubId),
+      enabled: Boolean(clubId),
+    }),
   search: (params?: { keyword?: string }) =>
     queryOptions<ClubSearchResponse['data']>({
       queryKey: clubKeys.search(params),

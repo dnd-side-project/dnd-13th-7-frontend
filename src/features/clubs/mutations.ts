@@ -4,6 +4,7 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query'
+import { subscribeKeys } from '@/features/subscribe/keys'
 import apiClient from '@/shared/utils/axios'
 import { clubKeys } from './keys'
 import { UserSubscriptionCheckData } from './types'
@@ -43,21 +44,21 @@ export function useToggleClubSubscription(
 
   return useMutation({
     mutationFn: async (clubId: number) => {
-      console.log('구독 토글 API 호출:', clubId)
       const { data } = await apiClient.post(`/api/v1/clubs/${clubId}/subscribe`)
-      console.log('구독 토글 API 응답:', data)
       return data
     },
     onSuccess: (data, clubId, context) => {
-      console.log('구독 토글 성공, 쿼리 무효화:', clubId)
-      // 구독 상태 확인 쿼리 무효화
       queryClient.invalidateQueries({
         queryKey: clubKeys.userSubscriptionCheck(clubId),
       })
+
+      queryClient.invalidateQueries({
+        queryKey: subscribeKeys.userSubscribes(),
+      })
+
       options?.onSuccess?.(data, clubId, context as never)
     },
     onError: (error, clubId, context) => {
-      console.error('구독 토글 실패:', error, clubId)
       options?.onError?.(error, clubId, context as never)
     },
     ...options,

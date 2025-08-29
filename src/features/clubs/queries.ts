@@ -43,11 +43,11 @@ export function usePopularClubs(): UseQueryResult<ClubsPage, Error> {
   return useQuery(clubQueries.popular())
 }
 
-// export function useUserSubscriptionCheck(
-//   clubId: number,
-// ): UseQueryResult<UserSubscriptionCheckData, Error> {
-//   return useQuery(clubQueries.userSubscriptionCheck(clubId))
-// }
+export function useUserSubscriptionCheck(
+  clubId: number,
+): UseQueryResult<UserSubscriptionCheckData, Error> {
+  return useQuery(clubQueries.userSubscriptionCheck(clubId))
+}
 export function useClubsSearch(params?: {
   keyword?: string
 }): UseQueryResult<ClubSearchResponse['data'], Error> {

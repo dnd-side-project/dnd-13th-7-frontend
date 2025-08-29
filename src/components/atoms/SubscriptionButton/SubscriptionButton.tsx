@@ -24,10 +24,11 @@ export function SubscriptionButton({
   const [isHovered, setIsHovered] = React.useState(false)
 
   const handleClick = () => {
-    if (isSubscribed) {
-      setIsHovered(false)
-    }
     onClick?.()
+  }
+
+  const getButtonText = () => {
+    return isSubscribed ? '구독중' : '구독'
   }
 
   return (
@@ -35,7 +36,7 @@ export function SubscriptionButton({
       variant="outlined-primary"
       size="small"
       onClick={handleClick}
-      onMouseEnter={() => !isSubscribed && setIsHovered(true)}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       disabled={disabled}
       className={cn(
@@ -44,10 +45,9 @@ export function SubscriptionButton({
         !isSubscribed &&
           !isHovered && ['!bg-white !border-main-color-1 !text-main-color-1'],
         // 호버 상태
-        !isSubscribed &&
-          isHovered && [
-            '!bg-main-color-3 !border-main-color-1 !text-main-color-1',
-          ],
+        isHovered && [
+          '!bg-main-color-3 !border-main-color-1 !text-main-color-1',
+        ],
         // 구독중
         isSubscribed && ['!bg-white !border-light-color-3 !text-black-color'],
         className,
@@ -56,7 +56,7 @@ export function SubscriptionButton({
       {icon && (
         <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
       )}
-      {children}
+      {getButtonText()}
     </Button>
   )
 }

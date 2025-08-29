@@ -107,7 +107,7 @@ export type ClubSubscriptionResponse = ApiResponse<SubscriptionResponse>
 
 // User subscription check types
 export interface UserSubscriptionCheckData {
-  isSubscribed: boolean
+  subscribed: boolean
 }
 
 export type UserSubscriptionCheckResponse =
