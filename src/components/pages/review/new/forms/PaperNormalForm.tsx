@@ -148,10 +148,12 @@ export default function PaperNormalForm() {
                         <SelectValue placeholder="선택하기" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1">기획</SelectItem>
-                        <SelectItem value="2">디자인</SelectItem>
-                        <SelectItem value="3">개발</SelectItem>
-                        <SelectItem value="4">마케팅</SelectItem>
+                        <SelectItem value="1">PM/PO</SelectItem>
+                        <SelectItem value="2">프로덕트 디자이너</SelectItem>
+                        <SelectItem value="3">프론트엔드 개발자</SelectItem>
+                        <SelectItem value="4">백엔드 개발자</SelectItem>
+                        <SelectItem value="5">iOS 개발자</SelectItem>
+                        <SelectItem value="6">안드로이드 개발자</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
