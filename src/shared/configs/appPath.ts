@@ -18,9 +18,10 @@ const AppPath = {
   reviewExplore: () => '/review/explore' as const,
   reviewDetail: (reviewId: string) => `/review/${reviewId}` as const,
   reviewNew: (
-    kind: 'paper' | 'interview' | 'activity',
+    kind?: 'paper' | 'interview' | 'activity',
     type?: 'normal' | 'premium',
-  ) => `/review/new/${kind}${type ? `/${type}` : ''}` as const,
+  ) =>
+    `/review/new/${kind ? `/${kind}` : ''}${type ? `/${type}` : ''}` as const,
   reviewEdit: (reviewId: string) => `/review/${reviewId}/edit` as const,
   reviewSubmitted: () => '/review/submitted' as const,
 } as const
