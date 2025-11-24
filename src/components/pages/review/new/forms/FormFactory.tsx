@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import PaperForm from './paper'
-import InterviewForm from './interview'
 import ActivityForm from './activity'
+import InterviewForm from './interview'
+import PaperForm from './paper'
 
 export type FormKind = 'paper' | 'interview' | 'activity'
 

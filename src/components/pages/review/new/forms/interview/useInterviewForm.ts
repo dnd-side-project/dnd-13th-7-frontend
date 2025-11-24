@@ -74,16 +74,11 @@ const InterviewFormSchema = z.object({
   // Step 1
   resultType: z.string().min(1, '면접 결과를 선택해주세요'),
   rate: appValidation.rating('면접 총평을 선택해주세요'),
-  q1QuestionType: z
-    .array(z.number())
-    .min(1, '최소 1개 이상 선택해주세요'),
-  q2InterviewerAttitude: appValidation.requiredNumber(
-    '면접관 태도를 선택해주세요',
-  ),
+  q1QuestionType: z.array(z.number()).min(1, '최소 1개 이상 선택해주세요'),
+  q2InterviewerAttitude:
+    appValidation.requiredNumber('면접관 태도를 선택해주세요'),
   q3MainTopic: appValidation.requiredNumber('주요 논의 주제를 선택해주세요'),
-  q4EmphasizedSkill: appValidation.requiredNumber(
-    '어필한 역량을 선택해주세요',
-  ),
+  q4EmphasizedSkill: appValidation.requiredNumber('어필한 역량을 선택해주세요'),
 
   // Step 2
   oneLineComment: appValidation.oneLineText(30, '한줄평을 입력해주세요'),
