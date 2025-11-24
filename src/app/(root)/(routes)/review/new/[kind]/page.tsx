@@ -1,132 +1,74 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { DocumentPencilIcon, DocumentDiamondIcon } from '@/assets/icons'
+'use client'
 
-const validKinds = ['paper', 'interview', 'activity'] as const
+import { Suspense, useEffect, useState } from 'react'
+import { notFound, redirect } from 'next/navigation'
+import {
+  FormFactory,
+  isValidFormKind,
+  type FormKind,
+} from '@/components/pages/review/new/forms'
+import AppPath from '@/shared/configs/appPath'
+import { useAuth } from '@/shared/providers/auth-provider'
 
-export async function generateMetadata({
-  params,
-}: {
+interface PageProps {
   params: Promise<{ kind: string }>
-}): Promise<Metadata> {
-  const { kind } = await params
-  const isValidKind = (validKinds as readonly string[]).includes(kind)
-
-  if (!isValidKind) {
-    return {
-      title: '페이지를 찾을 수 없습니다',
-    }
-  }
-
-  const getKindDisplayName = (kind: string) => {
-    switch (kind) {
-      case 'paper':
-        return '서류'
-      case 'interview':
-        return '인터뷰/면접'
-      case 'activity':
-        return '활동'
-      default:
-        return kind
-    }
-  }
-
-  const kindName = getKindDisplayName(kind)
-
-  return {
-    title: `${kindName} 후기 작성`,
-    description: `IT 동아리 ${kindName} 후기를 작성해보세요. 일반 후기와 프리미엄 후기 중 선택하여 경험을 공유하고 다른 분들에게 도움을 주세요.`,
-    keywords: [`IT 동아리 ${kindName} 후기`, '동아리 후기 작성', '경험 공유'],
-    openGraph: {
-      title: `${kindName} 후기 작성 | 모여잇`,
-      description: `IT 동아리 ${kindName} 후기를 작성해보세요. 일반 후기와 프리미엄 후기 중 선택하여 경험을 공유하고 다른 분들에게 도움을 주세요.`,
-    },
-  }
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ kind: string }>
-}) {
-  const { kind } = await params
-  const isValidKind = (validKinds as readonly string[]).includes(kind)
-  if (!isValidKind) {
-    notFound()
+export default function Page({ params }: PageProps) {
+  const { user, isLoading } = useAuth()
+  const [formKind, setFormKind] = useState<FormKind | null>(null)
+
+  useEffect(() => {
+    async function loadParams() {
+      const { kind } = await params
+
+      if (!isValidFormKind(kind)) {
+        notFound()
+      }
+
+      setFormKind(kind as FormKind)
+    }
+
+    loadParams()
+  }, [params])
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      redirect(AppPath.login())
+    }
+  }, [user, isLoading])
+
+  if (isLoading || !user) {
+    return (
+      <main className="">
+        <div className="max-w-[800px] mx-auto pt-20">
+          <div className="text-center">
+            <p className="typo-body-2-r text-grey-color-4">로딩 중...</p>
+          </div>
+        </div>
+      </main>
+    )
   }
 
-  const getKindDisplayName = (kind: string) => {
-    switch (kind) {
-      case 'paper':
-        return '서류'
-      case 'interview':
-        return '인터뷰/면접'
-      case 'activity':
-        return '활동'
-      default:
-        return kind
-    }
+  if (!formKind) {
+    return (
+      <main className="">
+        <div className="max-w-[800px] mx-auto pt-20">
+          <div className="text-center">
+            <p className="typo-body-2-r text-grey-color-4">로딩 중...</p>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   return (
-    <main className="w-full h-full">
-      <div className="max-w-[530px] h-full mx-auto flex flex-col items-center justify-center">
-        {/* 제목 */}
-        <div className="text-center mb-8">
-          <h2 className="typo-title-1 text-black-color mb-8">
-            {getKindDisplayName(kind)} 후기 작성
-          </h2>
+    <main className="">
+      <Suspense>
+        <div className="max-w-[800px] mx-auto pt-20 pb-20">
+          <FormFactory kind={formKind} />
         </div>
-
-        {/* 카드 컨테이너 */}
-        <div className="p-6 rounded-2xl bg-white-color flex flex-col gap-8 items-center w-[530px] shadow-sm">
-          <p className="typo-body-2-sb text-grey-color-4">
-            작성하실 후기 스타일을 선택해주세요
-          </p>
-          <div className="w-full flex flex-col gap-4">
-            {/* 일반 후기 카드 */}
-            <Link href={`/review/new/${kind}/normal`}>
-              <div className="w-full p-6 border border-gray-200 rounded-xl cursor-pointer group">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <DocumentPencilIcon role="img" aria-label="일반 후기" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="typo-body-3-b text-black-color mb-1">
-                      일반 후기
-                    </h3>
-                    <p className="typo-button-m text-grey-color-3">
-                      짧고 간단한 3분 후기 작성하기
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            {/* 프리미엄 후기 카드 */}
-            <Link href={`/review/new/${kind}/premium`}>
-              <div className="w-full p-6 border border-gray-200 rounded-xl cursor-pointer group">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <DocumentDiamondIcon
-                      role="img"
-                      aria-label="프리미엄 후기"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="typo-body-3-b text-black-color mb-1">
-                      프리미엄 후기
-                    </h3>
-                    <p className="typo-button-m text-grey-color-3">
-                      가이드 따라 상세 후기 작성하고 기프티콘 혜택 받기
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </div>
+      </Suspense>
     </main>
   )
 }

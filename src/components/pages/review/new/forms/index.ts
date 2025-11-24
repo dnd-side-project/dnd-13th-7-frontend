@@ -1,12 +1,9 @@
-// Form components exports
-export { default as PaperNormalForm } from './PaperNormalForm'
-export { default as PaperPremiumForm } from './PaperPremiumForm'
-export { default as InterviewNormalForm } from './InterviewNormalForm'
-export { default as InterviewPremiumForm } from './InterviewPremiumForm'
-export { default as ActivityNormalForm } from './ActivityNormalForm'
-export { default as ActivityPremiumForm } from './ActivityPremiumForm'
-
 // Factory component export
 export { default as FormFactory } from './FormFactory'
-export type { FormKind, FormType } from './FormFactory'
-export { isValidFormCombination, getFormDescription } from './FormFactory'
+export type { FormKind } from './FormFactory'
+export { isValidFormKind, getFormDescription, getFormTitle } from './FormFactory'
+
+// Form components exports
+export { default as PaperForm } from './paper'
+export { default as InterviewForm } from './interview'
+export { default as ActivityForm } from './activity'

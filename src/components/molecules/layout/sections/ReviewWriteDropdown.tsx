@@ -41,9 +41,7 @@ export default function ReviewWriteDropdown() {
     //   </DropdownMenuContent>
     // </DropdownMenu>
     <Button size="small" variant="solid" className="typo-button" asChild>
-      <Link href={AppPath.reviewNew()}>
-        후기 작성
-      </Link>
+      <Link href={AppPath.reviewNew()}>후기 작성</Link>
     </Button>
   )
 }
