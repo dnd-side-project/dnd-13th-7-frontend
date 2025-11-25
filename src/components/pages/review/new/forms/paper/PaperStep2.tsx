@@ -10,7 +10,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/molecules/Form'
-import { DynamicQASection } from '../../shared'
+import { DynamicQASection } from '@/components/molecules/dynamicQaSection'
 import { type PaperFormType } from './usePaperForm'
 
 interface PaperStep2Props {

@@ -10,7 +10,7 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
         // Base colors from design tokens
         'bg-white-color text-black-color placeholder:text-grey-color-1 border-light-color-4',
         // disabled states
-        'disabled:bg-light-color-2 disabled:text-grey-color-2 disabled:border-light-color-4 disabled:cursor-not-allowed',
+        'disabled:text-grey-color-2 disabled:border-light-color-4 disabled:cursor-not-allowed',
         // Invalid
         'aria-invalid:border-failure-color',
         className,

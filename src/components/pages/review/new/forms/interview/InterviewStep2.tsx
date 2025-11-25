@@ -10,7 +10,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/molecules/Form'
-import { DynamicQASection } from '../../shared'
+import { DynamicQASection } from '@/components/molecules/dynamicQaSection'
 import { type InterviewFormType } from './useInterviewForm'
 
 interface InterviewStep2Props {
