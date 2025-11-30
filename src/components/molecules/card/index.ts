@@ -9,9 +9,11 @@ import {
   CardStats,
   CardTitle,
 } from './Card'
+import { CardBookmark } from './CardBookmark'
 
 export type CardCompound = typeof CardRoot & {
   Image: typeof CardImage
+  Bookmark: typeof CardBookmark
   Content: typeof CardContent
   Header: typeof CardHeader
   Title: typeof CardTitle
@@ -23,6 +25,7 @@ export type CardCompound = typeof CardRoot & {
 
 export const Card = Object.assign(CardRoot, {
   Image: CardImage,
+  Bookmark: CardBookmark,
   Content: CardContent,
   Header: CardHeader,
   Title: CardTitle,
@@ -34,6 +37,7 @@ export const Card = Object.assign(CardRoot, {
 
 export {
   CardImage,
+  CardBookmark,
   CardContent,
   CardHeader,
   CardTitle,
