@@ -41,6 +41,7 @@ pnpm storybook            # Start Storybook on port 6006
 ### Key Patterns
 
 **Component Variants**: Use Class Variance Authority (CVA) for type-safe styling variants
+
 ```typescript
 const buttonVariants = cva([...], {
   variants: { variant: {...}, size: {...} },
@@ -61,6 +62,7 @@ const buttonVariants = cva([...], {
 ## Code Conventions
 
 ### Commit Messages (Conventional Commits)
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `style`: CSS related
@@ -70,6 +72,7 @@ const buttonVariants = cva([...], {
 - `test`: Test code
 
 ### Pre-commit Hooks
+
 Husky runs: lint -> format -> build before each commit
 
 ## Environment Variables
@@ -82,12 +85,12 @@ NEXT_PUBLIC_GA_ID           # Google Analytics
 
 ## Tech Stack Quick Reference
 
-| Category | Technology |
-|----------|------------|
-| Framework | Next.js 15 (App Router, Turbopack) |
-| UI | Radix UI + shadcn/ui + Tailwind CSS 4 |
-| State | TanStack React Query v5 |
-| Forms | React Hook Form + Zod |
-| Testing | Vitest + Storybook 9 + Playwright |
-| Mocking | MSW 2 |
-| Monitoring | Sentry |
+| Category   | Technology                            |
+| ---------- | ------------------------------------- |
+| Framework  | Next.js 15 (App Router, Turbopack)    |
+| UI         | Radix UI + shadcn/ui + Tailwind CSS 4 |
+| State      | TanStack React Query v5               |
+| Forms      | React Hook Form + Zod                 |
+| Testing    | Vitest + Storybook 9 + Playwright     |
+| Mocking    | MSW 2                                 |
+| Monitoring | Sentry                                |

@@ -197,9 +197,7 @@ const MultiDropDown: React.FC<Props> = ({
             <span
               className={cn(
                 'typo-button-m',
-                selected.length > 0
-                  ? 'text-main-color-1'
-                  : 'text-grey-color-2',
+                selected.length > 0 ? 'text-main-color-1' : 'text-grey-color-2',
               )}
             >
               {open ? <ChevronUp /> : <ChevronDown />}

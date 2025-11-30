@@ -1,5 +1,6 @@
 import {
   Card as CardRoot,
+  CardBookmark,
   CardContent,
   CardDescription,
   CardFooter,
@@ -9,7 +10,6 @@ import {
   CardStats,
   CardTitle,
 } from './Card'
-import { CardBookmark } from './CardBookmark'
 
 export type CardCompound = typeof CardRoot & {
   Image: typeof CardImage
