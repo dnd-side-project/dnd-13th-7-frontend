@@ -137,17 +137,6 @@ export function CardHeader({
   )
 }
 
-// URL 유효성 검사 함수
-function isValidUrl(url: string | null | undefined): boolean {
-  if (!url) return false
-  try {
-    new URL(url)
-    return true
-  } catch {
-    return false
-  }
-}
-
 export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
   logoUrl?: string | null
   fallbackSrc?: string | null
@@ -174,8 +163,7 @@ export function CardImage({
   const p = PRESET[preset]
 
   const [failed, setFailed] = React.useState(false)
-  const src =
-    failed || !logoUrl || !isValidUrl(logoUrl) ? fallbackSrc! : logoUrl!
+  const src = failed || !logoUrl ? fallbackSrc! : logoUrl!
 
   const ratio = ratioOverride || p.ratio
 
@@ -200,7 +188,7 @@ export function CardImage({
         ...((orientation === 'horizontal' && ImageWidth
           ? { '--thumb-w': ImageWidth }
           : {}) as CardImageCSSVars),
-        aspectRatio: ratio.replace('/', ' / '),
+        aspectRatio: ratio?.replace('/', ' / '),
       }}
       {...props}
     >

@@ -46,3 +46,6 @@ export {
   CardStats,
   CardFooter,
 }
+
+export { MobileCard } from './MobileCard'
+export { default as CardOverlay } from './CardOverlay'

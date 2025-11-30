@@ -72,8 +72,7 @@ const HorizontalRender = (args: React.ComponentProps<typeof Card>) => (
     <Card.Content>
       <Card.Title>{title}</Card.Title>
       <Card.Description>{description}</Card.Description>
-      <Card.Meta kind="지원편" clubName="모여잇" clubYear="2024" part="FE" />
-      <Card.Stats likes={20} comments={5} />
+      <Card.Meta part="기획 · 개발 · 디자인" />
     </Card.Content>
   </Card>
 )
@@ -97,9 +96,9 @@ export const HomeReviewDesktop: Story = {
 }
 
 export const Col4Phone: Story = {
-  name: 'Vertical / col4Phone',
-  args: { size: 'col4Phone', orientation: 'vertical', border: true },
-  render: VerticalRender,
+  name: 'Horizontal / col4Phone',
+  args: { size: 'col4Phone', orientation: 'horizontal', border: true },
+  render: HorizontalRender,
 }
 
 export const HomeReviewPhone: Story = {

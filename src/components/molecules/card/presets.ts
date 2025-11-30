@@ -2,7 +2,7 @@ import { CardSizePreset } from './types'
 
 export const PRESET: Record<
   CardSizePreset,
-  { cardWidth: string; ImageWidth: string; ratio: string; ImageSize: string }
+  { cardWidth: string; ImageWidth: string; ratio?: string; ImageSize: string }
 > = {
   col3Desktop: {
     cardWidth: '17.625rem',
@@ -29,9 +29,8 @@ export const PRESET: Record<
     ImageSize: '7.0625rem',
   },
   col4Phone: {
-    cardWidth: '9.625rem',
-    ImageWidth: '8.75rem',
-    ratio: '3/2',
-    ImageSize: '9.625rem',
+    cardWidth: '100%',
+    ImageWidth: '5.5rem',
+    ImageSize: '5.5rem',
   },
 }
