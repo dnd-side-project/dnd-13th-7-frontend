@@ -1,12 +1,14 @@
-import { Card as CardRoot } from './Card'
-import { CardContent } from './CardContent'
-import { CardDescription } from './CardDescription'
-import { CardFooter } from './CardFooter'
-import { CardHeader } from './CardHeader'
-import { CardImage } from './CardImage'
-import { CardMeta } from './CardMeta'
-import { CardStats } from './CardStats'
-import { CardTitle } from './CardTitle'
+import {
+  Card as CardRoot,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardImage,
+  CardMeta,
+  CardStats,
+  CardTitle,
+} from './Card'
 
 export type CardCompound = typeof CardRoot & {
   Image: typeof CardImage
