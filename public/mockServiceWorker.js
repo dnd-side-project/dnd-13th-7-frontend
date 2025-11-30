@@ -117,9 +117,12 @@ addEventListener('fetch', function (event) {
 })
 
 /**
- * @param {FetchEvent} event
- * @param {string} requestId
- * @param {number} requestInterceptedAt
+ * Process a fetch event by obtaining an appropriate response (mocked or passthrough) and notify the active client about the response.
+ *
+ * @param {FetchEvent} event - The fetch event that was intercepted.
+ * @param {string} requestId - A unique identifier for this intercepted request.
+ * @param {number} requestInterceptedAt - Timestamp (milliseconds since epoch) when the request was intercepted.
+ * @returns {Promise<Response>} A Response used to fulfill the intercepted request; may be a mocked response produced by the client or a network passthrough response. 
  */
 async function handleRequest(event, requestId, requestInterceptedAt) {
   const client = await resolveMainClient(event)
@@ -202,12 +205,15 @@ async function resolveMainClient(event) {
 }
 
 /**
- * @param {FetchEvent} event
- * @param {Client | undefined} client
- * @param {string} requestId
- * @param {number} requestInterceptedAt
- * @returns {Promise<Response>}
- */
+ * Obtain a Response for an intercepted fetch by asking the client for a mocked response or falling back to the network.
+ *
+ * If a valid active client is provided, the request is serialized and sent to that client; based on the client's reply the function returns either the mocked Response or performs a network passthrough. If no active client is available, the request is sent to the network.
+ *
+ * @param {FetchEvent} event - The fetch event representing the intercepted request.
+ * @param {Client | undefined} client - The client to consult for a mock response; may be undefined when no client is associated.
+ * @param {string} requestId - A unique identifier for this intercepted request.
+ * @param {number} requestInterceptedAt - Epoch timestamp (in milliseconds) when the request was intercepted.
+ * @returns {Response} A Response object constructed from the client's mock data or from the network passthrough.
 async function getResponse(event, client, requestId, requestInterceptedAt) {
   // Clone the request because it might've been already used
   // (i.e. its body has been read and sent to the client).

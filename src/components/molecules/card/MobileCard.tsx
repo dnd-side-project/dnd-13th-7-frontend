@@ -21,6 +21,22 @@ export interface MobileCardProps extends React.HTMLAttributes<HTMLDivElement> {
   onBookmarkClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
+/**
+ * Renders a compact mobile card with thumbnail, text content, categories, and a bookmark toggle.
+ *
+ * Displays an image using `logoUrl` or `fallbackSrc` when `logoUrl` is falsy, shows `clubName` and `description` when provided, and joins `categories` with a narrow separator (U+2009 · U+2009) when present. The bookmark button reflects `isSubscribed` (icon and `aria-label`) and, when clicked, stops event propagation and invokes `onBookmarkClick` with the button mouse event.
+ *
+ * @param logoUrl - URL of the thumbnail image; when falsy the component uses `fallbackSrc`.
+ * @param fallbackSrc - Fallback image URL used when `logoUrl` is not provided (defaults to '/images/default.svg').
+ * @param alt - Explicit alt text for the image; if omitted the component falls back to `clubName` or an empty string.
+ * @param clubName - Optional title text displayed above the description.
+ * @param description - Optional secondary text displayed below the title.
+ * @param categories - Optional list of category names; rendered as a single line separated by a narrow interpunct sequence.
+ * @param isSubscribed - Controls the bookmark icon and `aria-label`; when true the filled icon and "구독 해제" label are shown.
+ * @param onBookmarkClick - Click handler for the bookmark button; receives the `MouseEvent<HTMLButtonElement>` and is called after stopping propagation.
+ *
+ * @returns A React element representing the mobile card.
+ */
 export function MobileCard({
   logoUrl,
   fallbackSrc = '/images/default.svg',

@@ -83,6 +83,13 @@ const TARGET_OPTIONS: Group[] = [
   },
 ]
 
+/**
+ * Renders the club explore page with filtering, sorting, and bookmarking.
+ *
+ * Reads filter and sort state from URL query parameters, fetches club data and the user's subscriptions, and allows toggling club bookmarks; also renders hero, sidebar, filter controls, club cards, loading, error, and empty states.
+ *
+ * @returns The rendered Explore page as a JSX element
+ */
 export function Explore() {
   const { isDesktop } = useMediaQuery()
   const router = useRouter()

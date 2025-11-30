@@ -38,6 +38,20 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
 }
 
+/**
+ * Render a Card container that provides CardCtx and applies preset sizing, orientation, spacing, and optional border.
+ *
+ * @param orientation - Layout direction used by the card and its children; affects base flex classes. Defaults to `'vertical'`.
+ * @param size - Preset key used to derive card and image sizing CSS variables.
+ * @param thumbNailWidth - Explicit thumbnail width that overrides the preset image width (sets `--thumb-w`).
+ * @param className - Additional CSS classes applied to the outer card element.
+ * @param gap - Optional gap value applied to the card via `--card-gap`.
+ * @param pad - Optional padding value applied to the card via `--card-pad`.
+ * @param border - When true, renders a border around the card.
+ * @param style - Inline styles merged with generated CSS variables for sizing and spacing.
+ * @param children - Child nodes rendered inside the card.
+ * @returns The card element wrapped with CardCtx.Provider, with computed classes and CSS variables applied.
+ */
 export function Card({
   orientation = 'vertical',
   size = 'col3Desktop',
@@ -84,6 +98,15 @@ export function Card({
   )
 }
 
+/**
+ * Render the card content container with layout that adapts to the card orientation.
+ *
+ * The container always includes a minimum-width reset and applies a column layout.
+ * When the surrounding Card orientation is `horizontal` the container becomes flexibly
+ * expanding (`flex-1`) to fill available space.
+ *
+ * @returns A div element used as the card content area; `vertical` orientation uses a simple column layout, `horizontal` orientation uses `flex-1` plus a column layout.
+ */
 export function CardContent({
   className,
   ...props
@@ -103,6 +126,12 @@ export function CardContent({
   )
 }
 
+/**
+ * Renders the card's descriptive text area with preset typography, color, two-line truncation, and spacing.
+ *
+ * @param className - Additional CSS classes appended to the default description styles.
+ * @returns A div element used as the card description slot.
+ */
 export function CardDescription({
   className,
   ...props
@@ -119,6 +148,13 @@ export function CardDescription({
   )
 }
 
+/**
+ * Render the card's footer container with default layout and forwarded attributes.
+ *
+ * @param className - Additional CSS classes to merge with the footer's base `flex` class
+ * @param props - Other HTMLDivElement attributes forwarded to the root element
+ * @returns A div element with `data-slot="card-footer"`, `flex` layout, merged `className`, and any forwarded props
+ */
 export function CardFooter({
   className,
   ...props
@@ -128,6 +164,11 @@ export function CardFooter({
   )
 }
 
+/**
+ * Renders the header slot for a Card, providing a horizontal flex container.
+ *
+ * @returns A div with `data-slot="card-header"` and `flex` layout that merges any provided `className` and other div props.
+ */
 export function CardHeader({
   className,
   ...props
@@ -148,6 +189,23 @@ export interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean
 }
 
+/**
+ * Renders a card image area with responsive sizing, aspect-ratio control, and a fallback.
+ *
+ * Renders a container that applies a preset or explicit thumbnail width, sets the CSS aspect ratio,
+ * and contains an image that falls back to `fallbackSrc` on load error. When `orientation` is horizontal
+ * and `ImageWidth` is provided, the container sets the CSS variable `--thumb-w` to control thumbnail width.
+ *
+ * @param logoUrl - Primary image URL to display; if missing or if the image fails to load, `fallbackSrc` is used.
+ * @param fallbackSrc - URL used when `logoUrl` is absent or fails to load; defaults to '/images/default.svg'.
+ * @param alt - Alternative text for the image; defaults to an empty string when not provided.
+ * @param priority - If true, marks the image as high priority for loading.
+ * @param ImageWidth - Explicit thumbnail width (CSS value) applied when orientation is horizontal; overrides preset thumbnail width.
+ * @param ratioOverride - Aspect ratio string (e.g., '3/2') that overrides the preset ratio.
+ * @param interactive - When true, enables a subtle hover scale transform on the image.
+ * @param className - Additional container class names merged with internal classes.
+ * @returns A JSX element: a styled container div with the configured image element inside.
+ */
 export function CardImage({
   logoUrl,
   fallbackSrc = '/images/default.svg',
@@ -208,6 +266,18 @@ export function CardImage({
   )
 }
 
+/**
+ * Render a single-line metadata string composed from the provided parts.
+ *
+ * Each non-empty input is trimmed and joined with ' · '. If all inputs are empty or missing, the component renders `null`.
+ *
+ * @param kind - Optional descriptor (for example, item kind or category)
+ * @param clubName - Optional club or organization name
+ * @param clubYear - Optional year or season associated with the club
+ * @param part - Optional subrole or part information
+ * @param className - Additional CSS class names to apply to the container
+ * @returns A `div` containing the joined metadata string, or `null` when there is no metadata to display.
+ */
 export function CardMeta({
   kind,
   clubName,
@@ -241,6 +311,13 @@ export function CardMeta({
   )
 }
 
+/**
+ * Render right-aligned like and comment counts with accompanying icons.
+ *
+ * @param likes - Number of likes to display (defaults to 0)
+ * @param comments - Number of comments to display (defaults to 0)
+ * @returns A div element containing like and comment icons with their counts
+ */
 export function CardStats({
   likes = 0,
   comments = 0,
@@ -271,6 +348,14 @@ export function CardStats({
   )
 }
 
+/**
+ * Renders the card title slot with preset typography and single-line truncation.
+ *
+ * Applies typography, text color, ellipsis overflow, and line-clamp for a single line;
+ * accepts an additional `className` and forwards other div props.
+ *
+ * @returns A div element used as the card's title with single-line truncation and preset styles.
+ */
 export function CardTitle({
   className,
   ...props
@@ -295,6 +380,14 @@ export interface CardBookmarkProps
   disabled?: boolean
 }
 
+/**
+ * Renders a bookmark button that reflects subscription state and prevents the click from bubbling to ancestor elements.
+ *
+ * @param isSubscribed - If `true`, shows the filled bookmark icon and sets the aria-label to "구독 해제"; if `false`, shows the empty icon and sets the aria-label to "구독하기".
+ * @param onClick - Optional handler invoked when the button is clicked (the event propagation is stopped before calling this).
+ * @param disabled - If `true`, disables the button and applies disabled styling.
+ * @returns The bookmark button element with the appropriate icon and accessibility label.
+ */
 export function CardBookmark({
   isSubscribed = false,
   onClick,

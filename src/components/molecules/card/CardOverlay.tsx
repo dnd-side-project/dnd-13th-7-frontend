@@ -16,6 +16,17 @@ export interface CardOverlayProps {
   ) => void
 }
 
+/**
+ * Render a club card that navigates to the club detail page and exposes a bookmark control.
+ *
+ * Renders a desktop Card variant or a MobileCard based on viewport size. Displays the club's
+ * image, name, description, categories, subscription state, and an optional recruiting badge.
+ *
+ * @param club - Club data used to populate the card (logo, name, description, categories, id, recruiting flag)
+ * @param isSubscribed - Whether the current user is subscribed to the club
+ * @param onBookmarkClick - Callback invoked with the bookmark click event and the club's id
+ * @returns A React element representing the club card appropriate for the current viewport
+ */
 export default function CardOverlay({
   club,
   isSubscribed,
